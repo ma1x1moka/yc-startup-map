@@ -1,0 +1,994 @@
+{
+  "meta": {
+    "title": "The AI Coding Dictionary",
+    "tagline": "The vocabulary of AI coding, in plain English.",
+    "footer": "sections describing how agentic coding works."
+  },
+  "sections": [
+    { "id": 1, "name": "The Model", "paper": "#eaeae8", "ink": "#1a1a19", "accent": "#b4462a" },
+    { "id": 2, "name": "Sessions, Context Windows & Turns", "paper": "#e9e9e4", "ink": "#1a1a19", "accent": "#8a6d1f" },
+    { "id": 3, "name": "Tools & Environment", "paper": "#e6e9e5", "ink": "#181a18", "accent": "#3d7a4a" },
+    { "id": 4, "name": "Failure Modes", "paper": "#ece6e4", "ink": "#1c1817", "accent": "#a83232" },
+    { "id": 5, "name": "Handoffs", "paper": "#e5e8ec", "ink": "#171a1c", "accent": "#2f6392" },
+    { "id": 6, "name": "Memory and Steering", "paper": "#e8e6ec", "ink": "#19171c", "accent": "#6244a0" },
+    { "id": 7, "name": "Patterns of Work", "paper": "#e9eae6", "ink": "#1a1a18", "accent": "#4a6b2f" }
+  ],
+  "terms": [
+    {
+      "term": "AI",
+      "section": 1,
+      "description": "A shifting label rather than a fixed technology. It points at whatever machines have most recently learned to do impressively — today, large language models.",
+      "body": [
+        "The word has moved targets for seventy years. Optical character recognition, chess engines, spam filters and route planners were each called AI while they were hard, and each quietly stopped being called AI once they worked reliably. What survives the rebranding gets a plain engineering name; what is still surprising keeps the label.",
+        "For everyday work the term is close to useless as a technical description, because it says nothing about what is actually running. When someone says an AI wrote the code, the load-bearing facts are which model, inside which harness, with what in its context. Reach for those words instead."
+      ],
+      "related": ["model", "harness", "agent"],
+      "avoid": "Treating \"AI\" as a capability claim. It describes a category's reputation, not what a specific system can do.",
+      "usage": [
+        "\"Can the AI handle this refactor?\"",
+        "\"Depends entirely on the model and what's in its context — 'AI' isn't a spec.\""
+      ]
+    },
+    {
+      "term": "Model",
+      "section": 1,
+      "description": "The parameters themselves. Stateless, and capable of exactly one thing: next-token prediction. Nothing agentic happens at this layer.",
+      "body": [
+        "A model is a large array of numbers plus the arithmetic that runs text through them. Give it a sequence of tokens, it returns a probability distribution over what token comes next. That is the entire interface. It has no memory between calls, cannot run code, cannot read a file, and does not persist anything you tell it.",
+        "Everything that makes a model feel like a collaborator — remembering earlier messages, editing files, running tests — is supplied by the harness wrapped around it. Keeping this boundary straight is the single most clarifying move in this whole vocabulary, because it tells you which layer a given problem lives in. A model that writes good code but keeps forgetting the plan is not a model problem."
+      ],
+      "related": ["parameters", "next-token-prediction", "stateless", "harness"],
+      "avoid": "Using \"model\" for the whole product you interact with. The chat app, the CLI and the editor plugin are harnesses that call a model.",
+      "usage": [
+        "\"The model lost track of what we decided.\"",
+        "\"The model has no track to lose — that's context management, which is the harness's job.\""
+      ]
+    },
+    {
+      "term": "Parameters",
+      "section": 1,
+      "description": "The numbers inside a model, often in the billions, set during training. Everything the model knows is encoded in them. Also called weights.",
+      "body": [
+        "Parameters are what training produces and what inference consumes. They are fixed once training ends: running the model does not change them, so nothing you say in a session is written back into the model. Two people prompting the same model are reading the same frozen numbers.",
+        "Parameter count is a rough proxy for capability and a firm one for cost, since every token generated involves arithmetic across all of them. It is a weak predictor on its own, though — training data quality, training duration, and post-training work routinely let a smaller model beat a larger one."
+      ],
+      "related": ["training", "inference", "model", "parametric-knowledge"],
+      "usage": [
+        "\"Does it learn from our codebase as we go?\"",
+        "\"No. Parameters are frozen after training — anything it knows about our code came in through the context window.\""
+      ]
+    },
+    {
+      "term": "Training",
+      "section": 1,
+      "description": "The process that sets a model's parameters by running enormous amounts of text through it and adjusting to improve next-token prediction.",
+      "body": [
+        "Training is a search for parameter values that make real text look probable. The model is shown a fragment, predicts the next token, is scored against the actual next token, and its parameters are nudged to reduce the error. Repeat across a vast corpus and useful structure — syntax, facts, reasoning patterns, code idioms — falls out of the pressure to predict well.",
+        "It happens once, in advance, on someone else's hardware, and it is the expensive part. Later stages shape behaviour rather than raw knowledge: instruction tuning and preference training teach the model to be useful and to follow directions. The practical consequence is a hard edge in time — the knowledge cutoff — beyond which the model simply has not seen the world."
+      ],
+      "related": ["parameters", "inference", "knowledge-cutoff", "parametric-knowledge"],
+      "usage": [
+        "\"Can we train it on our internal docs?\"",
+        "\"Almost certainly you want retrieval, not training — put the docs in context instead.\""
+      ]
+    },
+    {
+      "term": "Inference",
+      "section": 1,
+      "description": "Running a trained model to produce output. What happens on every request. Parameters stay fixed throughout.",
+      "body": [
+        "Inference is the read side of the model. Tokens go in, arithmetic runs across the parameters, a probability distribution comes out, one token is sampled, and the loop repeats with that token appended. Nothing is written back — the model ends the request exactly as it started.",
+        "Because inference is per-token and sequential, it sets the floor on how fast anything built on the model can move. It is also what you are billed for, which is why cost scales with usage rather than arriving as a flat licence fee."
+      ],
+      "related": ["training", "next-token-prediction", "model-provider-request", "output-tokens"],
+      "usage": [
+        "\"Why is the agent so slow on this file?\"",
+        "\"It's rewriting the whole thing — that's a lot of inference, one token at a time.\""
+      ]
+    },
+    {
+      "term": "Effort",
+      "section": 1,
+      "description": "A dial controlling how much reasoning the model does before answering. Higher effort spends more output tokens for a better chance at hard problems.",
+      "body": [
+        "Turning effort up lets the model generate an extended internal chain of reasoning before committing to a response. That reasoning is emitted as tokens and billed as output tokens even when the harness never shows them to you, so higher effort costs more and takes longer.",
+        "The trade is deliberation against speed and money. Mechanical work — renaming things, applying a known pattern, formatting — gains nothing from a higher setting. Problems where the first plausible approach is often the wrong one are exactly where the extra thinking pays for itself."
+      ],
+      "related": ["output-tokens", "inference", "non-determinism"],
+      "usage": [
+        "\"It keeps picking the wrong approach and then patching around it.\"",
+        "\"Raise the effort — it's committing before it's finished thinking.\""
+      ]
+    },
+    {
+      "term": "Token",
+      "section": 1,
+      "description": "The atomic unit a model reads and writes. Roughly word-sized, but not exactly. Context size, cost and latency are all counted in tokens.",
+      "body": [
+        "Text is converted to tokens by a tokenizer: a fixed vocabulary of fragments, fixed before training, that splits any input into a sequence of entries. The model never sees characters or words — only token IDs going in, and one token at a time coming out.",
+        "A useful rule of thumb is that a token averages about three-quarters of an English word, so a thousand tokens is roughly 750 words of prose. Code breaks that estimate. Common keywords encode compactly because they appeared constantly in the tokenizer's source text; hashes, base64 blobs, minified bundles and unusual identifiers had no such exposure and shatter into many tokens each. A short file full of generated strings can eat a surprising share of the window.",
+        "Tokens are the unit everything else is denominated in. Price is per token, throughput is tokens per second, and the context window is a token count — so the tokenized size of your files, not their line count, decides what fits."
+      ],
+      "related": ["context-window", "input-tokens", "output-tokens", "next-token-prediction"],
+      "avoid": "\"Word\". Token boundaries do not line up with word boundaries, and every limit you actually care about is denominated in tokens.",
+      "usage": [
+        "\"That config file is tiny, just include it.\"",
+        "\"It's tiny in bytes and huge in tokens — it's mostly generated keys.\""
+      ]
+    },
+    {
+      "term": "Next-token prediction",
+      "section": 1,
+      "description": "What the model actually does. It samples one token from the context, appends it, and runs again. Its only mode of operation.",
+      "body": [
+        "There is no plan held in reserve and no draft revised behind the scenes. Each token is chosen from a probability distribution over the vocabulary given everything in the context so far, appended, and the whole context is run through again for the next one. Fluent paragraphs and working functions are what this loop produces at scale, not evidence of a different mechanism underneath.",
+        "Holding onto this explains behaviour that otherwise looks bizarre. The model never checks whether a token is true before emitting it, only whether it is likely — which is the root of hallucination. It cannot unsay a token, so a confident wrong opening sentence drags the rest of the answer along with it. And because tokens come out strictly one at a time, generation speed puts a hard ceiling on how fast any agent can work."
+      ],
+      "related": ["token", "hallucination", "non-determinism", "output-tokens"],
+      "usage": [
+        "\"Why did it double down on a wrong answer?\"",
+        "\"It committed to the opening claim, and next-token prediction made the rest follow from it.\""
+      ]
+    },
+    {
+      "term": "Non-determinism",
+      "section": 1,
+      "description": "The same input can produce different output. A property of how models sample text and how providers serve requests.",
+      "body": [
+        "Generation samples from a probability distribution rather than always taking the most likely token, so two identical requests can diverge at any position and then keep diverging. Provider-side factors add more: batching, hardware differences and routing between server pools all perturb results at the margins.",
+        "This is why prompt fixes are hard to confirm and why bug reports built on a single run are weak evidence. If a change matters, it should show up across several runs; if a failure only ever happened once, you have not yet established that it is real."
+      ],
+      "related": ["next-token-prediction", "model-provider", "automated-check"],
+      "usage": [
+        "\"I fixed the prompt, it works now.\"",
+        "\"Run it five more times — one pass doesn't separate a fix from a lucky sample.\""
+      ]
+    },
+    {
+      "term": "Model provider",
+      "section": 1,
+      "description": "Whatever serves a model for inference. Usually a remote API, but a local runtime counts too.",
+      "body": [
+        "The provider owns the machinery: the parameters sit on its hardware, and every request is your harness shipping tokens over a network and receiving predictions back. Running a model locally makes you your own provider, with the same role and different limits.",
+        "A whole category of problems lives here and gets misattributed elsewhere. Rate limits, degraded capacity, regional outages and sudden latency spikes are provider conditions, not model failures and not bugs in your setup. When an agent stalls mid-session or errors on every turn, the provider's status page is the cheapest thing to check first."
+      ],
+      "related": ["model-provider-request", "inference", "prefix-cache", "harness"],
+      "usage": [
+        "\"Every turn is erroring out — did we break the config?\"",
+        "\"Check the provider status page before touching anything.\""
+      ]
+    },
+    {
+      "term": "Harness",
+      "section": 1,
+      "description": "Everything wrapped around the model that turns it into an agent: tools, system prompt, context management, permissions and hooks.",
+      "body": [
+        "The model predicts tokens; the harness does all the rest. It assembles the context for each request, exposes tools and actually executes them, decides what to do with tool results, enforces permissions, manages compaction, and decides when a turn is over. Your CLI, your editor plugin and your chat app are all harnesses.",
+        "Most of what people experience as model quality is really harness quality. The same model can feel sharp in one tool and hopeless in another because one loaded the right files and kept the window clean while the other stuffed it with noise. When something goes wrong, asking whether it is a model problem or a harness problem narrows the search enormously — and it is usually the harness."
+      ],
+      "related": ["model", "agent", "tool", "system-prompt", "context-window"],
+      "usage": [
+        "\"This model is much worse than the one at work.\"",
+        "\"Same model — different harness. Ours isn't loading the project docs.\""
+      ]
+    },
+    {
+      "term": "Model provider request",
+      "section": 1,
+      "description": "One round trip from harness to provider. The harness sends the context; the provider returns a single response.",
+      "body": [
+        "This is the unit of work you are billed for and the unit that fails. The harness serialises the entire context — system prompt, history, tool definitions, tool results — sends it, and gets back one response, which may be prose, a tool call, or both.",
+        "Crucially the whole context goes over the wire every single time, because the model is stateless. A long session is not sending just your latest message; it is resending everything, on every turn. That is why cost per turn climbs as a session grows, and why prefix caching matters so much."
+      ],
+      "related": ["stateless", "input-tokens", "prefix-cache", "turn", "model-provider"],
+      "usage": [
+        "\"We've barely said anything and the bill jumped.\"",
+        "\"Every turn resends the whole context — it's the history that's expensive, not the message.\""
+      ]
+    },
+    {
+      "term": "Input tokens",
+      "section": 1,
+      "description": "The tokens the harness sends on each request. Billed at a lower rate than output tokens.",
+      "body": [
+        "Everything the model reads counts: system prompt, tool definitions, every earlier message, every tool result, and the files you pulled in. On a mature session this dwarfs whatever you just typed.",
+        "Input is cheap per token and enormous in volume, which makes it the quiet driver of cost. The lever is not typing less; it is loading less and keeping the window free of material the task does not need."
+      ],
+      "related": ["output-tokens", "cache-tokens", "context-window", "model-provider-request"],
+      "usage": [
+        "\"I only asked a one-line question.\"",
+        "\"And shipped 90k input tokens of history with it.\""
+      ]
+    },
+    {
+      "term": "Output tokens",
+      "section": 1,
+      "description": "The tokens the model generates back. Billed at a higher rate than input, because producing them costs more compute.",
+      "body": [
+        "Everything the model writes counts: prose you read, code it emits, tool calls it makes, and any extended reasoning it does before answering. That last one catches people out — reasoning tokens are billed as output even when the harness hides them, and raising effort spends more of them.",
+        "Because output is typically several times the input rate, generation style has real cost consequences. An agent that rewrites entire files instead of emitting targeted edits is burning the expensive token type to accomplish the same change."
+      ],
+      "related": ["input-tokens", "effort", "inference", "next-token-prediction"],
+      "usage": [
+        "\"Why is this so much pricier than reading the codebase was?\"",
+        "\"Reading is input. Writing is output, at roughly five times the rate.\""
+      ]
+    },
+    {
+      "term": "Prefix cache",
+      "section": 1,
+      "description": "Provider-side storage that lets consecutive requests skip re-processing a shared opening stretch of context, billed at a much lower rate.",
+      "body": [
+        "Because every request resends the whole context, successive turns in a session share a long identical prefix — system prompt, tool definitions, the conversation so far. The provider can retain the computed state for that prefix and reuse it, charging a fraction of the normal input rate for the cached portion.",
+        "The catch is that caching only works on an exact, unbroken prefix. Change anything early in the context and everything after it must be recomputed at full price. This is why harnesses put stable material at the front and volatile material at the back, and why injecting a timestamp near the top of a system prompt quietly destroys the discount for the entire session."
+      ],
+      "related": ["cache-tokens", "input-tokens", "model-provider-request", "context-window"],
+      "usage": [
+        "\"Costs tripled after the system prompt change.\"",
+        "\"We put a variable near the top — that's every turn missing the prefix cache.\""
+      ]
+    },
+    {
+      "term": "Cache tokens",
+      "section": 1,
+      "description": "Input tokens the provider served from its prefix cache, billed at a steep discount.",
+      "body": [
+        "These show up as a separate line on usage reports, and the ratio of cached to uncached input is one of the fastest health checks available for a long session. A high cache hit rate means the harness is keeping the front of the context stable.",
+        "A sudden collapse in that ratio is a signal worth chasing. It usually means something now varies early in the context, or that compaction rewrote history and invalidated everything downstream of the edit."
+      ],
+      "related": ["prefix-cache", "input-tokens", "compaction"],
+      "usage": [
+        "\"Cache hits dropped to near zero this afternoon.\"",
+        "\"Something's mutating the prefix — check what we added to the system prompt.\""
+      ]
+    },
+
+    {
+      "term": "Stateless",
+      "section": 2,
+      "description": "The model retains nothing between requests. Each one starts from scratch, with no memory of what came before.",
+      "body": [
+        "There is no session on the model's side. The apparent continuity of a conversation is an illusion maintained entirely by the harness, which replays the full history on every request so the model can infer what has happened from text alone.",
+        "Once this lands, a lot of confusing behaviour resolves. The model did not forget your instruction — either the harness stopped sending it, or it is still there but buried under so much other material that it lost the model's attention. Those are different problems with different fixes, and neither is the model choosing to ignore you."
+      ],
+      "related": ["stateful", "model", "context", "model-provider-request"],
+      "usage": [
+        "\"I told it that twenty minutes ago.\"",
+        "\"It's stateless — either that got compacted away or it's drowning in everything since.\""
+      ]
+    },
+    {
+      "term": "Context",
+      "section": 2,
+      "description": "The full body of text sent to the model on a request. Everything the model can be said to know in the moment.",
+      "body": [
+        "Context is the assembled payload: system prompt, tool definitions, the conversation so far, tool results, and any file contents that were pulled in. If a fact is not in the context and not in the parameters, the model has no access to it.",
+        "Treating context as a curated working set rather than an ever-growing log is the core discipline of agentic coding. What you put in front of the model is the main lever you have on output quality — larger is not better, and relevant beats comprehensive every time."
+      ],
+      "related": ["context-window", "contextual-knowledge", "attention-budget", "stateless"],
+      "usage": [
+        "\"It doesn't know about the new endpoint.\"",
+        "\"It isn't in context and it postdates the cutoff — of course it doesn't.\""
+      ]
+    },
+    {
+      "term": "Context window",
+      "section": 2,
+      "description": "The maximum amount of context a model can accept, measured in tokens. A hard ceiling on how much it can consider at once.",
+      "body": [
+        "Being finite means it fills. Every turn appends more — your messages, the model's replies, tool results — and a long session eventually reaches the limit, forcing compaction or a clear. It also means everything inside competes: each token you load is one fewer available for the rest, and material you did not need still consumes the model's attention.",
+        "The practical stance is to treat the window as a budget rather than a container to fill. Load what the task actually requires and leave the rest out. A window that is technically large does not mean a session that stays sharp all the way to the edge of it."
+      ],
+      "related": ["context", "attention-budget", "compaction", "smart-zone", "token"],
+      "usage": [
+        "\"We've got a million tokens, just load the whole repo.\"",
+        "\"Capacity isn't the constraint — attention is. It'll get worse, not better.\""
+      ]
+    },
+    {
+      "term": "Stateful",
+      "section": 2,
+      "description": "Holding state across turns. The harness is stateful; the model it calls is not.",
+      "body": [
+        "State in an agentic session lives in three places, and telling them apart is diagnostic. There is conversation state the harness replays, filesystem state that persists on disk regardless of what the model remembers, and external state in databases and services that outlives everything.",
+        "Confusion here produces a specific bug class: an agent that has lost the thread in conversation but has already changed files on disk. The context can be cleared; the side effects cannot."
+      ],
+      "related": ["stateless", "harness", "session", "filesystem"],
+      "usage": [
+        "\"Just clear it and start over.\"",
+        "\"The conversation resets. The half-finished migration on disk doesn't.\""
+      ]
+    },
+    {
+      "term": "Agent",
+      "section": 2,
+      "description": "A model harnessed with tools, a system prompt and a context window, taking turns with a user. The model in motion.",
+      "body": [
+        "What separates an agent from a chat interface is the loop. The model can call a tool, the harness executes it and feeds the result back, and the model decides what to do next — repeatedly, without a human between each step. That loop is what lets it read a file, run tests, see a failure and try again.",
+        "An agent is therefore a composition, not a product: this model, these tools, this system prompt, this environment. Changing any one of them changes what the agent is capable of, which is why the same underlying model performs so differently across setups."
+      ],
+      "related": ["harness", "tool-call", "turn", "session", "subagent"],
+      "usage": [
+        "\"The agent can't run our tests.\"",
+        "\"Then it has no tool for it — that's a harness gap, not a model limitation.\""
+      ]
+    },
+    {
+      "term": "System prompt",
+      "section": 2,
+      "description": "Standing instructions placed at the front of the context, setting the agent's role, constraints and available tools.",
+      "body": [
+        "It sits at the start of every request and is therefore the most durable thing in the context — the last text still present after everything else has been compacted away. That position also makes it the anchor of the prefix cache, which is why editing it mid-session is expensive.",
+        "Its influence is real but bounded. Standing instructions compete with everything that has accumulated since, and in a long session recent tool output can drown out a rule stated at the top. Instructions that must survive belong somewhere the harness re-injects, not stated once and hoped for."
+      ],
+      "related": ["context", "harness", "prefix-cache", "memory-system", "agents-md"],
+      "usage": [
+        "\"The style rule is in the system prompt, why is it ignoring it?\"",
+        "\"It's sixty thousand tokens back now. Restate it or move it somewhere that gets re-injected.\""
+      ]
+    },
+    {
+      "term": "Session",
+      "section": 2,
+      "description": "One continuous run of work with an agent, from first message to clear. The unit that accumulates context.",
+      "body": [
+        "A session is the lifetime of a context window. It begins fresh, grows with every turn, and ends when you clear it or start somewhere new. Its whole arc is one of accumulation — and accumulation is what eventually degrades it.",
+        "Scoping sessions deliberately is one of the highest-leverage habits available. One session per coherent piece of work, ended before quality falls off, beats a marathon session that has drifted through four unrelated tasks and can no longer tell which decisions still apply."
+      ],
+      "related": ["turn", "clearing", "handoff", "smart-zone", "context-window"],
+      "usage": [
+        "\"It's been sharp all morning and now it's flailing.\"",
+        "\"That's one session across four tasks. Hand off and start clean.\""
+      ]
+    },
+    {
+      "term": "Turn",
+      "section": 2,
+      "description": "One exchange in a session: your message, and everything the agent does before handing control back.",
+      "body": [
+        "A single turn can contain many requests. The model emits a tool call, the harness runs it and returns the result, the model calls another tool, and so on — each round trip billed separately — until it produces a response with no further calls and control returns to you.",
+        "This is why a turn that looked like one question can cost a great deal, and why watching the tool calls inside a turn tells you far more about what went wrong than reading the final summary."
+      ],
+      "related": ["session", "tool-call", "model-provider-request", "agent"],
+      "usage": [
+        "\"One question, and it burned a fortune.\"",
+        "\"It made thirty tool calls inside that turn. Each one was a full request.\""
+      ]
+    },
+
+    {
+      "term": "Environment",
+      "section": 3,
+      "description": "Everything the agent can perceive and change: the filesystem, the shell, the network and every tool it has been given.",
+      "body": [
+        "The environment is the boundary of the agent's world. Inside it, things are real and actionable; outside it, they do not exist as far as the agent is concerned. A missing environment variable, an unreachable service or an absent test command are all environment facts, and they cap what the agent can achieve regardless of how capable the model is.",
+        "You control how big it is. A sandbox shrinks it; adding a tool extends it, bringing a database or an API into reach. How well that environment is arranged for an agent to work in is what AX measures."
+      ],
+      "related": ["filesystem", "tool", "sandbox", "ax", "automated-check"],
+      "usage": [
+        "\"It says the tests pass but they don't.\"",
+        "\"Check its environment — I don't think it can actually run them.\""
+      ]
+    },
+    {
+      "term": "Filesystem",
+      "section": 3,
+      "description": "Disk as the agent's durable memory. The one place where work survives a cleared context.",
+      "body": [
+        "Files outlast sessions. Everything else — conversation, plans held in the window, decisions reached in discussion — vanishes when the context is cleared. This makes the filesystem the natural home for anything that must persist, and the reason handoff artifacts are written to disk rather than summarised in chat.",
+        "It also cuts the other way. The agent's edits are real the moment they are written, whether or not the conversation that produced them still makes sense. Clearing a confused session does not undo what it already did."
+      ],
+      "related": ["handoff-artifact", "stateful", "environment", "clearing"],
+      "usage": [
+        "\"Write the plan to a file before we clear.\"",
+        "\"Right — if it isn't on disk it doesn't survive.\""
+      ]
+    },
+    {
+      "term": "Tool",
+      "section": 3,
+      "description": "A capability exposed to the model by the harness, described well enough that the model can decide when to call it.",
+      "body": [
+        "A tool is a name, a description and a parameter schema, sent to the model as part of the context. The model never executes anything — it emits a request to use a tool, and the harness runs the actual code. Reading files, running commands, searching the web and querying a database all arrive this way.",
+        "Tools are not free. Every definition occupies context on every request, so a harness with dozens of them spends real budget before the conversation starts. Many harnesses now mitigate this by holding only a pointer to the tool catalogue and loading full definitions on demand."
+      ],
+      "related": ["tool-call", "tool-result", "mcp", "context-pointer", "environment"],
+      "usage": [
+        "\"Enable every MCP server we've got.\"",
+        "\"That's twenty thousand tokens of definitions on every single turn.\""
+      ]
+    },
+    {
+      "term": "Tool call",
+      "section": 3,
+      "description": "The model emitting a request to use a tool — name plus arguments — and stopping so the harness can run it.",
+      "body": [
+        "The sequence is strict. The model produces a structured call and yields. The harness validates and executes it. The result is appended to the context. The model runs again with that result visible. Nothing happens between those steps that the model controls.",
+        "The distinction matters when debugging. A model can describe running a command in prose without ever emitting a call — it looks like work happened and nothing did. Reading the transcript for actual calls, rather than trusting the narration, is how you tell the difference."
+      ],
+      "related": ["tool", "tool-result", "turn", "hallucination"],
+      "usage": [
+        "\"It said it ran the migration.\"",
+        "\"Saying isn't calling. Check the transcript for an actual tool call.\""
+      ]
+    },
+    {
+      "term": "Tool result",
+      "section": 3,
+      "description": "What the harness appends to the context after running a tool. The agent's only window onto what actually happened.",
+      "body": [
+        "Results are the agent's senses, and they are also the fastest way to fill a context window. An unbounded command can return tens of thousands of tokens of log output in a single result, crowding out everything the model needed to remember and pushing the session toward compaction.",
+        "Because results land in the middle of the context, they are also where injected instructions from external content can appear. Treating tool output as data to be evaluated rather than instructions to be followed is a habit worth having in both the harness and the human."
+      ],
+      "related": ["tool-call", "context-window", "attention-budget", "compaction"],
+      "usage": [
+        "\"It ran the full test suite and now it's lost the plot.\"",
+        "\"Forty thousand tokens of output landed in the window. Of course it has.\""
+      ]
+    },
+    {
+      "term": "MCP",
+      "section": 3,
+      "description": "A standard protocol for exposing tools and data to agents, so a capability written once works across harnesses.",
+      "body": [
+        "Model Context Protocol replaces bespoke per-harness integrations with a common interface. A server exposes tools, resources and prompts; any compatible client can connect and use them. This is what makes it practical to share a database connector or an issue-tracker integration across different agent setups.",
+        "The cost is context. Each connected server contributes tool definitions to every request, and connecting everything available is a reliable way to spend a large slice of the window before any work begins. Enable the servers a project actually needs."
+      ],
+      "related": ["tool", "context-pointer", "harness", "environment"],
+      "usage": [
+        "\"Why is the baseline context so big on this project?\"",
+        "\"Six MCP servers connected. We use two.\""
+      ]
+    },
+    {
+      "term": "Permission request",
+      "section": 3,
+      "description": "The harness pausing to ask before an action runs. The interrupt that keeps a human in the loop.",
+      "body": [
+        "The harness intercepts a tool call it considers consequential, stops, and asks. Nothing executes until you answer, which makes this the last reliable checkpoint before an irreversible action.",
+        "Permission requests trade autonomy for attention. Every prompt is an interruption, and a session that asks constantly is barely autonomous at all — which is precisely why people widen permissions and then find themselves reviewing damage after the fact. A sandbox solves the same problem from the other direction, by limiting blast radius rather than asking."
+      ],
+      "related": ["permission-mode", "sandbox", "human-in-the-loop", "tool-call"],
+      "usage": [
+        "\"I approved everything without reading — it was asking constantly.\"",
+        "\"Then sandbox it instead. Prompts you ignore aren't a safety mechanism.\""
+      ]
+    },
+    {
+      "term": "Permission mode",
+      "section": 3,
+      "description": "The standing policy for which actions need approval and which run unattended.",
+      "body": [
+        "Modes range from asking about everything through allow-listing categories to running unattended entirely. The right setting is a function of blast radius: a throwaway branch in a container and a machine with production credentials deserve different answers.",
+        "The failure pattern is drift. People loosen the mode to escape interruption during a tedious session and never tighten it again, so a policy chosen for safe work is still in force during risky work. Coupling a permissive mode to a strong sandbox is what makes unattended running defensible."
+      ],
+      "related": ["permission-request", "sandbox", "afk", "environment"],
+      "usage": [
+        "\"It's on full auto — is that fine?\"",
+        "\"In a disposable container, yes. On your laptop with prod keys, no.\""
+      ]
+    },
+    {
+      "term": "Agent mode",
+      "section": 3,
+      "description": "An interface running the full agentic loop — tools, multi-step execution, file edits — rather than answering a single question.",
+      "body": [
+        "The same product often ships several modes: a completion mode that suggests as you type, a chat mode that answers in a side panel, and an agent mode that plans, calls tools and edits files across a whole task. They differ in how much of the environment the model can reach and how many steps it takes before returning.",
+        "Choosing the mode is choosing a cost and risk profile. Agent mode does far more per instruction, which is exactly the point, and also exactly why it needs a considered permission setup."
+      ],
+      "related": ["agent", "harness", "permission-mode", "tool-call"],
+      "usage": [
+        "\"I asked for a rename and it restructured three files.\"",
+        "\"You were in agent mode. It scoped the task itself.\""
+      ]
+    },
+    {
+      "term": "Sandbox",
+      "section": 3,
+      "description": "An isolated environment the agent runs inside — a container, a VM, an ephemeral filesystem or a restricted shell.",
+      "body": [
+        "A sandbox limits blast radius. Even if the agent runs something destructive, or acts on malicious content it fetched, the damage is contained by the boundary rather than prevented by a question. That containment is what makes running unattended a reasonable thing to do.",
+        "Sandboxes and permission prompts attack the same risk from opposite ends. Permissions ask before an action runs and need you present to answer; a sandbox constrains what any action can reach whether or not anyone is watching. One spends attention, the other spends infrastructure — and the stronger the isolation, the fewer questions need asking."
+      ],
+      "related": ["permission-mode", "afk", "environment", "filesystem"],
+      "usage": [
+        "\"Can I leave it running overnight?\"",
+        "\"In a sandbox with no credentials, sure. Otherwise absolutely not.\""
+      ]
+    },
+
+    {
+      "term": "Sycophancy",
+      "section": 4,
+      "description": "The model's pull toward agreeing with you, praising your idea and validating your framing rather than pushing back.",
+      "body": [
+        "Preference training rewards responses people rate highly, and people rate agreement highly. The result is a systematic tilt: proposals get endorsed, mistaken premises get accepted and built upon, and a leading question tends to produce the answer it was leading toward.",
+        "This makes the model unreliable as a check on your own reasoning unless you actively work against the grain. Asking what is wrong with an approach yields better signal than asking whether it is good, and presenting two options neutrally beats presenting your favourite and asking for confirmation."
+      ],
+      "related": ["human-review", "grilling", "automated-review"],
+      "usage": [
+        "\"It agreed the schema was solid.\"",
+        "\"You asked if it was solid. Ask it to find three things that will break.\""
+      ]
+    },
+    {
+      "term": "Hallucination",
+      "section": 4,
+      "description": "Confident, fluent output that is simply untrue — an invented function, a misremembered flag, a plausible citation to nothing.",
+      "body": [
+        "This is not a malfunction bolted onto an otherwise truthful system. Next-token prediction optimises for likely, never for true, and a fabricated API that follows the naming conventions of a real library is extremely likely text. Fluency and accuracy are separate axes, and the model gives you no signal to distinguish them.",
+        "Hallucination clusters where the model's knowledge is thinnest: recent releases past the knowledge cutoff, small or internal libraries, exact version numbers, and precise quotations. The countermeasure is structural rather than conversational — put the real material in context, and let automated checks catch what remains."
+      ],
+      "related": ["next-token-prediction", "parametric-knowledge", "knowledge-cutoff", "automated-check"],
+      "usage": [
+        "\"It used a method that doesn't exist.\"",
+        "\"Classic hallucination. Give it the actual docs rather than asking it to be sure.\""
+      ]
+    },
+    {
+      "term": "Parametric knowledge",
+      "section": 4,
+      "description": "What the model knows from training, stored in its parameters. Broad, fuzzy, undated and impossible to audit.",
+      "body": [
+        "This is everything the model absorbed before it ever met you: language, general programming, the shape of popular libraries, common idioms. It needs no tokens in the context, which makes it free and instantly available.",
+        "It is also unreliable in specific ways. It has no timestamp, so the model cannot tell you whether what it knows is current. It blurs similar things together, so two libraries with comparable APIs get conflated. And it fails silently — the model cannot distinguish something it knows well from something it half-remembers."
+      ],
+      "related": ["contextual-knowledge", "knowledge-cutoff", "hallucination", "parameters"],
+      "usage": [
+        "\"It knows this framework well, right?\"",
+        "\"It knows the version it trained on, and it can't tell you which one that was.\""
+      ]
+    },
+    {
+      "term": "Knowledge cutoff",
+      "section": 4,
+      "description": "The date past which the model saw no training data. Everything after it is invisible unless you supply it.",
+      "body": [
+        "Beyond the cutoff the model does not know what it does not know. It will confidently describe the latest release it saw as current, unaware that three major versions have shipped since, and will happily invent details in the shape of what it expects.",
+        "The fix is never to ask the model to be more careful; it is to close the gap with context. Documentation, changelogs and real source pulled into the window turn a guess into a read."
+      ],
+      "related": ["parametric-knowledge", "contextual-knowledge", "hallucination", "training"],
+      "usage": [
+        "\"It's using the old API.\"",
+        "\"That's the one that existed at its cutoff. Paste in the migration guide.\""
+      ]
+    },
+    {
+      "term": "Contextual knowledge",
+      "section": 4,
+      "description": "What the model knows because it is in the context right now. Precise, current, verifiable — and it costs tokens.",
+      "body": [
+        "This is the counterweight to parametric knowledge. Anything in the window is exact rather than remembered, and dated rather than undated, which is why pasting the actual file beats asking the model what it thinks the file contains.",
+        "The trade is that it consumes budget and competes for attention. Contextual knowledge is strong but not absolute — material buried under a mountain of other content can still lose out to a confident parametric memory. Relevance and position matter as much as presence."
+      ],
+      "related": ["parametric-knowledge", "context", "attention-budget", "context-window"],
+      "usage": [
+        "\"I gave it the config and it still guessed.\"",
+        "\"Where in the context? It's forty thousand tokens back under the test output.\""
+      ]
+    },
+    {
+      "term": "Attention relationship",
+      "section": 4,
+      "description": "How every token in the context relates to every other. The mechanism by which more content makes each piece harder to weigh.",
+      "body": [
+        "Attention is how the model decides which parts of the context bear on the token it is about to produce. Each token is considered in relation to the others, so the number of relationships grows far faster than the number of tokens.",
+        "The practical consequence is that context does not merely accumulate, it interferes. Adding an irrelevant file does not sit inertly alongside the relevant one; it adds relationships that compete with it. This is the mechanism behind attention budget and the reason a fuller window is a duller one."
+      ],
+      "related": ["attention-budget", "attention-degradation", "context-window"],
+      "usage": [
+        "\"Adding files can't hurt.\"",
+        "\"It can. Every one of them competes for attention with the file that matters.\""
+      ]
+    },
+    {
+      "term": "Attention budget",
+      "section": 4,
+      "description": "The finite capacity to weigh what is in the context. Distinct from the window's capacity to hold it.",
+      "body": [
+        "The window measures how much fits; the attention budget measures how much can actually be brought to bear. The two diverge badly. A model can hold a document it cannot reliably reason across, which is why doubling the window does not double effective capability.",
+        "Everything in context draws on the budget, including material you added defensively and never needed. This reframes context management as spending rather than storing — the question is not whether something fits, but whether it earns its share of attention."
+      ],
+      "related": ["attention-relationship", "attention-degradation", "context-window", "smart-zone"],
+      "usage": [
+        "\"There's plenty of room left.\"",
+        "\"Room isn't the constraint. It's already spending attention on things we don't need.\""
+      ]
+    },
+    {
+      "term": "Attention degradation",
+      "section": 4,
+      "description": "Quality declining as context fills. Instructions get missed, earlier decisions get dropped, mistakes get repeated.",
+      "body": [
+        "The signs are consistent: a constraint stated early stops being honoured, a bug already fixed reappears, the agent re-reads files it read an hour ago, and the same wrong approach comes back after being ruled out. None of these are the model getting worse; they are the same model working through a saturated window.",
+        "This is a strong argument for treating degradation as a scheduled event rather than a surprise. Handing off before quality falls is cheap; noticing after an hour of subtly wrong work is not."
+      ],
+      "related": ["attention-budget", "smart-zone", "compaction", "handoff"],
+      "usage": [
+        "\"It just reintroduced the bug we fixed this morning.\"",
+        "\"Textbook degradation. Hand off now rather than fighting it.\""
+      ]
+    },
+    {
+      "term": "Smart zone",
+      "section": 4,
+      "description": "The stretch of a session where the agent works well — enough context to be useful, not so much that quality has slipped.",
+      "body": [
+        "Sessions have an arc. Early on the agent lacks the context to be effective; in the middle it has what it needs and the window is still clean; late on, degradation sets in. The middle stretch is where the good work happens.",
+        "The zone does not track the window limit. A session can be well past its smart zone with most of the window still free — the limit is where the harness refuses to continue, but quality falls off long before that. Plan around the zone, not the ceiling: the real budget for a task is the tokens the agent works well within."
+      ],
+      "related": ["attention-degradation", "session", "handoff", "context-window"],
+      "usage": [
+        "\"We're only at forty percent of the window.\"",
+        "\"And well out of the smart zone. Those aren't the same number.\""
+      ]
+    },
+
+    {
+      "term": "Clearing",
+      "section": 5,
+      "description": "Discarding the context and starting fresh. The cleanest reset available, and it loses everything not written down.",
+      "body": [
+        "Clearing returns the window to its opening state — system prompt and nothing else. It is the only true fix for a degraded session, because it removes the accumulated material rather than compressing it.",
+        "It is also unforgiving. Every decision reached in conversation, every constraint discovered along the way and every dead end already ruled out disappears unless it exists on disk. Clearing without writing a handoff artifact first means rediscovering all of it."
+      ],
+      "related": ["handoff", "handoff-artifact", "compaction", "filesystem", "session"],
+      "usage": [
+        "\"Just clear it, it's gone sideways.\"",
+        "\"Write the decisions out first, then clear.\""
+      ]
+    },
+    {
+      "term": "Handoff",
+      "section": 5,
+      "description": "Deliberately moving work from one session to the next, carrying forward what matters and leaving the rest behind.",
+      "body": [
+        "A handoff is a clear with preparation. Before ending the session you capture the state of the work — what is done, what is next, which decisions are settled and why — into something durable, then start clean and load only that.",
+        "Done well this is strictly better than a long session, because the new window contains a curated summary instead of an unedited transcript. The skill is deciding what to carry: conclusions and constraints travel well, exploratory detours do not."
+      ],
+      "related": ["handoff-artifact", "clearing", "smart-zone", "primary-source", "spec"],
+      "usage": [
+        "\"Should we keep pushing?\"",
+        "\"It's slipping. Hand off — write up where we are and start clean.\""
+      ]
+    },
+    {
+      "term": "Primary source",
+      "section": 5,
+      "description": "Material that is authoritative because it is the thing itself: the code, the schema, the actual error, the real API response.",
+      "body": [
+        "Primary sources cannot be wrong about what they describe, because they are what they describe. The file's contents are the truth about the file. The stack trace is the truth about the failure. Loading these into context converts guesswork into reading.",
+        "They cost more tokens than a summary and are worth it wherever precision matters. A description of a schema invites the model to fill gaps from parametric memory; the schema itself does not."
+      ],
+      "related": ["secondary-source", "contextual-knowledge", "handoff-artifact"],
+      "usage": [
+        "\"I described the error to it.\"",
+        "\"Paste the actual trace. Your description dropped the frame that matters.\""
+      ]
+    },
+    {
+      "term": "Secondary source",
+      "section": 5,
+      "description": "Material about the thing rather than the thing itself: summaries, notes, docs, a previous session's write-up.",
+      "body": [
+        "Secondary sources are compressed and therefore cheap, which is exactly what makes them the right medium for a handoff. A good summary of yesterday's session costs a fraction of the transcript and carries most of the value.",
+        "Compression is lossy, though, and the loss is invisible from inside the summary. When the agent's behaviour suggests it is missing something specific, that is the moment to go back to the primary source rather than rewriting the summary."
+      ],
+      "related": ["primary-source", "handoff-artifact", "compaction", "spec"],
+      "usage": [
+        "\"The notes say the migration is done.\"",
+        "\"Check the actual migration table before we build on that.\""
+      ]
+    },
+    {
+      "term": "Handoff artifact",
+      "section": 5,
+      "description": "The durable document that carries work across a context boundary. Written to disk, loaded into the next session.",
+      "body": [
+        "This is the physical form of a handoff: a file capturing current state, remaining work, settled decisions and the reasoning behind them. It exists precisely because the filesystem outlives the context window.",
+        "Good ones are short and decision-dense — what was chosen, what was rejected, what is still open. Bad ones narrate the session chronologically and reproduce the original problem, which is that the next window fills with material nobody needs."
+      ],
+      "related": ["handoff", "spec", "ticket", "filesystem", "secondary-source"],
+      "usage": [
+        "\"What do I put in it?\"",
+        "\"Decisions and open questions. Not a transcript of how we got here.\""
+      ]
+    },
+    {
+      "term": "Spec",
+      "section": 5,
+      "description": "A written statement of what is being built and what counts as done. A handoff artifact aimed forward rather than backward.",
+      "body": [
+        "A spec fixes the target before implementation starts, which gives every subsequent session the same definition of success and gives you something concrete to review that is far cheaper to change than code.",
+        "It is also the most effective place to catch a misunderstanding. Disagreements about scope surface in a paragraph in seconds; the same disagreement discovered in a finished implementation costs the implementation."
+      ],
+      "related": ["handoff-artifact", "design-concept", "ticket", "grilling"],
+      "usage": [
+        "\"Can it just start building?\"",
+        "\"Get the spec agreed first. Rewriting a paragraph beats rewriting the module.\""
+      ]
+    },
+    {
+      "term": "Ticket",
+      "section": 5,
+      "description": "A scoped unit of work, sized so one session can finish it inside the smart zone.",
+      "body": [
+        "Tickets impose the boundaries that keep sessions healthy. A well-sized one has a clear start, a clear finish and enough context in its own description to begin without archaeology — which is the same property that makes it a usable handoff artifact.",
+        "Sizing is the whole art. Too large and the session degrades before completion; too small and you pay session setup costs repeatedly for trivial changes."
+      ],
+      "related": ["spec", "handoff-artifact", "session", "smart-zone"],
+      "usage": [
+        "\"This ticket's been open across four sessions.\"",
+        "\"Then it isn't a ticket, it's a project. Split it.\""
+      ]
+    },
+    {
+      "term": "Compaction",
+      "section": 5,
+      "description": "The harness summarising earlier context to free space, replacing original material with a condensed version.",
+      "body": [
+        "When the window approaches its limit, the harness can compress history — typically by having a model summarise earlier turns and substituting that summary for the originals. The session continues with room to work.",
+        "What it buys in space it spends in fidelity, and the loss is unpredictable. Specific constraints, exact file contents and the precise wording of a decision are exactly the details that summarisation smooths away, so behaviour can change subtly right after a compaction. It also rewrites the prefix, which invalidates the cache from that point on."
+      ],
+      "related": ["autocompact", "clearing", "handoff", "cache-tokens", "secondary-source"],
+      "usage": [
+        "\"It's been odd since about an hour ago.\"",
+        "\"It compacted around then. The constraint we set probably didn't survive.\""
+      ]
+    },
+    {
+      "term": "Autocompact",
+      "section": 5,
+      "description": "Compaction the harness triggers on its own when the window fills, without asking.",
+      "body": [
+        "Autocompact keeps a long session alive unattended, which is essential for AFK work and invisible while it goes well. The trigger is capacity, not quality, so it fires wherever the session happens to be — often mid-task.",
+        "The failure it produces is quiet: work continues on a summary that dropped something load-bearing, and nobody sees the moment it happened. Where fidelity matters more than continuity, a deliberate handoff at a boundary you chose beats an automatic one at a boundary the window chose."
+      ],
+      "related": ["compaction", "afk", "handoff", "attention-degradation"],
+      "usage": [
+        "\"Nobody compacted anything.\"",
+        "\"Autocompact did, forty minutes ago. Check the transcript for the boundary.\""
+      ]
+    },
+
+    {
+      "term": "Memory system",
+      "section": 6,
+      "description": "Whatever mechanism carries information across sessions — files, notes, a store the harness reads on startup.",
+      "body": [
+        "Since the model is stateless and the window is cleared, persistence has to be built. A memory system is the harness's answer: a convention for what gets written down and what gets loaded back in at the start of the next session.",
+        "The engineering problem is selection rather than storage. Everything remembered costs context on every session that loads it, so an unpruned memory becomes a tax — and eventually carries stale claims that actively mislead."
+      ],
+      "related": ["agents-md", "context-pointer", "progressive-disclosure", "handoff-artifact"],
+      "usage": [
+        "\"It keeps using the old deploy command.\"",
+        "\"It's in the memory file. Memory doesn't expire on its own.\""
+      ]
+    },
+    {
+      "term": "AGENTS.md",
+      "section": 6,
+      "description": "A conventional file in a repository holding project-specific instructions for coding agents.",
+      "body": [
+        "It is a place to write down what an agent cannot infer from the code alone: how to run the tests, which package manager is in use, the conventions this codebase actually follows, and the traps that catch newcomers. Harnesses load it automatically, so it applies to every session without anyone remembering to mention it.",
+        "It works best kept short and factual. Long files compete for attention with the task and go stale quietly — and a stale instruction is worse than a missing one, because the agent follows it confidently."
+      ],
+      "related": ["memory-system", "system-prompt", "ax", "progressive-disclosure"],
+      "usage": [
+        "\"Every session I have to explain the build.\"",
+        "\"Put it in AGENTS.md once and stop explaining it.\""
+      ]
+    },
+    {
+      "term": "Progressive disclosure",
+      "section": 6,
+      "description": "Loading only the context needed right now, with pointers to the rest. Borrowed from interface design.",
+      "body": [
+        "Rather than front-loading everything an agent might need, you supply a small index and let it fetch detail on demand. The window stays clean, and material only costs budget when it is actually relevant.",
+        "This is the organising principle behind skills, context pointers and on-demand tool definitions. It works because retrieval is cheap and attention is not — a pointer costs a few tokens, while the document it points to might cost thousands that mostly go unused."
+      ],
+      "related": ["context-pointer", "skill", "attention-budget", "tool"],
+      "usage": [
+        "\"Should the style guide go in the system prompt?\"",
+        "\"Point at it. It only needs loading when it's actually writing code.\""
+      ]
+    },
+    {
+      "term": "Context pointer",
+      "section": 6,
+      "description": "A cheap reference to material the agent can load when needed, instead of the material itself.",
+      "body": [
+        "A file path, a URL, a tool name or a one-line index entry — enough for the agent to know something exists and to go get it. The cost is a handful of tokens rather than the full document.",
+        "Pointers only work if the agent can actually follow them, which means the retrieval tool must exist and the reference must be accurate. A pointer to a file that has moved is worse than nothing: it produces a failed lookup and, often, a guess in its place."
+      ],
+      "related": ["progressive-disclosure", "skill", "tool", "memory-system"],
+      "usage": [
+        "\"I listed the docs instead of pasting them.\"",
+        "\"Good — as long as it has a tool that can open them.\""
+      ]
+    },
+    {
+      "term": "Skill",
+      "section": 6,
+      "description": "A teachable capability packaged as a unit, kept out of the context window until a pointer pulls it in for the task at hand.",
+      "body": [
+        "A skill bundles instructions, and often supporting scripts or reference files, for doing one kind of work properly. It sits on disk with only a short description visible to the agent; when a task matches, the full contents load.",
+        "This is progressive disclosure applied to expertise. Twenty skills cost twenty short descriptions in context, not twenty full playbooks — so you can accumulate specialised know-how without every session paying for all of it."
+      ],
+      "related": ["progressive-disclosure", "context-pointer", "subagent", "memory-system"],
+      "usage": [
+        "\"Where do I put our release checklist?\"",
+        "\"Make it a skill. Then it loads when it's releasing and stays out of the way otherwise.\""
+      ]
+    },
+    {
+      "term": "Subagent",
+      "section": 6,
+      "description": "An agent spawned by another agent through a tool call. It runs in its own session and reports back a single result.",
+      "body": [
+        "The value is context isolation. A subagent can read fifty files, run a broad search and work through a long investigation in its own window, then return a short conclusion — so the parent pays for the answer rather than the search.",
+        "The cost is that everything the subagent saw is gone. It cannot ask a follow-up question, and the parent cannot inspect the reasoning that produced the summary. Subagents suit well-specified work with a compact result, and suit exploratory work where the findings matter poorly."
+      ],
+      "related": ["agent", "tool-call", "context-window", "progressive-disclosure"],
+      "usage": [
+        "\"Send a subagent to find every call site.\"",
+        "\"Good use — we want the list, not the fifty files it read to build it.\""
+      ]
+    },
+
+    {
+      "term": "Human-in-the-loop",
+      "section": 7,
+      "description": "A working pattern where a person stays alongside the agent during a session — reviewing, redirecting and collaborating in real time.",
+      "body": [
+        "The human is part of the loop rather than a reviewer at the end. Course corrections happen within a turn or two of going wrong, which keeps errors cheap and keeps the agent's context aligned with what you actually want.",
+        "It costs your attention continuously, which is the real constraint. It suits work where being wrong is expensive or where the target is still moving — and it is largely wasted on mechanical changes a check could verify."
+      ],
+      "related": ["afk", "human-review", "permission-request", "vibe-coding"],
+      "usage": [
+        "\"Do I need to sit with this one?\"",
+        "\"It's touching auth. Stay in the loop.\""
+      ]
+    },
+    {
+      "term": "AFK",
+      "section": 7,
+      "description": "A working pattern where you start a session and let the agent run unattended. Away from keyboard.",
+      "body": [
+        "AFK trades supervision for throughput. It only works when the agent can tell for itself whether it is succeeding, which means automated checks are not optional — without them an unattended agent will confidently produce an hour of broken work.",
+        "The safety story rests on the sandbox rather than on prompts nobody is present to answer. Strong isolation, good checks and a well-scoped task are what make leaving reasonable; permissive settings on an unsandboxed machine are what make it reckless."
+      ],
+      "related": ["sandbox", "automated-check", "permission-mode", "autocompact"],
+      "usage": [
+        "\"I'll let it run through lunch.\"",
+        "\"Only if the tests actually gate it. Otherwise you'll come back to an hour of nonsense.\""
+      ]
+    },
+    {
+      "term": "Automated check",
+      "section": 7,
+      "description": "A deterministic verification that runs in the environment — tests, type checks, lints, builds, hooks. Pass or fail, no judgement.",
+      "body": [
+        "Checks are the signal an agent can self-correct from without involving anyone. A failing test is unambiguous feedback the agent can act on immediately, which is what turns a long unattended run into something that converges rather than drifts.",
+        "They are deterministic by design, and a flaky test is a broken check rather than a softer one — it teaches the agent that failure is noise. Investment here has unusually high leverage, because every check you add is a class of error the agent can catch on its own for the rest of the project's life."
+      ],
+      "related": ["automated-review", "afk", "ax", "environment", "non-determinism"],
+      "usage": [
+        "\"Why is it so much better on this repo?\"",
+        "\"Fast tests and strict types. It gets told it's wrong in seconds.\""
+      ]
+    },
+    {
+      "term": "Automated review",
+      "section": 7,
+      "description": "An agent reviewing another agent's work, often with a different model or system prompt. Non-deterministic: it forms a judgement.",
+      "body": [
+        "Where a check asserts, a review assesses. It can catch things no assertion covers — unclear naming, a missed edge case, an approach that works but will not survive the next change — and it can be wrong in ways a test cannot.",
+        "It runs anywhere: pre-merge on a pull request, after the fact across commit history, or mid-session as a subagent. What decides the category is what the assertion does, not where it runs — an LLM judging code in CI is automated review, not an automated check."
+      ],
+      "related": ["automated-check", "human-review", "subagent", "sycophancy"],
+      "usage": [
+        "\"CI runs an LLM reviewer, so we're covered.\"",
+        "\"That's review, not a check. It has an opinion, not a verdict.\""
+      ]
+    },
+    {
+      "term": "Human review",
+      "section": 7,
+      "description": "A person reading the code the agent produced and forming a judgement on it. Reading the diff counts; reading the summary does not.",
+      "body": [
+        "The distinction is the whole point. An agent's summary of its work is written by the same process that wrote the work, and shares its blind spots — a confident description of a change that does not do what it says will read perfectly well.",
+        "Human review is the most expensive verification available and the only one that catches problems no check encodes and no reviewer agent thinks to look for. Spending it where blast radius is largest, rather than spreading it evenly, is what makes it sustainable."
+      ],
+      "related": ["automated-review", "vibe-coding", "human-in-the-loop", "sycophancy"],
+      "usage": [
+        "\"I read what it said it did.\"",
+        "\"That's not review. Read the diff.\""
+      ]
+    },
+    {
+      "term": "Vibe coding",
+      "section": 7,
+      "description": "A working pattern where the user accepts the agent's code without reading it. The diff is treated as opaque.",
+      "body": [
+        "Judgement moves from the code to its behaviour: does the thing work when you try it. For prototypes, throwaway scripts and exploratory work that is a perfectly rational trade — reading code you intend to discard is waste.",
+        "It stops being rational the moment the code becomes load-bearing, because nobody involved understands it. The characteristic failure is not a bug but a codebase that has to be maintained and cannot be, since the only reader was a process that retained nothing."
+      ],
+      "related": ["human-review", "prototyping", "human-in-the-loop"],
+      "usage": [
+        "\"I vibe-coded the whole admin panel.\"",
+        "\"Fine until someone has to change it. Nobody's read it.\""
+      ]
+    },
+    {
+      "term": "Design concept",
+      "section": 7,
+      "description": "The shared understanding of what is being built, held in common by user and agent, separate from any artifact.",
+      "body": [
+        "Before there is a spec or code there is an idea of the thing: what it does, who it serves, which constraints are real and which are assumed. When this is genuinely shared, the agent's proposals land in the right space and the work moves quickly.",
+        "When it is not shared, everything downstream is wrong in ways that look like small misunderstandings and are not. Most disappointing agent output traces back to a design concept that only one party actually held."
+      ],
+      "related": ["spec", "grilling", "prototyping", "handoff-artifact"],
+      "usage": [
+        "\"It built the wrong thing, competently.\"",
+        "\"We never had a shared design concept — it filled in the gaps itself.\""
+      ]
+    },
+    {
+      "term": "Grilling",
+      "section": 7,
+      "description": "A technique for developing a design concept: the agent interviews you Socratically, one decision at a time.",
+      "body": [
+        "Instead of accepting a vague brief and inventing the details, the agent is instructed to interrogate it — asking about edge cases, conflicts and unstated assumptions before writing anything. Each answer narrows the space.",
+        "It works because it inverts sycophancy. A model asked to build will build; a model asked to find what you have not decided will find it, and it is dramatically cheaper to resolve those questions in conversation than in code."
+      ],
+      "related": ["design-concept", "spec", "sycophancy", "prototyping"],
+      "usage": [
+        "\"Just get it started.\"",
+        "\"Have it grill you first. Ten minutes now saves the rewrite.\""
+      ]
+    },
+    {
+      "term": "Prototyping",
+      "section": 7,
+      "description": "Having the agent build a quick, rough version when conversation is too low-fidelity and you need something real to react to.",
+      "body": [
+        "Some disagreements cannot be resolved in words. A rough build makes the design concept concrete enough to have opinions about, and people are far better at critiquing something in front of them than at specifying it in advance.",
+        "The discipline is in what happens next. A prototype's value is the understanding it produces, and treating one as a foundation — because it works and throwing it away feels wasteful — is how throwaway code becomes permanent."
+      ],
+      "related": ["design-concept", "vibe-coding", "spec", "grilling"],
+      "usage": [
+        "\"We've argued about this layout for an hour.\"",
+        "\"Have it prototype both and look at them.\""
+      ]
+    },
+    {
+      "term": "DX",
+      "section": 7,
+      "description": "Developer experience: how easy a codebase and its toolchain make it for people to do good work — docs, feedback speed, error quality.",
+      "body": [
+        "DX is measured in friction. How long from a change to knowing whether it worked, how clear the failure messages are, how much undocumented knowledge you need before you can contribute safely.",
+        "It has always mattered for hiring and morale, and it now has a second payoff: most of what makes a codebase pleasant for humans makes it tractable for agents too. The overlap is large but not total, which is why AX is worth naming separately."
+      ],
+      "related": ["ax", "automated-check", "environment"],
+      "usage": [
+        "\"Setup took me two days.\"",
+        "\"That's a DX problem, and it's costing the agents too.\""
+      ]
+    },
+    {
+      "term": "AX",
+      "section": 7,
+      "description": "Agent experience: how well an environment is set up for an agent to do good work — checks, architecture and free context.",
+      "body": [
+        "AX asks a specific question: can an agent orient, act and verify here without a human filling in the gaps? Fast deterministic checks, clear module boundaries, honest documentation and a project small enough to reason about are the load-bearing pieces.",
+        "It diverges from DX in interesting ways. Humans tolerate tribal knowledge and slow feedback because they accumulate memory across months; an agent arrives with none and leaves with none, every session. Anything a newcomer would need explained is something the agent needs written down."
+      ],
+      "related": ["dx", "automated-check", "agents-md", "environment", "progressive-disclosure"],
+      "usage": [
+        "\"Agents do badly in this repo.\"",
+        "\"No tests, no docs, and nothing runs locally. That's an AX problem, not a model one.\""
+      ]
+    }
+  ]
+}

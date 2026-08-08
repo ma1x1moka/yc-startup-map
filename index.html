@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <title>The AI Coding Dictionary</title>
+    <meta
+      name="description"
+      content="The vocabulary of AI coding, defined plainly and wired into a 3D graph you can explore term by term."
+    />
+    <meta name="theme-color" content="#eaeae8" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23eaeae8'/><circle cx='16' cy='16' r='6' fill='%231a1a19'/></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+
+    <header class="header">
+      <a class="wordmark" href="./">
+        <span class="the">The</span><strong>AI Coding Dictionary</strong>
+      </a>
+      <span class="header-spacer"></span>
+
+      <div class="search">
+        <label class="skip" for="search-input">Search terms</label>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search  /"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <button class="icon-btn" id="theme-toggle" aria-pressed="false" aria-label="Switch theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="hero">
+      <h1 id="hero-title"></h1>
+      <p id="hero-tagline"></p>
+      <div class="hero-stats">
+        <div><b id="stat-terms">—</b><span class="label">terms</span></div>
+        <div><b id="stat-sections">—</b><span class="label">sections</span></div>
+        <div><span class="label">Drag the graph · press / to search</span></div>
+      </div>
+    </div>
+
+    <div class="graph-wrap">
+      <div class="graph-frame">
+        <canvas id="graph" aria-label="3D graph of terms and their relationships" role="img"></canvas>
+        <div class="graph-hint">Drag to rotate · click a node</div>
+        <div class="graph-legend" id="graph-legend"></div>
+      </div>
+    </div>
+
+    <main id="main">
+      <div id="sections"></div>
+    </main>
+
+    <footer class="footer">
+      <span id="footer-note"></span>
+      <span>Self-hosted · swap data/terms.json for your own</span>
+    </footer>
+
+    <div class="scrim" id="scrim"></div>
+
+    <aside class="panel" id="panel" aria-hidden="true" aria-label="Term detail">
+      <div class="panel-head">
+        <span class="sec" id="panel-section"></span>
+        <div class="panel-nav">
+          <button class="icon-btn" id="panel-prev" aria-label="Previous term">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </button>
+          <button class="icon-btn" id="panel-next" aria-label="Next term">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <button class="icon-btn" id="panel-close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel-body" id="panel-body"></div>
+    </aside>
+
+    <script type="module" src="assets/app.js"></script>
+  </body>
+</html>
