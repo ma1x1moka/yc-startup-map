@@ -31,6 +31,22 @@ const state = {
   current: null,
 };
 
+async function fetchData() {
+  const res = await fetch(DATA_URL);
+  if (!res.ok) throw new Error(`Failed to load terms.json: ${res.status}`);
+  return res.json();
+}
+
+/* Sandboxed frames can throw on history and storage access. Neither is
+   essential, so degrade instead of taking the page down. */
+const safe = (fn, fallback) => {
+  try {
+    return fn();
+  } catch {
+    return fallback;
+  }
+};
+
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
@@ -50,9 +66,8 @@ init();
 async function init() {
   initTheme();
 
-  const res = await fetch(DATA_URL);
-  if (!res.ok) throw new Error(`Failed to load terms.json: ${res.status}`);
-  const data = await res.json();
+  // A single-file build inlines the dataset; the source build fetches it.
+  const data = globalThis.__ACD_DATA__ ?? (await fetchData());
 
   state.data = data;
   state.sections = new Map(data.sections.map((s) => [s.id, s]));
@@ -262,9 +277,11 @@ function openTerm(slug, push = true) {
   $("#panel-close").focus({ preventScroll: true });
 
   if (push) {
-    const url = new URL(location.href);
-    url.searchParams.set("term", slug);
-    history.pushState({ term: slug }, "", url);
+    safe(() => {
+      const url = new URL(location.href);
+      url.searchParams.set("term", slug);
+      history.pushState({ term: slug }, "", url);
+    });
   }
 }
 
@@ -277,9 +294,11 @@ function closeTerm(push = true) {
   state.graph?.select(null);
 
   if (push) {
-    const url = new URL(location.href);
-    url.searchParams.delete("term");
-    history.pushState({}, "", url);
+    safe(() => {
+      const url = new URL(location.href);
+      url.searchParams.delete("term");
+      history.pushState({}, "", url);
+    });
   }
 }
 
@@ -364,18 +383,23 @@ function wireEvents() {
 /* ================================= theme ================================= */
 
 function initTheme() {
-  const saved = localStorage.getItem("acd-theme");
+  const root = document.documentElement;
+  // Respect a theme the host already stamped on the document.
+  const stamped = root.dataset.theme;
+  const saved = safe(() => localStorage.getItem("acd-theme"), null);
   const dark =
-    saved === "dark" ||
-    (!saved && matchMedia("(prefers-color-scheme: dark)").matches);
-  document.documentElement.dataset.theme = dark ? "dark" : "light";
+    stamped === "dark" ||
+    (!stamped &&
+      (saved === "dark" ||
+        (!saved && matchMedia("(prefers-color-scheme: dark)").matches)));
+  root.dataset.theme = dark ? "dark" : "light";
   updateThemeButton();
 }
 
 function toggleTheme() {
   const dark = !isDark();
   document.documentElement.dataset.theme = dark ? "dark" : "light";
-  localStorage.setItem("acd-theme", dark ? "dark" : "light");
+  safe(() => localStorage.setItem("acd-theme", dark ? "dark" : "light"));
   updateThemeButton();
   renderSections(state.filtered || state.order, $("#search-input").value.trim());
   syncGraphTheme();

@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<!-- No data-theme here on purpose: an un-stamped root lets the saved
+     preference (or the OS setting) decide. A host that stamps one wins. -->
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -10,6 +12,13 @@
     />
     <meta name="theme-color" content="#eaeae8" />
     <link rel="stylesheet" href="assets/styles.css" />
+    <script>
+      // Stamp the saved theme before first paint to avoid a flash.
+      try {
+        var t = localStorage.getItem("acd-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23eaeae8'/><circle cx='16' cy='16' r='6' fill='%231a1a19'/></svg>"

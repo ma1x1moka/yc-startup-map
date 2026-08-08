@@ -64,10 +64,21 @@
   initial-value: #b4462a;
 }
 
+/* Three theme states, not two: an explicit stamp wins in either direction,
+   and an un-stamped document falls back to the OS preference. Only tokens
+   are redefined here — components always style through them. */
 :root[data-theme="dark"] {
   --color-paper: #131313;
   --color-ink: #e8e8e6;
   color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #131313;
+    --color-ink: #e8e8e6;
+    color-scheme: dark;
+  }
 }
 
 /* Dark overrides for the per-section palettes, applied by app.js via
