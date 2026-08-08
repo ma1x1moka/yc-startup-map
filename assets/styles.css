@@ -348,6 +348,10 @@ button {
 @media (min-width: 800px) {
   .graph-frame {
     aspect-ratio: 16 / 9;
+    /* 16/9 across a wide window is ~760px tall, which pushes the first
+       section off-screen on every common desktop height. Cap it so the graph
+       reads as a band and the terms below stay reachable. */
+    max-height: min(54vh, 600px);
   }
   .graph-legend {
     position: absolute;
