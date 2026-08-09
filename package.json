@@ -1,0 +1,19 @@
+{
+  "name": "ai-coding-dictionary",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A 3D term atlas: fixed-viewport WebGL graph plus a deep-linkable term panel, driven by a folder of markdown.",
+  "scripts": {
+    "graph": "node pipeline/build-graph.mjs",
+    "build": "node build.mjs",
+    "dev": "python3 -m http.server 8100"
+  },
+  "dependencies": {
+    "d3-quadtree": "3.0.1",
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

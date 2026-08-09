@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "title": "The AI Coding Dictionary",
+    "tagline": "The vocabulary of AI coding, in plain English.",
+    "footer": "sections describing how agentic coding works."
+  },
+  "sections": [
+    {
+      "title": "The Model",
+      "slugs": [
+        "ai",
+        "model",
+        "parameters",
+        "training",
+        "inference",
+        "effort",
+        "token",
+        "next-token-prediction",
+        "non-determinism",
+        "model-provider",
+        "harness",
+        "model-provider-request",
+        "input-tokens",
+        "output-tokens",
+        "prefix-cache",
+        "cache-tokens"
+      ]
+    },
+    {
+      "title": "Sessions, Context Windows & Turns",
+      "slugs": [
+        "stateless",
+        "context",
+        "context-window",
+        "stateful",
+        "agent",
+        "system-prompt",
+        "session",
+        "turn"
+      ]
+    },
+    {
+      "title": "Tools & Environment",
+      "slugs": [
+        "environment",
+        "filesystem",
+        "tool",
+        "tool-call",
+        "tool-result",
+        "mcp",
+        "permission-request",
+        "permission-mode",
+        "agent-mode",
+        "sandbox"
+      ]
+    },
+    {
+      "title": "Failure Modes",
+      "slugs": [
+        "sycophancy",
+        "hallucination",
+        "parametric-knowledge",
+        "knowledge-cutoff",
+        "contextual-knowledge",
+        "attention-relationship",
+        "attention-budget",
+        "attention-degradation",
+        "smart-zone"
+      ]
+    },
+    {
+      "title": "Handoffs",
+      "slugs": [
+        "clearing",
+        "handoff",
+        "primary-source",
+        "secondary-source",
+        "handoff-artifact",
+        "spec",
+        "ticket",
+        "compaction",
+        "autocompact"
+      ]
+    },
+    {
+      "title": "Memory and Steering",
+      "slugs": [
+        "memory-system",
+        "agents",
+        "progressive-disclosure",
+        "context-pointer",
+        "skill",
+        "subagent"
+      ]
+    },
+    {
+      "title": "Patterns of Work",
+      "slugs": [
+        "human-in-the-loop",
+        "afk",
+        "automated-check",
+        "automated-review",
+        "human-review",
+        "vibe-coding",
+        "design-concept",
+        "grilling",
+        "prototyping",
+        "dx",
+        "ax"
+      ]
+    }
+  ]
+}
