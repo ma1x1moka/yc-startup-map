@@ -2,7 +2,11 @@
   "meta": {
     "title": "The AI Coding Dictionary",
     "tagline": "The vocabulary of AI coding, in plain English.",
-    "footer": "sections describing how agentic coding works."
+    "about": [
+      "Everybody is throwing around tokens, context windows, agents and handoffs — and half the time nobody agrees on what they mean.",
+      "So here is a dictionary. Every term in plain English, wired into a graph so you can see how the ideas connect instead of memorising a list. Click a node and follow the threads.",
+      "The atlas is built from the definitions themselves: wherever one entry links to another, an edge appears. Drag to rotate, scroll to zoom, press _/_ to search."
+    ]
   },
   "sections": [
     {

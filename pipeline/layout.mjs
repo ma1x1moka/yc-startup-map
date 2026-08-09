@@ -20,25 +20,34 @@ function mulberry32(seed) {
   };
 }
 
-/** Evenly spread N points over a sphere. Used to seat the section clusters. */
-function fibonacciSphere(count, radius) {
+/**
+ * Seats the section clusters around a ring rather than over a sphere.
+ *
+ * A sphere puts two sections at the poles, which stretches the finished cloud
+ * vertically — and a screen is wider than it is tall, so the tall axis is the
+ * one you have least room for. A ring in the horizontal plane, with only a
+ * little vertical wander, gives a cloud that is about as wide as it is deep
+ * and reads across a landscape viewport. Rotating it then sweeps the sections
+ * past you one after another, which a sphere does not do.
+ */
+function sectionCentres(count, radius) {
   const points = [];
-  const golden = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < count; i++) {
-    const y = count === 1 ? 0 : 1 - (i / (count - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const theta = golden * i;
-    points.push([Math.cos(theta) * r * radius, y * radius, Math.sin(theta) * r * radius]);
+    const angle = (i / count) * Math.PI * 2;
+    // Irregular but deterministic vertical wander, so the ring does not read
+    // as a perfect disc.
+    const wander = (((i * 0.618034) % 1) - 0.5) * 0.24 * radius;
+    points.push([Math.cos(angle) * radius, wander, Math.sin(angle) * radius]);
   }
   return points;
 }
 
-const CLUSTER_RADIUS = 190; // how far section centres sit from the origin
-const SPREAD = 55; // initial jitter of a node around its section centre
+const CLUSTER_RADIUS = 112; // how far section centres sit from the origin
+const SPREAD = 45; // initial jitter of a node around its section centre
 const ITERATIONS = 600;
-const IDEAL_EDGE = 120; // spring rest length
-const REPULSION = 5200; // node-node separation strength
-const COHESION = 0.012; // pull toward a node's own section centre
+const IDEAL_EDGE = 92; // spring rest length
+const REPULSION = 3400; // node-node separation strength
+const COHESION = 0.014; // pull toward a node's own section centre
 const DAMPING = 0.86;
 
 /**
@@ -49,7 +58,7 @@ const DAMPING = 0.86;
  */
 export function computeLayout(nodes, edges, sectionCount) {
   const random = mulberry32(0x5eed);
-  const centres = fibonacciSphere(sectionCount, CLUSTER_RADIUS);
+  const centres = sectionCentres(sectionCount, CLUSTER_RADIUS);
 
   const index = new Map(nodes.map((n, i) => [n.slug, i]));
   const pos = nodes.map((n) => {

@@ -1,108 +1,104 @@
 <!doctype html>
-<!-- No data-theme here on purpose: an un-stamped root lets the saved
-     preference (or the OS setting) decide. A host that stamps one wins. -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>The AI Coding Dictionary</title>
     <meta
       name="description"
-      content="The vocabulary of AI coding, defined plainly and wired into a 3D graph you can explore term by term."
+      content="The vocabulary of AI coding, defined plainly and wired into a 3D atlas you can explore term by term."
     />
-    <meta name="theme-color" content="#eaeae8" />
+    <meta name="theme-color" content="#f2f2f0" />
     <link rel="stylesheet" href="assets/styles.css" />
-    <script>
-      // Stamp the saved theme before first paint to avoid a flash.
-      try {
-        var t = localStorage.getItem("acd-theme");
-        if (t) document.documentElement.dataset.theme = t;
-      } catch (e) {}
-    </script>
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23eaeae8'/><circle cx='16' cy='16' r='6' fill='%231a1a19'/></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f2f2f0'/><circle cx='16' cy='16' r='6' fill='%231a1a19'/></svg>"
     />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to main content</a>
+    <a class="skip" href="#panel">Skip to the term panel</a>
 
-    <header class="header">
-      <a class="wordmark" href="./">
-        <span class="the">The</span><strong>AI Coding Dictionary</strong>
-      </a>
-      <span class="header-spacer"></span>
-
-      <div class="search">
-        <label class="skip" for="search-input">Search terms</label>
-        <input
-          id="search-input"
-          type="search"
-          placeholder="Search  /"
-          autocomplete="off"
-          spellcheck="false"
-        />
-      </div>
-
-      <button class="icon-btn" id="theme-toggle" aria-pressed="false" aria-label="Switch theme">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-        </svg>
-      </button>
-    </header>
-
-    <div class="hero">
-      <h1 id="hero-title"></h1>
-      <p id="hero-tagline"></p>
-      <div class="hero-stats">
-        <div><b id="stat-terms">—</b><span class="label">terms</span></div>
-        <div><b id="stat-sections">—</b><span class="label">sections</span></div>
-        <div><span class="label">Drag the graph · press / to search</span></div>
-      </div>
+    <div class="atlas" id="atlas">
+      <canvas id="atlas-canvas"></canvas>
+      <!-- Labels are HTML over the canvas so they stay crisp and focusable. -->
+      <div class="atlas-labels" id="atlas-labels" aria-label="Terms in the atlas"></div>
     </div>
 
-    <div class="graph-wrap">
-      <div class="graph-frame">
-        <canvas id="graph" aria-label="3D graph of terms and their relationships" role="img"></canvas>
-        <div class="graph-hint">Drag to rotate · click a node</div>
-        <div class="graph-legend" id="graph-legend"></div>
-      </div>
-    </div>
-
-    <main id="main">
-      <div id="sections"></div>
-    </main>
-
-    <footer class="footer">
-      <span id="footer-note"></span>
-      <span>Self-hosted · swap data/terms.json for your own</span>
-    </footer>
-
-    <div class="scrim" id="scrim"></div>
-
-    <aside class="panel" id="panel" aria-hidden="true" aria-label="Term detail">
-      <div class="panel-head">
-        <span class="sec" id="panel-section"></span>
-        <div class="panel-nav">
-          <button class="icon-btn" id="panel-prev" aria-label="Previous term">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M15 5l-7 7 7 7" />
-            </svg>
-          </button>
-          <button class="icon-btn" id="panel-next" aria-label="Next term">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-          <button class="icon-btn" id="panel-close" aria-label="Close">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M6 6l12 12M18 6L6 18" />
+    <div class="corner corner-tl">
+      <div class="search" id="search">
+        <button class="icon-btn search-open" id="search-open" aria-label="Search the dictionary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" />
+            <path d="M16 16l4.5 4.5" stroke-linecap="round" />
+          </svg>
+        </button>
+        <div class="search-field" hidden>
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5" />
+            <path d="M16 16l4.5 4.5" stroke-linecap="round" />
+          </svg>
+          <label class="skip" for="search-input">Search the dictionary</label>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search the dictionary"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="search-clear" id="search-clear" aria-label="Clear search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+              <path d="M7 7l10 10M17 7L7 17" stroke-linecap="round" />
             </svg>
           </button>
         </div>
+        <p class="search-count" id="search-count" hidden></p>
       </div>
-      <div class="panel-body" id="panel-body"></div>
-    </aside>
+    </div>
+
+    <div class="corner corner-tr">
+      <button class="icon-btn" id="info-open" aria-label="About this project">
+        <span class="glyph">i</span>
+      </button>
+    </div>
+
+    <a class="wordmark" href="./" id="wordmark"></a>
+
+    <p class="hint" id="hint">Drag to rotate <span>·</span> Scroll to zoom</p>
+
+    <div class="corner corner-br">
+      <button class="icon-btn" id="color-toggle" aria-pressed="false" aria-label="Switch to section colours">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M12 3.5a8.5 8.5 0 1 0 0 17c1 0 1.6-.7 1.6-1.5 0-.9-.7-1.4-.7-2.2 0-.7.6-1.3 1.4-1.3h1.4A4.8 4.8 0 0 0 20.5 11c0-4.1-3.8-7.5-8.5-7.5Z" />
+          <circle cx="8" cy="11" r="1.05" fill="currentColor" stroke="none" />
+          <circle cx="12" cy="8" r="1.05" fill="currentColor" stroke="none" />
+          <circle cx="16" cy="10.5" r="1.05" fill="currentColor" stroke="none" />
+        </svg>
+      </button>
+      <button class="icon-btn" id="sound-toggle" aria-pressed="false" aria-label="Unmute interface sounds">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M4 9.5h3l4-3.2v11.4l-4-3.2H4z" stroke-linejoin="round" />
+          <path class="wave" d="M14.6 9.4a3.6 3.6 0 0 1 0 5.2" stroke-linecap="round" />
+          <path class="wave" d="M17 7.2a6.8 6.8 0 0 1 0 9.6" stroke-linecap="round" />
+          <path class="mute" d="M15 9.5l4.5 5M19.5 9.5l-4.5 5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <aside class="panel" id="panel" aria-label="Term detail" hidden></aside>
+
+    <div class="modal" id="info" hidden>
+      <div class="modal-scrim" data-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="info-title">
+        <button class="icon-btn modal-close" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M7 7l10 10M17 7L7 17" stroke-linecap="round" />
+          </svg>
+        </button>
+        <p class="label">About</p>
+        <h1 id="info-title"></h1>
+        <div class="modal-body" id="info-body"></div>
+      </div>
+    </div>
 
     <script type="module" src="assets/app.js"></script>
   </body>

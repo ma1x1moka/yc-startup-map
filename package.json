@@ -7,7 +7,7 @@
   "scripts": {
     "graph": "node pipeline/build-graph.mjs",
     "build": "node build.mjs",
-    "dev": "python3 -m http.server 8100"
+    "dev": "node build.mjs && python3 -m http.server 8100 --directory dist"
   },
   "dependencies": {
     "d3-quadtree": "3.0.1",

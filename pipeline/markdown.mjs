@@ -24,25 +24,10 @@
  * "copy as markdown" action hands you.
  */
 
-/** Title to slug. `.md` in a title (AGENTS.md) is an extension, not a word. */
-export function slugify(title) {
-  return title
-    .replace(/\.md$/i, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-/** `./Term%20Name.md` -> `term-name`. */
-export function slugFromHref(href) {
-  let path = href.replace(/^\.\//, "");
-  try {
-    path = decodeURIComponent(path);
-  } catch {
-    /* a stray % is not worth failing a build over */
-  }
-  return slugify(path.replace(/\.md$/i, ""));
-}
+/* One definition of the slug rules, shared with the runtime — if the two ever
+ * disagreed, every inline link would resolve to nothing. */
+export { slugify, slugFromHref } from "../src/slug.js";
+import { slugify, slugFromHref } from "../src/slug.js";
 
 function parseFrontmatter(source) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(source);
