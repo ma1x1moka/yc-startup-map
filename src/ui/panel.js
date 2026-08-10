@@ -33,18 +33,60 @@ export class Panel {
     this.positionOf = new Map(order.map((slug, i) => [slug, i]));
     this.lastPosition = null;
 
+    // Navigation follows the graph, not the reading order: `trail` is the
+    // breadcrumb of where you came from ("Prec"), and each node's neighbours —
+    // its edges — are the forward choices, heaviest flow first.
+    this.neighboursOf = new Map(graph.nodes.map((n) => [n.slug, []]));
+    for (const e of graph.edges) {
+      this.neighboursOf.get(e.source)?.push({ slug: e.target, weight: e.weight ?? 0 });
+      this.neighboursOf.get(e.target)?.push({ slug: e.source, weight: e.weight ?? 0 });
+    }
+    for (const list of this.neighboursOf.values()) list.sort((a, b) => b.weight - a.weight);
+    this.trail = [];
+    this._wentBack = false;
+
     this.element.addEventListener("click", (event) => this._onClick(event));
     this.unsubscribe = store.subscribe((state, previous) => {
-      if (state.focusedSlug !== previous.focusedSlug) this.render(state.focusedSlug);
+      if (state.focusedSlug !== previous.focusedSlug) {
+        this._track(previous.focusedSlug, state.focusedSlug);
+        this.render(state.focusedSlug);
+      }
     });
   }
 
-  /** Move by ±1 in reading order. */
-  step(delta) {
+  /** Maintain the breadcrumb. Returning to the last crumb pops it (a real
+   *  back); going anywhere else pushes where you were. */
+  _track(from, to) {
+    if (this.trail.length && to === this.trail[this.trail.length - 1]) {
+      this.trail.pop();
+      this._wentBack = true;
+    } else {
+      if (from) this.trail.push(from);
+      this._wentBack = false;
+    }
+  }
+
+  get precSlug() {
+    return this.trail.length ? this.trail[this.trail.length - 1] : null;
+  }
+
+  /** Back to where you came from. */
+  goPrec() {
+    if (this.precSlug) {
+      this.store.set({ focusedSlug: this.precSlug });
+      this.onSound("step");
+    }
+  }
+
+  /** Forward to the heaviest connected edge that is not where you came from. */
+  goForward() {
     const current = this.store.get().focusedSlug;
-    if (!current) return;
-    const next = this.order[this.positionOf.get(current) + delta];
-    if (next) this.store.set({ focusedSlug: next });
+    const prec = this.precSlug;
+    const choice = (this.neighboursOf.get(current) ?? []).find((n) => n.slug !== prec);
+    if (choice) {
+      this.store.set({ focusedSlug: choice.slug });
+      this.onSound("step");
+    }
   }
 
   _onClick(event) {
@@ -60,15 +102,13 @@ export class Panel {
     if (!action) return;
 
     const { action: kind } = action.dataset;
-    if (kind === "close") {
-      this.store.set({ focusedSlug: null });
-      this.onSound("close");
-    } else if (kind === "prev") {
-      this.step(-1);
-      this.onSound("step");
-    } else if (kind === "next") {
-      this.step(1);
-      this.onSound("step");
+    if (kind === "prec") {
+      this.goPrec();
+    } else if (kind === "toggle-edges") {
+      const wrap = action.closest(".edge-choices");
+      const open = wrap.toggleAttribute("data-expanded");
+      action.setAttribute("aria-expanded", String(open));
+      action.textContent = open ? "less" : `+${wrap.dataset.rest} more`;
     } else if (kind === "copy-markdown" || kind === "copy-link" || kind === "share") {
       this._share(kind, action);
     }
@@ -123,19 +163,48 @@ export class Panel {
     }
 
     const position = this.positionOf.get(slug);
-    const direction =
-      this.lastPosition === null ? 0 : position > this.lastPosition ? 1 : -1;
+    const direction = this.lastPosition === null ? 0 : this._wentBack ? -1 : 1;
     this.lastPosition = position;
 
     const section = this.graph.sections[node.section];
     const total = this.order.length;
     const exists = (s) => this.bySlug.has(s);
 
-    const previous = this.bySlug.get(this.order[position - 1]);
-    const next = this.bySlug.get(this.order[position + 1]);
+    // Graph navigation: a breadcrumb back ("Prec"), then the node's other
+    // edges — heaviest first — as the forward choices.
+    const prec = this.precSlug ? this.bySlug.get(this.precSlug) : null;
+    const choices = (this.neighboursOf.get(slug) ?? [])
+      .filter((c) => c.slug !== this.precSlug)
+      .map((c) => this.bySlug.get(c.slug))
+      .filter(Boolean);
 
     let i = 0;
     const blocks = [];
+
+    if (node.stats?.length) {
+      blocks.push(`
+        <section class="block" style="--i:${++i}">
+          <span class="rule"></span>
+          <p class="label">Position</p>
+          <dl class="stats">
+            ${node.stats
+              .map(
+                (s) => `<div class="stat-row"${s.tone ? ` data-tone="${s.tone}"` : ""}>
+                  <dt>${escapeHtml(s.k)}</dt>
+                  <dd${s.mono ? ' class="mono"' : ""}>${escapeHtml(s.v)}</dd>
+                </div>`
+              )
+              .join("")}
+          </dl>
+          ${
+            node.address
+              ? `<a class="action etherscan" href="https://etherscan.io/address/${escapeHtml(
+                  node.address
+                )}" target="_blank" rel="noopener"><span>View on Etherscan</span>${svg(ICONS.link)}</a>`
+              : ""
+          }
+        </section>`);
+    }
 
     if (node.usage?.length) {
       blocks.push(`
@@ -165,26 +234,6 @@ export class Panel {
         </section>`);
     }
 
-    if (node.links?.length) {
-      blocks.push(`
-        <section class="block" style="--i:${++i}">
-          <span class="rule"></span>
-          <p class="label">Connects to</p>
-          <ul class="tags">
-            ${node.links
-              .map((target) => {
-                const term = this.bySlug.get(target);
-                return term
-                  ? `<li><button type="button" class="tag" data-term="${escapeHtml(
-                      term.slug
-                    )}">${escapeHtml(term.title)}</button></li>`
-                  : "";
-              })
-              .join("")}
-          </ul>
-        </section>`);
-    }
-
     if (node.prose) {
       blocks.push(`
         <section class="block" style="--i:${++i}">
@@ -195,9 +244,6 @@ export class Panel {
     }
 
     this.element.innerHTML = `
-      <button class="icon-btn panel-close" data-action="close" aria-label="Close">
-        ${svg(ICONS.close)}
-      </button>
       <div class="panel-scroll">
         <article class="slide" style="--dir:${direction}">
           <header class="panel-meta">
@@ -210,7 +256,7 @@ export class Panel {
           <h2><span>${escapeHtml(node.title)}</span></h2>
           <p class="lede">${renderInline(node.description, exists)}</p>
           ${blocks.join("")}
-          <details class="more">
+          <details class="more" open>
             <summary>Read more ${svg(ICONS.chevron)}</summary>
             <div class="actions">
               <button type="button" class="action" data-action="share">
@@ -226,21 +272,40 @@ export class Panel {
           </details>
         </article>
       </div>
-      <nav class="panel-nav">
-        <button type="button" data-action="prev" ${previous ? "" : "disabled"}>
+      <nav class="panel-nav graph-nav">
+        <button type="button" class="prec" data-action="prec" ${prec ? "" : "disabled"}>
           <span class="arrow">${svg(ICONS.left)}</span>
           <span class="text">
-            <small>Prev</small>
-            <span>${previous ? escapeHtml(previous.title) : "—"}</span>
+            <small>Prec</small>
+            <span>${prec ? escapeHtml(prec.title) : "Start of trail"}</span>
           </span>
         </button>
-        <button type="button" data-action="next" ${next ? "" : "disabled"}>
-          <span class="arrow">${svg(ICONS.right)}</span>
-          <span class="text">
-            <small>Next</small>
-            <span>${next ? escapeHtml(next.title) : "—"}</span>
-          </span>
-        </button>
+        <div class="edge-choices" data-rest="${Math.max(0, choices.length - 3)}">
+          <div class="edge-head">
+            <small>Go to connected nodes</small>
+            ${
+              choices.length > 3
+                ? `<button type="button" class="edge-toggle" data-action="toggle-edges" aria-expanded="false">+${
+                    choices.length - 3
+                  } more</button>`
+                : ""
+            }
+          </div>
+          <ul class="tags">
+            ${
+              choices.length
+                ? choices
+                    .map(
+                      (t) =>
+                        `<li><button type="button" class="tag" data-term="${escapeHtml(
+                          t.slug
+                        )}">${escapeHtml(t.title)}</button></li>`
+                    )
+                    .join("")
+                : `<li class="edge-empty">no other edges</li>`
+            }
+          </ul>
+        </div>
       </nav>`;
 
     this.element.hidden = false;

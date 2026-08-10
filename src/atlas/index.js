@@ -98,6 +98,15 @@ export class Atlas {
     this.labelWeights = new Float32Array(this.nodes.length);
     this.edgeAlphas = new Float32Array(graph.edges.length);
 
+    // A faint, weight-scaled resting visibility so the thick flows into the
+    // hub read in the overview. Kindless/weightless edges (e.g. the dictionary
+    // content) stay hidden until focus, as before.
+    const edgeW = graph.edges.map((e) => e.weight ?? null);
+    const maxEdgeW = Math.max(1, ...edgeW.map((w) => w ?? 0));
+    this.edgeResting = graph.edges.map((e) =>
+      e.weight == null ? 0 : 0.05 + 0.16 * Math.sqrt((e.weight || 0) / maxEdgeW)
+    );
+
     this.lensShift = 0;
     this.lensShiftGoal = 0;
     this.width = 1;
@@ -155,9 +164,9 @@ export class Atlas {
   _onClick(event) {
     if (!this.controls.wasClick()) return;
     const slug = this.pick(event.clientX, event.clientY);
-    // Clicking empty space closes the panel, which is how you get back to the
-    // overview without hunting for the X.
-    this.store.set({ focusedSlug: slug ?? null });
+    // A wallet is always selected — clicking a node moves the selection, but
+    // clicking empty space keeps the current one so the panel is never empty.
+    if (slug) this.store.set({ focusedSlug: slug });
   }
 
   _onMove(event) {
@@ -237,8 +246,9 @@ export class Atlas {
       const bothMatch = matches?.has(edge.source) && matches?.has(edge.target);
 
       let alpha = 0;
-      if (searchActive) alpha = bothMatch ? 0.5 : 0;
-      else if (focusedSlug) alpha = touchesFocus ? 0.5 : 0.05;
+      if (searchActive) alpha = bothMatch ? 0.6 : 0;
+      else if (focusedSlug) alpha = touchesFocus ? 0.7 : Math.min(this.edgeResting[e], 0.05);
+      else alpha = this.edgeResting[e];
 
       this.edgeAlphas[e] = alpha;
       if (alpha > 0.3) active.push(e);

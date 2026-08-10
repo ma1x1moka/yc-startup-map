@@ -26,6 +26,13 @@ if (!graph) {
  *  them. This drives the "07 / 69" index and prev/next. */
 const order = graph.sections.flatMap((section) => section.slugs);
 
+/* A wallet is always selected, so the panel is never empty. Default to the
+ * most-connected node (the hub) when no ?term= is in the URL. */
+const defaultSlug = graph.nodes.reduce(
+  (best, n) => (n.inDegree > best.inDegree ? n : best),
+  graph.nodes[0]
+).slug;
+
 const safe = (fn, fallback) => {
   try {
     return fn();
@@ -40,7 +47,7 @@ const slugFromUrl = () => {
 };
 
 const store = createStore({
-  focusedSlug: slugFromUrl(),
+  focusedSlug: slugFromUrl() ?? defaultSlug,
   hoveredSlug: null,
   matchSlugs: [],
   searchActive: false,
@@ -174,7 +181,7 @@ function syncUrl(slug) {
 }
 
 window.addEventListener("popstate", () => {
-  store.set({ focusedSlug: slugFromUrl() });
+  store.set({ focusedSlug: slugFromUrl() ?? defaultSlug });
 });
 
 /* ---------- reactions ---------- */
@@ -229,7 +236,7 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     if (!info.hidden) closeInfo();
     else if (search.isOpen) search.close();
-    else if (store.get().focusedSlug) store.set({ focusedSlug: null });
+    // No deselect: a wallet is always selected so the panel stays open.
     return;
   }
 
@@ -237,12 +244,10 @@ window.addEventListener("keydown", (event) => {
 
   if (event.key === "ArrowRight") {
     event.preventDefault();
-    panel.step(1);
-    sound.play("step");
+    panel.goForward();
   } else if (event.key === "ArrowLeft") {
     event.preventDefault();
-    panel.step(-1);
-    sound.play("step");
+    panel.goPrec();
   }
 });
 
