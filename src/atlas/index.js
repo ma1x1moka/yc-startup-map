@@ -257,16 +257,56 @@ export class Atlas {
     this.nodeLayer.apply(this.colors, this.alphas);
     this.edgeLayer.apply(this.edgeAlphas, active);
 
-    // Selecting a term flies the camera to it and tightens the depth of field
-    // so the neighbourhood reads as the subject and the rest as context.
-    if (focusedNode) {
-      this.controls.flyTo(focusedNode.layout, this.cloudRadius * FOCUS_DISTANCE);
-    } else if (this.lastFocused) {
-      this.controls.reset();
+    // Only move the camera when the *selection* changes — restyle also runs on
+    // hover and search, and re-flying on every one of those was yanking the
+    // atlas back to the focus framing a beat after the user zoomed or panned.
+    if (focusedSlug !== this.lastFocused) {
+      if (focusedNode) this._frameNeighbourhood(focusedNode);
+      else if (this.lastFocused) this.controls.reset();
     }
     this.lastFocused = focusedSlug;
 
     this.focusTight = Boolean(focusedSlug);
+  }
+
+  /** Fly to frame the focused node *together with everything it connects to*,
+   *  so a wallet's collateral source and the reserve it borrows from land in
+   *  the same frame — the relationship, not a lone dot floating in space. */
+  _frameNeighbourhood(node) {
+    const pts = [node.layout];
+    let maxRadius = nodeRadius(node.inDegree);
+    for (const slug of this.neighbours.get(node.slug) ?? []) {
+      const n = this.nodes[this.indexBySlug.get(slug)];
+      if (!n) continue;
+      pts.push(n.layout);
+      maxRadius = Math.max(maxRadius, nodeRadius(n.inDegree));
+    }
+
+    // Centroid of the neighbourhood, so the subject sits centred rather than
+    // clinging to one edge of the frame (which left the big empty margin).
+    const c = [0, 0, 0];
+    for (const p of pts) {
+      c[0] += p[0]; c[1] += p[1]; c[2] += p[2];
+    }
+    c[0] /= pts.length; c[1] /= pts.length; c[2] /= pts.length;
+
+    // Radius that must fit, padded so discs and labels don't clip at the rim.
+    let R = 0;
+    for (const p of pts) R = Math.max(R, Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2]));
+    R += maxRadius * 2;
+
+    // Fit R vertically and horizontally, the latter allowing for the panel that
+    // eats the right third of the width when a term is open.
+    const half = (this.camera.fov * Math.PI) / 360;
+    const vExtent = Math.tan(half);
+    const usableW = Math.max(0.35, 1 - this.lensShiftGoal);
+    const fit = Math.max(R / vExtent, R / (vExtent * Math.max(0.5, this.camera.aspect) * usableW));
+    const distance = Math.max(this.cloudRadius * FOCUS_DISTANCE, fit * 1.25);
+
+    // Keep the depth of field wide enough that the whole neighbourhood stays
+    // sharp even when it is spread across the layout.
+    this.focusRangeWorld = Math.max(this.cloudRadius * FOCUS_RANGE, R * 2.2);
+    this.controls.flyTo(c, distance);
   }
 
   /* ---------- frame ---------- */
@@ -288,8 +328,9 @@ export class Atlas {
     this.camera.updateProjectionMatrix();
     this.camera.projectionMatrix.elements[8] += this.lensShift;
 
-    const focusRange =
-      this.cloudRadius * (this.focusTight ? FOCUS_RANGE : HOME_RANGE);
+    const focusRange = this.focusTight
+      ? this.focusRangeWorld ?? this.cloudRadius * FOCUS_RANGE
+      : this.cloudRadius * HOME_RANGE;
     this.nodeLayer.setFocus(this.controls.distance, focusRange);
     this.edgeLayer.update(now / 1000);
     this.labelLayer.update(

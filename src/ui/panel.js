@@ -21,6 +21,37 @@ const ICONS = {
 const svg = (path, className = "") =>
   `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${path}</svg>`;
 
+const money = (v) =>
+  v >= 1e9 ? `$${(v / 1e9).toFixed(2)}B`
+  : v >= 1e6 ? `$${(v / 1e6).toFixed(1)}M`
+  : v >= 1e3 ? `$${(v / 1e3).toFixed(0)}K`
+  : v > 0 ? `$${Math.round(v)}` : "";
+
+/* Turn an edge into a plain-English flow, from the focused node's point of
+ * view. `dir` is "out" when the focused node is the edge's source, "in" when
+ * it is the target — that plus the kind is enough to say who posts what to
+ * whom. This is what makes the graph legible: not "Yuzu Money — Aave reserve"
+ * but "USDe borrowed · $75.3M". */
+function describeFlow(kind, dir, weight) {
+  switch (kind) {
+    case "collateral":
+      return dir === "in"
+        ? { rel: "sUSDe collateral posted", amt: money(weight), tone: "collateral" }
+        : { rel: "sUSDe backing this position", amt: money(weight), tone: "collateral" };
+    case "borrow-loop":
+    case "borrow-organic":
+      return dir === "out"
+        ? { rel: "USDe borrowed from reserve", amt: money(weight), tone: kind }
+        : { rel: "USDe borrowed from here", amt: money(weight), tone: kind };
+    case "funds":
+      return dir === "in"
+        ? { rel: "Gas / capital seeded in", amt: "seed", tone: "funds" }
+        : { rel: "Gas / capital seeded out", amt: "seed", tone: "funds" };
+    default:
+      return { rel: "Connected", amt: money(weight), tone: "" };
+  }
+}
+
 export class Panel {
   constructor(element, { graph, store, order, onSound }) {
     this.element = element;
@@ -38,8 +69,10 @@ export class Panel {
     // its edges — are the forward choices, heaviest flow first.
     this.neighboursOf = new Map(graph.nodes.map((n) => [n.slug, []]));
     for (const e of graph.edges) {
-      this.neighboursOf.get(e.source)?.push({ slug: e.target, weight: e.weight ?? 0 });
-      this.neighboursOf.get(e.target)?.push({ slug: e.source, weight: e.weight ?? 0 });
+      // `dir` is relative to the node whose list this is: "out" = it is the
+      // edge's source, "in" = it is the target.
+      this.neighboursOf.get(e.source)?.push({ slug: e.target, weight: e.weight ?? 0, kind: e.kind, dir: "out" });
+      this.neighboursOf.get(e.target)?.push({ slug: e.source, weight: e.weight ?? 0, kind: e.kind, dir: "in" });
     }
     for (const list of this.neighboursOf.values()) list.sort((a, b) => b.weight - a.weight);
     this.trail = [];
@@ -175,8 +208,8 @@ export class Panel {
     const prec = this.precSlug ? this.bySlug.get(this.precSlug) : null;
     const choices = (this.neighboursOf.get(slug) ?? [])
       .filter((c) => c.slug !== this.precSlug)
-      .map((c) => this.bySlug.get(c.slug))
-      .filter(Boolean);
+      .map((c) => ({ node: this.bySlug.get(c.slug), flow: describeFlow(c.kind, c.dir, c.weight) }))
+      .filter((c) => c.node);
 
     let i = 0;
     const blocks = [];
@@ -282,7 +315,7 @@ export class Panel {
         </button>
         <div class="edge-choices" data-rest="${Math.max(0, choices.length - 3)}">
           <div class="edge-head">
-            <small>Go to connected nodes</small>
+            <small>Flows in &amp; out</small>
             ${
               choices.length > 3
                 ? `<button type="button" class="edge-toggle" data-action="toggle-edges" aria-expanded="false">+${
@@ -291,15 +324,22 @@ export class Panel {
                 : ""
             }
           </div>
-          <ul class="tags">
+          <ul class="tags flows">
             ${
               choices.length
                 ? choices
                     .map(
-                      (t) =>
-                        `<li><button type="button" class="tag" data-term="${escapeHtml(
-                          t.slug
-                        )}">${escapeHtml(t.title)}</button></li>`
+                      ({ node, flow }) =>
+                        `<li><button type="button" class="flow" data-term="${escapeHtml(
+                          node.slug
+                        )}"${flow.tone ? ` data-tone="${flow.tone}"` : ""}>
+                          <span class="flow-dot" aria-hidden="true"></span>
+                          <span class="flow-main">
+                            <span class="flow-rel">${escapeHtml(flow.rel)}</span>
+                            <span class="flow-node">${escapeHtml(node.title)}</span>
+                          </span>
+                          ${flow.amt ? `<span class="flow-amt">${escapeHtml(flow.amt)}</span>` : ""}
+                        </button></li>`
                     )
                     .join("")
                 : `<li class="edge-empty">no other edges</li>`

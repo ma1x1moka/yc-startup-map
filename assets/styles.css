@@ -866,6 +866,83 @@ body[data-section-color="on"] .bubble[data-role="a"] {
   font: 400 13px/1.2 var(--sans);
 }
 
+/* Descriptive flow rows. Each edge says what it *is* — collateral posted, USDe
+   borrowed, gas seeded — plus how much and in which colour it appears in the
+   atlas, so a wallet's neighbourhood reads as a trade rather than a name list.
+   Full-width rows always (not pills), so they stay legible collapsed or not. */
+.flows {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+.flow {
+  --tone: var(--faint);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-gleasing),
+    border-color var(--duration-fast) var(--ease-gleasing);
+}
+.flow:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.flow-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tone);
+}
+.flow-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.flow-rel {
+  font: 500 9.4px/1.4 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tone);
+}
+.flow-node {
+  font: 400 13.5px/1.25 var(--sans);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-amt {
+  flex: none;
+  font: 500 13px/1 var(--mono);
+  color: var(--ink);
+}
+.flow:hover .flow-node,
+.flow:hover .flow-amt {
+  color: var(--panel);
+}
+.flow:hover .flow-rel {
+  color: color-mix(in srgb, var(--panel) 78%, transparent);
+}
+.flow:hover .flow-dot {
+  box-shadow: 0 0 0 1px var(--panel);
+}
+/* Tones match the ribbon colours in edges.js. */
+.flow[data-tone="collateral"] { --tone: #3f9a57; }
+.flow[data-tone="borrow-loop"] { --tone: #cf5a25; }
+.flow[data-tone="borrow-organic"] { --tone: #1f8f84; }
+.flow[data-tone="funds"] { --tone: #7a5bd0; }
+
 /* --- about modal --------------------------------------------------------- */
 
 .modal {
