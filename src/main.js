@@ -2,6 +2,7 @@
 
 import { createStore } from "./store.js";
 import { Atlas } from "./atlas/index.js";
+import { nodeRadius } from "./atlas/nodes.js";
 import { Panel } from "./ui/panel.js";
 import { Search } from "./ui/search.js";
 import { Sound } from "./ui/sound.js";
@@ -71,6 +72,32 @@ const atlas = new Atlas(document.querySelector("#atlas-canvas"), {
   palette: PALETTE,
 });
 
+/* ---------- size legend ---------- */
+/* Node size encodes debt, but nothing on screen said so — this is the key.
+ * Dots are drawn at the same nodeRadius() scale as the wallets themselves, so
+ * "this dot = $25M" is a true reading of the atlas, not a decorative guess. */
+const sizeLegend = graph.meta?.sizeLegend;
+if (sizeLegend?.refs?.length) {
+  const maxRadius = Math.max(...sizeLegend.refs.map((r) => nodeRadius(r.inDegree)));
+  const el = document.createElement("div");
+  el.className = "legend";
+  el.setAttribute("aria-hidden", "true");
+  el.innerHTML = `
+    <p class="legend-title">Node size <span>·</span> ${escapeHtml(sizeLegend.encodes ?? "")}</p>
+    <div class="legend-scale">
+      ${sizeLegend.refs
+        .map((r) => {
+          const d = Math.max(6, Math.round((nodeRadius(r.inDegree) / maxRadius) * 30));
+          return `<span class="legend-ref">
+            <span class="legend-dot" style="width:${d}px;height:${d}px"></span>
+            <span class="legend-val">${escapeHtml(r.text)}</span>
+          </span>`;
+        })
+        .join("")}
+    </div>`;
+  document.body.appendChild(el);
+}
+
 const panel = new Panel(document.querySelector("#panel"), {
   graph,
   store,
@@ -116,14 +143,14 @@ function paintTheme() {
   }
 
   document.body.dataset.sectionColor = state.sectionColorOn ? "on" : "off";
-  colorButton.setAttribute("aria-pressed", String(state.sectionColorOn));
-  colorButton.setAttribute(
+  colorButton?.setAttribute("aria-pressed", String(state.sectionColorOn));
+  colorButton?.setAttribute(
     "aria-label",
     state.sectionColorOn ? "Switch to grayscale" : "Switch to section colours"
   );
 }
 
-colorButton.addEventListener("click", () => {
+colorButton?.addEventListener("click", () => {
   const on = !store.get().sectionColorOn;
   store.set({
     sectionColorOn: on,

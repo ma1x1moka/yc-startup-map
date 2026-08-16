@@ -33,7 +33,9 @@ export class Sound {
     }
     this._reflect();
 
-    button.addEventListener("click", () => {
+    // No toggle in the UI means sound stays off and play() is a no-op — the
+    // module still binds cleanly so the rest of the app can call play() freely.
+    button?.addEventListener("click", () => {
       this.enabled = !this.enabled;
       this._reflect();
       try {
@@ -50,8 +52,8 @@ export class Sound {
   }
 
   _reflect() {
-    this.button.setAttribute("aria-pressed", String(this.enabled));
-    this.button.setAttribute(
+    this.button?.setAttribute("aria-pressed", String(this.enabled));
+    this.button?.setAttribute(
       "aria-label",
       this.enabled ? "Mute interface sounds" : "Unmute interface sounds"
     );

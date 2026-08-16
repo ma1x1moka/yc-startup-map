@@ -239,26 +239,6 @@ body[data-panel="open"] {
   font: italic 500 13px/1 var(--sans);
 }
 
-/* The speaker shows waves when on, a cross when muted. */
-#sound-toggle .wave {
-  opacity: 0;
-}
-#sound-toggle .mute {
-  opacity: 1;
-}
-#sound-toggle[aria-pressed="true"] .wave {
-  opacity: 1;
-}
-#sound-toggle[aria-pressed="true"] .mute {
-  opacity: 0;
-}
-
-#color-toggle[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--panel);
-  border-color: var(--ink);
-}
-
 .wordmark {
   position: fixed;
   bottom: 28px;
@@ -272,6 +252,60 @@ body[data-panel="open"] {
 .wordmark b {
   font-weight: 500;
   letter-spacing: 0.12em;
+}
+
+/* --- size legend --------------------------------------------------------- */
+/* Sits bottom-right (where the colour/sound toggles used to be). Dots are
+   baseline-aligned so the value labels form a straight line and the discs grow
+   upward with the debt. Tracks the panel inset so it never hides behind an
+   open term. */
+.legend {
+  position: fixed;
+  right: calc(32px + var(--panel-inset));
+  bottom: 28px;
+  z-index: 20;
+  text-align: right;
+  pointer-events: none;
+  transition: right var(--duration) var(--ease-gleasing),
+    opacity var(--duration) var(--ease-gleasing);
+}
+.legend-title {
+  margin: 0 0 9px;
+  font: 500 9.4px/1.4 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legend-title span {
+  margin: 0 3px;
+  opacity: 0.5;
+}
+.legend-scale {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.legend-ref {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  display: block;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--section-ink) 80%, transparent);
+}
+.legend-val {
+  font: 500 10.5px/1 var(--mono);
+  color: var(--muted);
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .legend {
+    display: none;
+  }
 }
 
 .hint {

@@ -206,6 +206,15 @@ const graph = {
   meta: {
     title: "Aave v3 · USDe Borrow Book",
     tagline: `${fmt(m.total_debt_usde)} borrowed · block ${m.block.toLocaleString()} · ${m.time_utc.slice(0, 10)}`,
+    // Reference points for the on-screen size legend. `inDegree` uses the exact
+    // same proxy sizeProxy() feeds nodeRadius(), so the legend dots are drawn at
+    // the same scale the wallet nodes are — a readable key for "size = debt".
+    sizeLegend: {
+      encodes: "USDe debt",
+      refs: [5e6, 25e6, 75e6]
+        .filter((v) => v <= vmax * 1.05)
+        .map((v) => ({ text: fmt(v), inDegree: Math.max(1, Math.round(Math.sqrt(v / vmax) * 34)) })),
+    },
     about: [
       "Aavescan tracks Aave's rates and liquidity. This is the layer underneath: every wallet borrowing USDe on Aave v3, drawn as a graph and sized by debt.",
       `${fmt(m.loop_debt)} of the ${fmt(m.total_debt_usde)} book (${((m.loop_debt / m.total_debt_usde) * 100).toFixed(0)}%) is a single leveraged trade — sUSDe posted as collateral, USDe borrowed against it, restaked — stacked into a handful of named desks.`,

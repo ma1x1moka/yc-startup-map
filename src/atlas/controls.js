@@ -16,6 +16,10 @@ const MAX_DISTANCE = 1400;
 const MAX_POLAR = Math.PI / 2 - 0.08;
 const AUTO_ROTATE = 0.028; // radians/second
 const IDLE_BEFORE_AUTO_ROTATE = 4000; // ms
+/** Radians of orbit added on every fly-to, so a change of selection *arcs*
+ *  around the new subject instead of sliding straight to it — the atlas reads
+ *  as a space you move through, not a series of cuts. */
+const FLY_SPIN = 0.9;
 
 export class Controls {
   constructor(camera, element, homeDistance = 560) {
@@ -101,11 +105,24 @@ export class Controls {
   flyTo(position, distance) {
     this.goal.target.set(position[0], position[1], position[2]);
     this.goal.distance = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, distance));
+    this._sweep();
   }
 
   reset() {
     this.goal.target.set(0, 0, 0);
     this.goal.distance = this.homeDistance;
+    this._sweep();
+  }
+
+  /** Add a partial orbit to the azimuth goal so the camera swings around the
+   *  new centre as it flies in. Direction alternates each jump so repeated
+   *  navigation doesn't wind endlessly one way. */
+  _sweep() {
+    this._spinSign = -(this._spinSign || -1);
+    this.goal.azimuth += this._spinSign * FLY_SPIN;
+    // Count the sweep as fresh interaction so the idle auto-rotate doesn't kick
+    // in on top of it mid-arc.
+    this.lastInteraction = performance.now();
   }
 
   update(dt, now) {
