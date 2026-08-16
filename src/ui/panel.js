@@ -16,7 +16,65 @@ const ICONS = {
   share: `<path d="M12 15V4m0 0L8.5 7.5M12 4l3.5 3.5M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13" stroke-linecap="round" stroke-linejoin="round"/>`,
   copy: `<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 6.5A1.5 1.5 0 0 0 13.5 5h-7A1.5 1.5 0 0 0 5 6.5v7A1.5 1.5 0 0 0 6.5 15" stroke-linecap="round"/>`,
   link: `<path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1.2 1.2M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1.2-1.2" stroke-linecap="round"/>`,
+  twitter: `<path d="M4 4l16 16M4 20 20 4" stroke-linecap="round"/><path d="M9 4H4l4.5 6M15 4h5l-4.5 6M4 20h5l11-16" stroke-linecap="round" stroke-linejoin="round"/>`,
+  linkedin: `<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.5" stroke-linecap="round"/><path d="M12 16v-5m0 0c0-1.5 4-1.5 4 0v5" stroke-linecap="round"/>`,
+  graduation: `<path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M6 11.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5" stroke-linecap="round"/>`,
 };
+
+/** Consistent hue from a string — same name always same colour. */
+function nameHue(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffff;
+  return h % 360;
+}
+
+/** First letter of each word, max 2. */
+function initials(name) {
+  return name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+}
+
+/** Render the dossier block for founder/person nodes. */
+function renderDossier(node, i) {
+  const hasDossier = node.linkedin || node.twitter || node.birth_year || node.university || node.photo;
+  if (!hasDossier) return "";
+
+  const hue = nameHue(node.title);
+  const inits = initials(node.title);
+  const age = node.birth_year ? (2026 - node.birth_year) : null;
+
+  const photoHtml = node.photo
+    ? `<img class="dossier-photo" src="${escapeHtml(node.photo)}" alt="${escapeHtml(node.title)}" loading="lazy">`
+    : `<div class="dossier-photo dossier-initials" style="--hue:${hue}"><span>${escapeHtml(inits)}</span></div>`;
+
+  const uniIcon = node.university_logo
+    ? `<img class="uni-logo" src="${escapeHtml(node.university_logo)}" alt="" aria-hidden="true" loading="lazy">`
+    : svg(ICONS.graduation, "icon-sm");
+  const uniHtml = node.university
+    ? node.university_url
+      ? `<a class="dossier-uni" href="${escapeHtml(node.university_url)}" target="_blank" rel="noopener noreferrer">${uniIcon}${escapeHtml(node.university)}</a>`
+      : `<span class="dossier-uni">${uniIcon}${escapeHtml(node.university)}</span>`
+    : "";
+
+  const socialHtml = [
+    node.twitter ? `<a class="social-link" href="https://x.com/${escapeHtml(node.twitter.replace(/^@/, ''))}" target="_blank" rel="noopener noreferrer">${svg(ICONS.twitter, "icon-sm")}<span>${escapeHtml(node.twitter.startsWith('@') ? node.twitter : '@' + node.twitter)}</span></a>` : "",
+    node.linkedin ? `<a class="social-link" href="${node.linkedin.startsWith('http') ? escapeHtml(node.linkedin) : 'https://' + escapeHtml(node.linkedin)}" target="_blank" rel="noopener noreferrer">${svg(ICONS.linkedin, "icon-sm")}<span>LinkedIn</span></a>` : "",
+  ].filter(Boolean).join("");
+
+  return `
+    <section class="block dossier-block" style="--i:${i}">
+      <span class="rule"></span>
+      <p class="label">Founder profile</p>
+      <div class="dossier-card">
+        ${photoHtml}
+        <div class="dossier-meta">
+          <p class="dossier-name">${escapeHtml(node.title)}</p>
+          ${age ? `<p class="dossier-age">${age} y.o.</p>` : ""}
+          ${uniHtml}
+        </div>
+      </div>
+      ${socialHtml ? `<div class="dossier-social">${socialHtml}</div>` : ""}
+    </section>`;
+}
 
 const svg = (path, className = "") =>
   `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${path}</svg>`;
@@ -213,6 +271,10 @@ export class Panel {
 
     let i = 0;
     const blocks = [];
+
+    // Dossier block — shown first for founder/person nodes
+    const dossierHtml = renderDossier(node, ++i);
+    if (dossierHtml) blocks.push(dossierHtml);
 
     if (node.stats?.length) {
       blocks.push(`

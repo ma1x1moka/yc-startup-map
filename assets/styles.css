@@ -1072,3 +1072,118 @@ body[data-section-color="on"] .bubble[data-role="a"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Dossier block ─────────────────────────────────────────────────────────── */
+
+.dossier-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+/* Photo: either <img> or generated initials circle */
+.dossier-photo {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.dossier-initials {
+  background: hsl(var(--hue, 210) 55% 46%);
+  border-color: transparent;
+}
+.dossier-initials span {
+  font: 700 22px/1 var(--mono);
+  color: #fff;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dossier-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dossier-name {
+  margin: 0;
+  font: 600 15px/1.3 var(--sans);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dossier-age {
+  margin: 0;
+  font: 500 11px/1 var(--mono);
+  color: var(--faint);
+  letter-spacing: 0.04em;
+}
+.dossier-uni {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  font: 500 11px/1.4 var(--sans);
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+a.dossier-uni:hover { opacity: 1; text-decoration: underline; }
+
+/* Social links row */
+.dossier-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 11px/1 var(--mono);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.social-link:hover {
+  background: var(--surface-2);
+  border-color: var(--ink);
+}
+.social-link span {
+  letter-spacing: 0.02em;
+}
+
+/* Small icon used in social + uni */
+.icon-sm {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  stroke-width: 1.8;
+}
+
+/* University logo next to university name */
+.uni-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  border-radius: 2px;
+  flex: none;
+  opacity: 0.85;
+}

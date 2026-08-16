@@ -98,6 +98,14 @@ export function parseTerm(source, title) {
     links,
     usage,
     avoid,
+    // Dossier fields — optional, used by founders/people nodes
+    linkedin:         data.linkedin         ?? null,
+    twitter:          data.twitter          ?? null,
+    birth_year:       data.birth_year       ? parseInt(data.birth_year, 10) : null,
+    university:       data.university       ?? null,
+    university_url:   data.university_url   ?? null,
+    university_logo:  data.university_logo  ?? null,
+    photo:            data.photo            ?? null,
   };
 }
 

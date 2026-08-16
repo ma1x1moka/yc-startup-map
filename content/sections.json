@@ -1,116 +1,88 @@
 {
   "meta": {
-    "title": "The AI Coding Dictionary",
-    "tagline": "The vocabulary of AI coding, in plain English.",
+    "title": "YC F25 & W26 Atlas",
+    "tagline": "The most promising startups from Y Combinator's Fall 2025 and Winter 2026 batches.",
     "about": [
-      "Everybody is throwing around tokens, context windows, agents and handoffs — and half the time nobody agrees on what they mean.",
-      "So here is a dictionary. Every term in plain English, wired into a graph so you can see how the ideas connect instead of memorising a list. Click a node and follow the threads.",
-      "The atlas is built from the definitions themselves: wherever one entry links to another, an edge appears. Drag to rotate, scroll to zoom, press _/_ to search."
+      "Fall 2025 and Winter 2026 brought two of the strongest YC cohorts in history. 92% of F25 companies use AI at their core. W26 has 3 AGI labs, 20 hardware startups, and the revenue outlier of the decade: Pocket, which hit $27M ARR in 5 months.",
+      "This atlas maps the breakout companies and the founders behind them. Click a company to read what it does and who built it. Click a founder to trace their connections across the batch.",
+      "Drag to rotate, scroll to zoom, press / to search."
     ]
   },
   "sections": [
     {
-      "title": "The Model",
+      "title": "AI Research & Labs",
       "slugs": [
-        "ai",
-        "model",
-        "parameters",
-        "training",
-        "inference",
-        "effort",
-        "token",
-        "next-token-prediction",
-        "non-determinism",
-        "model-provider",
-        "harness",
-        "model-provider-request",
-        "input-tokens",
-        "output-tokens",
-        "prefix-cache",
-        "cache-tokens"
+        "ndea",
+        "synthetic-sciences",
+        "origin-bio"
       ]
     },
     {
-      "title": "Sessions, Context Windows & Turns",
+      "title": "AI Infrastructure",
       "slugs": [
-        "stateless",
-        "context",
-        "context-window",
-        "stateful",
-        "agent",
-        "system-prompt",
-        "session",
-        "turn"
+        "multifactor",
+        "metorial",
+        "runanywhere",
+        "s2",
+        "byteport"
       ]
     },
     {
-      "title": "Tools & Environment",
+      "title": "Vertical AI",
       "slugs": [
-        "environment",
-        "filesystem",
-        "tool",
-        "tool-call",
-        "tool-result",
-        "mcp",
-        "permission-request",
-        "permission-mode",
-        "agent-mode",
-        "sandbox"
+        "bolna",
+        "lunabill",
+        "cortex-ai",
+        "solidroad",
+        "flick-ai",
+        "cardboard",
+        "beacon-health"
       ]
     },
     {
-      "title": "Failure Modes",
+      "title": "Hardware",
       "slugs": [
-        "sycophancy",
-        "hallucination",
-        "parametric-knowledge",
-        "knowledge-cutoff",
-        "contextual-knowledge",
-        "attention-relationship",
-        "attention-budget",
-        "attention-degradation",
-        "smart-zone"
+        "pocket",
+        "fort",
+        "grazemate"
       ]
     },
     {
-      "title": "Handoffs",
+      "title": "New Frontiers",
       "slugs": [
-        "clearing",
-        "handoff",
-        "primary-source",
-        "secondary-source",
-        "handoff-artifact",
-        "spec",
-        "ticket",
-        "compaction",
-        "autocompact"
+        "gru-space",
+        "pax-historia",
+        "skillsync",
+        "browser-use"
       ]
     },
     {
-      "title": "Memory and Steering",
+      "title": "Founders",
       "slugs": [
-        "memory-system",
-        "agents",
-        "progressive-disclosure",
-        "context-pointer",
-        "skill",
-        "subagent"
-      ]
-    },
-    {
-      "title": "Patterns of Work",
-      "slugs": [
-        "human-in-the-loop",
-        "afk",
-        "automated-check",
-        "automated-review",
-        "human-review",
-        "vibe-coding",
-        "design-concept",
-        "grilling",
-        "prototyping",
-        "dx",
-        "ax"
+        "francois-chollet",
+        "mike-knoop",
+        "akshay-narisetti",
+        "gabriel-dymowski",
+        "aayam-bansal",
+        "ishaan-gangwani",
+        "vivek-nair",
+        "colin-roberts",
+        "tobias-herber",
+        "karim-rahme",
+        "saksham-aggarwal",
+        "ishan-sharma",
+        "skyler-chan",
+        "prateek-sachan",
+        "maitreya-wagh",
+        "lucas-ngoo",
+        "magnus-muller",
+        "gregor-zunic",
+        "sanchit-monga",
+        "shubham-malhotra",
+        "mark-hughes",
+        "patrick-finlay",
+        "mark-pothen",
+        "obinna-akahara"
       ]
     }
   ]
