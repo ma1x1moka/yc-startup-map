@@ -14,7 +14,12 @@
       "slugs": [
         "ndea",
         "synthetic-sciences",
-        "origin-bio"
+        "origin-bio",
+        "thesis",
+        "arc-prize-foundation",
+        "sciloop",
+        "anto-biosciences",
+        "ditto-biosciences"
       ]
     },
     {
@@ -24,7 +29,14 @@
         "metorial",
         "runanywhere",
         "s2",
-        "byteport"
+        "byteport",
+        "sf-tensor",
+        "unsiloed-ai",
+        "overshoot",
+        "sourcebot",
+        "hyperspell",
+        "nessie",
+        "carrot-labs"
       ]
     },
     {
@@ -36,7 +48,27 @@
         "solidroad",
         "flick-ai",
         "cardboard",
-        "beacon-health"
+        "beacon-health",
+        "cardinal",
+        "stilta",
+        "lexi",
+        "zarna",
+        "diligencesquared",
+        "antigen",
+        "parameter",
+        "avoice",
+        "structured-ai",
+        "aurorin-cad",
+        "hypercubic",
+        "uplane",
+        "answerthis",
+        "end-close",
+        "robby",
+        "prox",
+        "scheduling-wizard",
+        "aside",
+        "corvera",
+        "sponge"
       ]
     },
     {
@@ -44,7 +76,12 @@
       "slugs": [
         "pocket",
         "fort",
-        "grazemate"
+        "grazemate",
+        "servo7",
+        "voxel-energy",
+        "voltair",
+        "icarus",
+        "aircaps"
       ]
     },
     {
@@ -53,7 +90,21 @@
         "gru-space",
         "pax-historia",
         "skillsync",
-        "browser-use"
+        "browser-use",
+        "doomersion",
+        "samora-ai",
+        "human-archive",
+        "kita",
+        "autonomous-technologies",
+        "prana",
+        "opalite-health",
+        "ruma-care",
+        "amera",
+        "clicks-health",
+        "wideframe",
+        "lance",
+        "celltype",
+        "condor-energy"
       ]
     },
     {
