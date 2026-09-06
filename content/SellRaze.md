@@ -10,6 +10,6 @@ Each day, more than 2,500 items are added to SellRaze, representing over $326,00
 
 _Usage:_
 
-"What does SellRaze do?"
+"How does SellRaze determine the price for an item when you point the camera at it?"
 
-"The fastest way to sell online. F25 batch. San Francisco."
+"SellRaze’s AI automatically generates a price as part of the listing flow – when you snap a photo it identifies the product and then, using its internal pricing model, suggests a sale price without any manual input, though the brief doesn’t detail the data or algorithm behind that pricing."

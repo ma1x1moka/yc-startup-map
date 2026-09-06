@@ -183,6 +183,46 @@ body::after {
   opacity: 1 !important;
 }
 
+/* --- graph tabs ------------------------------------------------------------
+   Two independent graphs (main atlas, Review Queue) live in one build;
+   these are literal browser-style tabs sitting flush at the top edge, the
+   active one "lifted" to look continuous with the atlas below it. */
+
+.graph-tabs {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  gap: 2px;
+}
+.graph-tab {
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 9px 18px 8px;
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  color: var(--faint);
+  font: 500 11.5px/1 var(--mono);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-gleasing),
+    color var(--duration-fast) var(--ease-gleasing);
+}
+.graph-tab:hover {
+  color: var(--section-ink);
+}
+.graph-tab.is-active {
+  background: var(--panel);
+  color: var(--section-ink);
+  /* Sits one pixel lower so its bottom border merges into the content edge
+     it belongs to, the way a real browser tab reads as "this one is open." */
+  padding-bottom: 9px;
+  margin-bottom: -1px;
+}
+
 /* --- corner controls ----------------------------------------------------- */
 
 .corner {
@@ -486,6 +526,21 @@ body[data-panel="open"] {
 }
 .label[data-tone="warn"] {
   color: color-mix(in srgb, #a8321f 70%, var(--ink));
+}
+
+/* Draft-review aid (Review Queue cards) — flags immediately-repeated words. */
+mark.dup-word {
+  background: color-mix(in srgb, #a8321f 22%, transparent);
+  color: color-mix(in srgb, #a8321f 85%, var(--ink));
+  border-radius: 2px;
+  padding: 0 1px;
+}
+.panel-dupes {
+  margin: 0;
+  color: color-mix(in srgb, #a8321f 70%, var(--ink));
+  font: 500 9.6px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .panel-index {

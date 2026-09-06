@@ -10,6 +10,6 @@ The CEO spent 6 years building the reconciliation org at Modern Treasury (YC S18
 
 _Usage:_
 
-"What does End Close do?"
+"What sets End Close apart from traditional payment reconciliation systems?"
 
-"AI-powered reconciliation for high-volume payments companies. W26 batch. San Francisco."
+"End Close productizes the infrastructure built by its founder over six years at Modern Treasury—which processed $1T across 40 banks with 99.995% automation—and applies AI agents specifically to exception handling, where 99% of manual reconciliation work occurs."

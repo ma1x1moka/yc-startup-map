@@ -10,6 +10,6 @@ Scheduling Wizard is building the logistics infrastructure to modernize healthca
 
 _Usage:_
 
-"What does Scheduling Wizard do?"
+"What is the internal Scheduling Programming Language and how does it give Scheduling Wizard an edge over traditional or off‑the‑shelf scheduling tools?"
 
-"Logistics infrastructure to modernize healthcare operations. W26 batch. Washington DC."
+"The Scheduling Programming Language is a domain‑specific language that lets hospitals encode their staffing rules, shift constraints, and physician preferences directly into the scheduling engine; this structured representation lets the AI‑driven workflow automatically generate compliant schedules, whereas generic tools rely on manual adjustments or lack the ability to capture complex hospital‑specific policies."

@@ -10,6 +10,6 @@ Leading frontier AI labs trust them for video, sensor, robot deployment, image, 
 
 _Usage:_
 
-"What does Human Archive do?"
+"What does Human Archive actually do to capture data for physical AI?"
 
-"Physical AI data lab. W26 batch. San Francisco."
+"Rather than just processing third-party data, they build the full hardware and software pipeline: they design their own hardware, deploy cameras and sensors globally, and train models focused on how humans interact with the physical world. This allows them to supply frontier AI labs with video, sensor, audio, image, and robot deployment datasets."

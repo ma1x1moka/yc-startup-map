@@ -48,26 +48,42 @@ const VERB_3P = {
   handle: "handles", run: "runs", train: "trains", process: "processes",
 };
 
-// NOTE: known limitation — "We reverse engineer X" becomes "{Name} reverses
-// engineer X" (phrasal verbs aren't handled). Grep the output for "reverses "
-// and similar before writing files if the source text uses phrasal verbs.
+const MODALS = new Set(["can", "could", "will", "would", "shall", "should", "may", "might", "must"]);
+function conjugate(verb) {
+  const lower = verb.toLowerCase();
+  if (MODALS.has(lower)) return verb; // modals are invariant in 3rd person: "it can", not "it cans"
+  return VERB_3P[lower] || (lower.endsWith("s") ? verb : verb + "s");
+}
+
+// NOTE: known limitations (unfixed — not observed in real data yet, so not
+// worth the complexity per YAGNI): phrasal verbs ("We reverse engineer X" ->
+// "{Name} reverses engineer X" — grep output for "reverses " etc.), and
+// negated contractions ("we don't/won't/can't X" — \w+ stops at the
+// apostrophe, would produce "it dons't X"). Fix if/when they actually show up.
 function thirdPerson(text, name) {
   let usedName = false;
-  let result = text.replace(/\bWe('re)?\s+(\w+)/g, (m, contraction, verb) => {
-    const subject = usedName ? "it" : ((usedName = true), name);
-    if (contraction) return `${subject} is ${verb}`;
-    const lower = verb.toLowerCase();
-    const conjugated = VERB_3P[lower] || (lower.endsWith("s") ? verb : verb + "s");
-    return `${subject} ${conjugated}`;
-  });
+  const subject = () => (usedName ? "it" : ((usedName = true), name));
+
+  // normalize smart apostrophes (source text uses ’, e.g. "We're") before matching
+  let result = text.replace(/[‘’]/g, "'");
+
+  const CONTRACTIONS = { "'re": "is", "'ve": "has", "'ll": "will", "'d": "would" };
+  result = result.replace(/\bWe('re|'ve|'ll|'d)\b/g, (m, c) => `${subject()} ${CONTRACTIONS[c]}`);
+  result = result.replace(/\bwe('re|'ve|'ll|'d)\b/g, (m, c) => `it ${CONTRACTIONS[c]}`);
+
+  result = result.replace(/\bWe\s+(\w+)/g, (m, verb) => `${subject()} ${conjugate(verb)}`);
   result = result.replace(/\bOur\b/g, () => (usedName ? "its" : ((usedName = true), name + "'s")));
-  result = result.replace(/\bwe\s+(\w+)/g, (m, verb) => {
-    const lower = verb.toLowerCase();
-    const conjugated = VERB_3P[lower] || (lower.endsWith("s") ? verb : verb + "s");
-    return `it ${conjugated}`;
-  });
+  result = result.replace(/\bwe\s+(\w+)/g, (m, verb) => `it ${conjugate(verb)}`);
   result = result.replace(/\bour\b/g, "its");
   result = result.replace(/(^|[.!?]\s+)(it|its)\b/g, (m, pre, word) => pre + word[0].toUpperCase() + word.slice(1));
+
+  // defensive cleanup: squash any accidental "word word" duplication,
+  // whether introduced by this conversion or already present in the source
+  // (e.g. a YC company's own typo'd one_liner). Same-line only ([ \t], not
+  // \s) — \s would also match a paragraph-break newline and wrongly merge
+  // two different paragraphs that happen to end/start with the same word.
+  result = result.replace(/\b(\w+)[ \t]+\1\b/g, "$1");
+
   return result;
 }
 
@@ -102,7 +118,7 @@ const out = candidates.map(c => {
   const body = cleanBody(c.long_description || c.one_liner, c.name);
   const loc = c.all_locations ? c.all_locations.split(",")[0].trim() : "";
   const bs = batchShort(c.batch);
-  const oneLiner = thirdPerson(c.one_liner.trim().replace(/[.\s]+$/, ""), c.name);
+  const oneLiner = thirdPerson(c.one_liner.trim().replace(/[.!?\s]+$/, ""), c.name);
   const md = `---
 description: ${oneLiner}. YC ${bs}.
 ---
@@ -127,4 +143,22 @@ const bySection = {};
 for (const o of out) (bySection[o.section] ||= []).push(o.name);
 console.log(`${out.length} candidates (of ${list.length} missing) -> ${outDir}/generated.json`);
 for (const [s, names] of Object.entries(bySection)) console.log(`  ${s} (${names.length}): ${names.join(", ")}`);
-console.log("\nReview generated.json (esp. body prose) before running write-cards.mjs.");
+
+// self-check: flag known failure signatures so they don't need a separate
+// manual grep pass afterward. Not exhaustive (see limitations note above) —
+// a clean report here is not proof of clean prose, just of no *known* bug.
+const FLAGS = [
+  [/\bWe\b|\bOur\b|\bwe\b|\bour\b/, "residual first-person pronoun"],
+  [/\b(cans|coulds|wills|woulds|shalls|shoulds|mays|mights|musts)\b/, "modal verb wrongly conjugated"],
+  [/[!?]\./, "double terminal punctuation"],
+  // same-line only ([ \t], not \s) — \s would span the URL-slug -> body
+  // newline and flag "companies/o11\n\no11 is..." as a false "duplicate"
+  [/\b(\w+)[ \t]+\1\b/, "duplicate consecutive word"],
+];
+let flagged = 0;
+for (const o of out) {
+  const hits = FLAGS.filter(([re]) => re.test(o.md)).map(([, label]) => label);
+  if (hits.length) { flagged++; console.log(`  ! ${o.name}: ${hits.join(", ")}`); }
+}
+console.log(flagged ? `\n${flagged} card(s) flagged above — check by hand.` : "\nNo known failure signatures found.");
+console.log("Review generated.json before running write-cards.mjs regardless.");

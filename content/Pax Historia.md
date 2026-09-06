@@ -18,6 +18,6 @@ The 2,334 Twitter likes at launch made it the most-engaged W26 launch on social 
 
 _Usage:_
 
-"Is this educational or a game?"
+"How does Pax Historia achieve historically grounded, emergent gameplay compared to the fixed‑script approach used by most other historical games?"
 
-"Both, and the tension is the company's biggest design challenge. The 35K DAU suggests it's fun enough to play daily — whether it's rigorous enough to trust historically is the open product question."
+"Pax Historia replaces static scripts with large language models that are fine‑tuned on historical data, letting each AI agent reason about societies, economies, and politics in real time; because the LLM can maintain a coherent state over long sessions, interactions between agents generate unique, historically plausible events rather than pre‑written outcomes, which is why the platform processes over 100 billion tokens weekly to keep the simulation alive."

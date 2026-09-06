@@ -17,6 +17,6 @@ The 30,000 units shipped in 5 months is as much a supply chain achievement as a 
 
 _Usage:_
 
-"What's Dymowski's role at Pocket vs Narisetti?"
+"What does Gabriel Dymowski's enterprise software background bring to a hardware startup like Pocket?"
 
-"Narisetti drives product and hardware vision; Dymowski handles operations, go-to-market, and the enterprise expansion path. The DoxyChain CEO background gives him the B2B playbook the consumer hardware success needs to scale."
+"Dymowski provides the operational and commercial complement to Akshay Narisetti's hardware background. He manages manufacturing, supplier relationships, quality control, logistics, and the enterprise sales roadmap—the operational infrastructure that allowed Pocket to ship 30,000 units in five months, a scale that typically takes hardware startups 12 to 18 months to build."

@@ -10,6 +10,6 @@ Differentiation: voice AI fails in production when real callers interrupt, go of
 
 _Usage:_
 
-"What does Samora AI do?"
+"How does Samora make its voice agents handle interruptions, language switches, and local dialects better than typical voice AI?"
 
-"Multilingual voice agents that outperform humans. W26 batch. San Francisco."
+"Samora builds its agents around strict rule‑based dialogue flows combined with multilingual models that are trained to recognize and respond to local dialects, so when callers interrupt, go off‑script, or switch languages mid‑sentence the system can stay on track and sound native without needing custom engineering or a call‑center setup."

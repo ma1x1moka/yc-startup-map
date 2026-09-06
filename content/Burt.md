@@ -12,6 +12,6 @@ It helps freight brokers and forwarders build AI teammates that handle their rep
 
 _Usage:_
 
-"What does Burt do?"
+"Why focus specifically on freight brokers and forwarders?"
 
-"AI teammates for logistics. W26 batch. San Francisco."
+"Freight brokerage is a relationship-driven industry running on razor-thin margins, yet teams spend most of their day stuck doing manual, repetitive work. Burt builds AI teammates to offload those routine tasks so staff can spend their time managing carriers, serving customers, and growing the business."

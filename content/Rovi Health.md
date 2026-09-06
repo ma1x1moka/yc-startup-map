@@ -10,6 +10,6 @@ Its AI agents analyze clinical data to identify care needs. It treats common con
 
 _Usage:_
 
-"What does Rovi Health do?"
+"How does Rovi Health’s AI-driven approach achieve the claimed 10–20% reduction in employer healthcare spend?"
 
-"AI healthcare concierge for employees. F25 batch. New York City."
+"Rovi Health’s AI agents first analyze each employee’s clinical data to pinpoint needed care, handling routine conditions directly through its integrated virtual clinic; for more complex cases they use millions of price‑and‑quality data points to automatically locate the most cost‑effective in‑network provider and manage the entire appointment process, eliminating manual coordination and leveraging cheaper virtual care where possible, which together drive the 10–20% spend reduction."

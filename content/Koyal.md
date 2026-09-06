@@ -13,6 +13,6 @@ Demo: https://x.com/meh_agarwal/status/1965137062119752099
 
 _Usage:_
 
-"What does Koyal do?"
+"What is the CHARCHA secure personalization protocol and how does it differ from other genAI captcha approaches?"
 
-"Agentic AI Filmmaking Platform. F25 batch. San Francisco."
+"CHARCHA is Koyal’s patented secure personalization protocol that functions as a genAI captcha, tying the personalization of generated video to a verification step that ensures the content is tied to an authorized user; unlike generic captchas that only prove a human is present, CHARCHA embeds personalization security directly into the AI generation pipeline, a feature the company highlights as unique in its research and press coverage."

@@ -12,6 +12,6 @@ DIY your money: You end up with accounts everywhere (401k, IRAs, brokerage, cryp
 
 _Usage:_
 
-"What does Autonomous Technologies Group do?"
+"How does Autonomous address the drawbacks of DIY financial management?"
 
-"Superintelligent financial advisor. F25 batch. New York City."
+"Managing your own money usually leaves you juggling scattered accounts—from 401ks and IRAs to crypto, equity, and secondaries—using spreadsheets that are constantly out of date and prone to costly mistakes. Autonomous replaces that manual DIY effort by acting as an automated financial advisor with zero advisory fees."

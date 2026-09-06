@@ -10,6 +10,6 @@ Target applications: physical security, safety, gaming, robotics, consumer produ
 
 _Usage:_
 
-"What does Overshoot do?"
+"What makes Overshoot able to deliver inference 10× faster than existing platforms?"
 
-"AI infrastructure for real-time vision applications. W26 batch. San Francisco."
+"Overshoot’s platform lets developers hook live video streams into a curated set of Vision‑Language Models with just three lines of code, and the service returns results in under 200 ms, which is about ten times the latency of typical inference platforms; the speed comes from the tightly integrated, low‑overhead connection between the video feed and the models."

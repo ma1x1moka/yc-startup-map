@@ -8,6 +8,6 @@ Norra helps nursing facilities manage equipment operations. Every year, ~$80 bil
 
 _Usage:_
 
-"What does Norra do?"
+"How do Norra's physical trackers and AI agents actually work to give nursing facilities visibility and cut equipment waste?"
 
-"Automating equipment operations for nursing facilities. F25 batch. New York City."
+"Norra attaches a physical tracker to each piece of equipment—beds, concentrators, wheelchairs, etc.—so the device continuously reports location and status; the platform then runs AI agents that ingest this data, surface real‑time usage patterns, flag idle or misplaced assets, and alert staff, turning the current zero‑visibility situation into actionable insight that can prevent the $15 billion annual waste."

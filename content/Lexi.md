@@ -10,6 +10,6 @@ Processed 5,000,000+ documents across 200,000+ cases for 200+ organizations and 
 
 _Usage:_
 
-"What does Lexi do?"
+"How does Lexi actually deliver the claimed 10+ hours saved per week for lawyers?"
 
-"AI Operating System for Legal Teams. F25 batch. San Francisco."
+"Lexi bundles research, drafting, document review, contract redlining, workflow management, translation, and knowledge‑base access into a single, role‑controlled workspace, so lawyers no longer have to switch between separate tools or manually copy documents; the AI automates repetitive tasks like extracting relevant clauses and generating drafts, which together shave off the time that would otherwise be spent moving data and performing those steps manually."

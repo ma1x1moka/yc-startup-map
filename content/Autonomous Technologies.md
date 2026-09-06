@@ -10,6 +10,6 @@ Delivers the sophisticated strategies the ultra-wealthy use: strategic tax-loss 
 
 _Usage:_
 
-"What does Autonomous Technologies do?"
+"How does Autonomous differ from traditional financial advisors?"
 
-"Superintelligent financial advisor at 0% advisory fees. F25 batch. New York City."
+"Traditional advisors charge 1–2% of assets annually, which can eat up to half a portfolio's net worth over decades. Autonomous charges 0% in advisory fees while delivering high-end strategies typically reserved for the ultra-wealthy, including individual security tax-loss harvesting, systematic risk management, portfolio-backed borrowing to defer capital gains, and access to alternative assets."

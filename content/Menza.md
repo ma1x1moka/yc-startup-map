@@ -8,6 +8,6 @@ Menza is the AI data analyst for consumer brands. A brand like Hershey’s would
 
 _Usage:_
 
-"What does Menza do?"
+"How is Menza's AI analyst different from traditional business intelligence tools or hiring a data analyst?"
 
-"The AI data analyst for consumer brands. W26 batch. London."
+"Menza connects a brand’s data sources and runs an AI analyst around the clock that automatically scans for revenue opportunities, cost leaks, trends and anomalies, delivering insights continuously instead of relying on periodic human queries or manual BI dashboards."

@@ -17,6 +17,6 @@ What it dos:
 
 _Usage:_
 
-"What does Helonic do?"
+"How does this replace traditional manual drawing reviews?"
 
-"Automatic Construction Drawing Clash Detection. F25 batch. San Francisco."
+"Instead of having teams hold long page-turn meetings to manually spot mismatches across sheets, Helonic analyzes the PDF plans automatically. It aligns the architectural, structural, and MEP drawings, flags clashes or missing information across disciplines, and immediately drafts RFIs for the issues it finds."

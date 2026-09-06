@@ -10,6 +10,6 @@ SOC 2 Type II and HIPAA compliant. Helps teams improve accuracy, shorten turnaro
 
 _Usage:_
 
-"What does Clicks Health do?"
+"How do Clicks Health's AI agents handle exceptions in legacy healthcare software?"
 
-"AI agents for healthcare back-office operations. F25 batch. San Francisco."
+"Rather than failing on non-standard inputs, the agents operate directly across EHRs, payer portals, desktop applications, and legacy systems by following existing workflows. They handle process exceptions autonomously and only escalate tasks to staff when human judgment is required."

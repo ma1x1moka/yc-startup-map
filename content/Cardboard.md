@@ -16,6 +16,6 @@ The browser-native + agentic combination is the differentiation: most browser-ba
 
 _Usage:_
 
-"Is this just a browser version of Premiere?"
+"How does Cardboard differ from Flick AI?"
 
-"No. The editing operations are AI-driven — you describe what you want and agents execute. Manual timeline cutting is the fallback, not the primary workflow."
+"While Flick AI uses a canvas interface, Cardboard takes an agentic timeline approach built natively for the browser. It combines fast browser-based performance with AI agents that execute natural language commands directly on the timeline, bypassing the local software downloads typically required by AI video editors."

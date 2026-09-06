@@ -12,6 +12,6 @@ Real-world camera systems are messy, fragmented, and decades old, and AI breaks 
 
 _Usage:_
 
-"What does Lexius do?"
+"How does Lexius achieve reliable, high‑accuracy AI detection on low‑quality, fragmented legacy CCTV cameras without replacing the hardware?"
 
-"AI for Corporate Security Cameras. W26 batch. San Francisco."
+"Lexius focuses on the engineering pipeline that cleans up and normalizes the noisy, low‑resolution feeds from existing CCTV systems, applying robust pre‑processing, calibration, and error‑handling so the AI model can operate reliably at scale; by doing all the heavy lifting in software they avoid the $50‑$100K hardware swap and still meet the accuracy needed for real‑world security decisions."

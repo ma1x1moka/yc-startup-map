@@ -10,6 +10,6 @@ Leverages the vast supply of second-life EV batteries and a novel DC microgrid a
 
 _Usage:_
 
-"What does Voxel Energy do?"
+"How does Voxel’s on‑site DC microgrid using second‑life EV batteries differ from the traditional diesel generator/UPS approach for powering data centers?"
 
-"Energy-independent data centers with solar and repurposed batteries. W26 batch. San Francisco."
+"Voxel replaces diesel generators and conventional UPS stacks with a vertically integrated system that combines on‑site generation and storage built from second‑life EV batteries wired into a DC microgrid, delivering power directly to the data center; this eliminates the 5–10 year utility connection delay and lowers overall system cost while still meeting the datacenter’s power needs."

@@ -10,6 +10,6 @@ Firms using Avoice manage over $300M in active projects on the platform. Archite
 
 _Usage:_
 
-"What does Avoice do?"
+"What does Avoice mean by positioning itself as the 'Harvey for Architecture'?"
 
-"Harvey for Architecture. W26 batch. San Francisco."
+"It applies the legal AI playbook—using AI to automate associate-level professional services work—to architecture. Rather than generating designs, Avoice deploys AI agents to ingest and handle non-design overhead, specifically parsing drawings, specifications, project schedules, materials, building codes, and research."

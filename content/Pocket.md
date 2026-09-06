@@ -19,6 +19,6 @@ _Avoid:_ Comparing Pocket to Otter.ai or similar phone-based transcription apps.
 
 _Usage:_
 
-"What makes Pocket different from just leaving Otter running?"
+"How does Pocket ensure privacy and obtain consent when the device is always on and continuously records conversations?"
 
-"Friction. Opening an app and pressing record means you miss spontaneous conversations, hallway decisions, and the meeting where someone forgot to hit record. Pocket's always-on form factor removes the decision entirely."
+"The description says Pocket is always on and captures conversations passively with three microphones, without a record button or app, but it does not provide any details about privacy safeguards, consent flows, or data handling beyond the automatic transcription and to‑do extraction."

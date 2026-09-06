@@ -8,6 +8,6 @@ Booko helps businesses that sell bookable time slots make more money by dynamica
 
 _Usage:_
 
-"What does Booko do?"
+"How does Booko differ from standard booking software?"
 
-"Dynamically pricing the whole economy. W26 batch. San Francisco."
+"Most booking software relies on static pricing, letting unsold time slots expire with zero return. Booko integrates directly into existing booking systems to dynamically adjust prices and incentives based on historical utilization, availability, and demand, generating about a 20% revenue uplift for early users by filling otherwise wasted slots."

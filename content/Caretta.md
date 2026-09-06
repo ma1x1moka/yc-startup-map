@@ -10,6 +10,6 @@ Caretta gets smarter automatically: every call expands its knowledge base and ob
 
 _Usage:_
 
-"What does Caretta do?"
+"How does Caretta continuously update its sales knowledge base?"
 
-"Realtime AI for Sales Calls. W26 batch. San Francisco."
+"Caretta joins reps on live calls to assist with real-time questions and objections, then automatically feeds the content from those calls back into its system to expand its knowledge base and objection library over time. It also integrates directly into Slack so the team can access that evolving knowledge base during daily communications."

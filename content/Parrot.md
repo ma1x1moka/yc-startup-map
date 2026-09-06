@@ -8,6 +8,6 @@ Parrot is the TikTok for language learning. Parrot turns doomscrolling into flue
 
 _Usage:_
 
-"What does Parrot do?"
+"How does Parrot’s short‑form, personalized video format actually improve language fluency compared to traditional language‑learning apps?"
 
-"TikTok for language learning. F25 batch. San Francisco."
+"Parrot treats language learning like a TikTok feed: it serves bite‑sized, personalized videos that users can consume while they’re already scrolling, aiming to increase exposure time (the text cites power users scrolling about six hours a week). The idea is that frequent, context‑rich snippets reinforce vocabulary and pronunciation more naturally than longer, structured lessons, but the description only provides usage time as evidence and does not include any measured fluency outcomes."

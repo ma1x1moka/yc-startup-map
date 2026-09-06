@@ -10,6 +10,6 @@ Its team combines expertise in risk estimation for autonomy with deep experience
 
 _Usage:_
 
-"What does Valgo do?"
+"How does Valgo validate the accuracy of its simulated loss estimates for autonomous systems when there is virtually no historical claims data to compare against?"
 
-"Insurance risk layer for physical AI. W26 batch. San Francisco."
+"Valgo relies on bottom‑up probabilistic models of routes, tasks, and environments built from safety‑critical system expertise and physics‑based failure rates, then generates loss distributions that insurers can use; validation comes from the team’s background in safety validation (e.g., FAA‑certified collision avoidance) and by benchmarking model outputs against known safety standards and limited pilot data rather than large claim histories."

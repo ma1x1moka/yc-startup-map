@@ -16,6 +16,6 @@ The 10K GitHub stars at seed stage places RunAnywhere alongside [Browser Use](./
 
 _Usage:_
 
-"Why does Apple Silicon need a third-party inference engine?"
+"How does RunAnywhere's inference performance compare to Apple's own MLX framework on Apple Silicon?"
 
-"MLX is general-purpose and evolves slowly. RunAnywhere specialises for inference throughput and can iterate faster — same reason NVIDIA's cuDNN gets beat by specialised kernels in certain workloads."
+"RunAnywhere's engine, built on the MetalRT stack that Malhotra created, uses hand‑optimized GPU kernels for multimodal workloads, and the company claims it runs those models faster (higher throughput / lower latency) than Apple's native MLX framework on the same Apple Silicon hardware, thanks to that low‑level kernel expertise."

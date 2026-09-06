@@ -12,6 +12,6 @@ Behind the platform is Ion, its proprietary inference engine running on a custom
 
 _Usage:_
 
-"What does Cumulus Labs do?"
+"How does Cumulus Labs compare to serving frameworks like vLLM or SGLang?"
 
-"The Fastest Multimodal Inference OS. W26 batch. San Francisco."
+"Cumulus Labs runs a proprietary inference engine named Ion on a custom NVIDIA Grace GPU fleet. By utilizing in-house custom GPU kernels, Ion delivers 30 to 50 percent higher throughput than standard vLLM or SGLang setups."

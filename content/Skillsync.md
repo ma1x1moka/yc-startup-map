@@ -14,6 +14,6 @@ Skillsync and [Cardboard](./Cardboard.md) are both betting on work product over 
 
 _Usage:_
 
-"Won't candidates just clean up their GitHub to look better?"
+"How does Skillsync ensure that a candidate's GitHub contributions accurately reflect their ability to ship production code rather than just surface‑level activity?"
 
-"Yes, and that's fine — curating your best work is a legitimate signal. It's still more predictive than optimizing for a specific LeetCode style in a 45-minute window."
+"Skillsync requires candidates to assemble structured portfolios of real work and complete async technical demonstrations on actual problems; employers then use Skillsync’s evaluation tools to directly review the shipped code, deployed projects, and open‑source impact, letting them judge authentic engineering output instead of relying on résumé or interview proxies."

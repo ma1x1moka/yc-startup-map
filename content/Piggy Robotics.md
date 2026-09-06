@@ -8,6 +8,6 @@ Piggy Robotics builds humanoid robots that do your chores at iPhone prices. Just
 
 _Usage:_
 
-"What does Piggy Robotics do?"
+"How can a single pump power all the robot’s artificial muscles to achieve complex humanoid movements?"
 
-"Humanoid robots that do your chores for the price of an iPhone!. F25 batch. London."
+"The robot’s artificial muscles are simple pneumatic tubes wrapped in braided fibre, and the single pump supplies pressurised fluid that is routed to each tube through a network of valves; by opening and closing those valves the system can inflate or deflate individual muscles, producing joint motion without separate motors, which lets the robot be built cheaply and at scale."

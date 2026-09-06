@@ -8,6 +8,6 @@ Tornyol builds micro-drones that kill mosquitoes. Tornyol uses smartphone microp
 
 _Usage:_
 
-"What does Tornyol do?"
+"How do the 40‑gram micro‑drones actually kill mosquitoes?"
 
-"Tornyol builds micro-drones that kill mosquitoes. F25 batch. Paris."
+"The drones mount a smartphone microphone and a car‑park‑assist sensor to pick up the characteristic wing‑beat frequency of a mosquito; onboard DSP analyzes the audio in real time, the control system steers the 40‑gram toy drone toward the detected target, and the fast‑spinning propellers or impactor physically strike and kill the mosquito."

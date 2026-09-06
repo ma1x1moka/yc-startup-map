@@ -12,6 +12,6 @@ Miniswap saves hobbyists from this chaos with its catalogue of more than 20,000 
 
 _Usage:_
 
-"What does Miniswap do?"
+"How does Miniswap ensure that listings are correctly identified and avoid counterfeit miniatures compared to generic marketplaces?"
 
-"The Marketplace for Complex Hobbies. F25 batch. San Francisco."
+"Miniswap requires sellers to match each listing to an entry in its curated catalogue of over 20,000 unique miniatures, so the platform can attach standardized identifiers and details to every item; this structured matching lets buyers see consistent information and filters out mis‑tagged or fake products that typically slip through on unstructured marketplaces."

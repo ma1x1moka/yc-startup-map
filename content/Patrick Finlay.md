@@ -25,6 +25,6 @@ The Intercom product engineering role (same company where [Mark Hughes](./Mark%2
 
 _Usage:_
 
-"Is SolidRoad Finlay's best company?"
+"What is the current startup that Patrick Finlay is working on, and what does it do?"
 
-"By the metrics so far, yes — $25M Series A in under a year from seed is faster institutional follow-on than Monaru achieved. The second-time YC experience compressed the learning curve."
+"The text doesn’t specify any current startup or its product; it only lists his past co‑founding of SolidRoad and Monaru, his product engineering role at Intercom, and his Hotspoter project."

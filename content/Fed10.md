@@ -12,6 +12,6 @@ Built by three ex-lobbyists who passed legislation together.
 
 _Usage:_
 
-"What does Fed10 do?"
+"How does Fed10 compare to a traditional policy consultant?"
 
-"AI Agents for Government Affairs. W26 batch. San Francisco."
+"Traditional policy consultants charge around $500/hr and take days to track legislation and analyze risks. Fed10 automates that workflow using AI agents built by ex-lobbyists, monitoring every bill across the U.S. to flag business threats and deliver actionable insights in seconds."

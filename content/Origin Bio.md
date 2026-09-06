@@ -10,6 +10,6 @@ The AlphaGenome comparison is the key credibility marker: DeepMind's genomics gr
 
 _Usage:_
 
-"What does outperforming AlphaGenome actually mean?"
+"What evidence supports that Origin Bio's model truly outperforms DeepMind's AlphaGenome, and could the benchmark framing be influencing the result?"
 
-"It means Origin Bio's model predicts gene expression from DNA sequence more accurately on the held-out test sets the benchmark uses. Whether those test sets generalize to real biology is the open question."
+"Origin Bio points to benchmark results where its foundation model predicts gene expression, regulatory element activity, and other molecular phenotypes from DNA sequence better than DeepMind's AlphaGenome on several genomic understanding tasks; however, the text notes that the comparison hinges on how those benchmarks are framed, so without seeing the exact metrics and dataset splits, it's unclear whether the advantage reflects a genuine performance gain or just a favorable benchmark setup."

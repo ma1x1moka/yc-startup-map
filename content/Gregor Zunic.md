@@ -21,6 +21,6 @@ The GitHub handle `gregpr07` is the actual repository owner: **github.com/gregpr
 
 _Usage:_
 
-"What did Zunic specifically build in Browser Use?"
+"What is Gregor Zunic's specific technical contribution to Browser Use?"
 
-"The reliability layer: error recovery, element identification that survives DOM changes, multi-tab coordination, and the retry logic that makes agents robust enough for production. Demos are easy; production reliability is what 97K developers starred."
+"Zunic wrote the core framework (97K GitHub stars) and focuses on making web agents reliable in production rather than just impressive demos. Applying a background in physics and data science from ETH Zurich, his work targets the underlying systems challenges that break deployments: retry logic, edge case handling, and keeping agents working when site layouts change."

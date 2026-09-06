@@ -10,6 +10,6 @@ Understanding code — not writing it — is the primary bottleneck for large en
 
 _Usage:_
 
-"What does Sourcebot do?"
+"How does Sourcebot differ from existing code‑search tools like Sourcegraph or GitHub’s code search?"
 
-"Helping humans and AI agents understand massive codebases. F25 batch. San Francisco."
+"Sourcebot combines instant regex search over millions of lines with AI‑driven Q&A across thousands of repos, letting you plug in any flagship reasoning model, and it’s fully open‑source and deployable on‑prem within minutes, whereas typical code‑search tools are SaaS‑only and don’t natively integrate large‑scale AI reasoning."

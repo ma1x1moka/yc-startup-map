@@ -18,6 +18,6 @@ Sits in a natural stack with [Multifactor](./Multifactor.md) (agent security) an
 
 _Usage:_
 
-"Can't I just monitor customer satisfaction scores?"
+"What concrete evidence shows SolidRoad's automated QA improves AI agent performance compared to traditional human QA?"
 
-"CSAT is lagging — you find out the agent failed after the customer had a bad experience. SolidRoad catches failures before real users hit them by running adversarial test cases against the agent in simulation."
+"In deployments, SolidRoad cut onboarding time by half for PartnerHero and Tech Mahindra and lifted Crypto.com’s go‑live CSAT by three points to over 90%, showing that its synthetic adversarial tests and automatic training‑data generation can deliver faster rollouts and higher customer satisfaction than manual QA alone."

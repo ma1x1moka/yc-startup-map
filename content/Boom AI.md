@@ -12,6 +12,6 @@ Every month, companies lose 5-15% of revenue to churn, and more walks out throug
 
 _Usage:_
 
-"What does Boom AI do?"
+"How does Boom AI differ from traditional churn tools like win-back emails and cancel flows?"
 
-"AI agents that recover lost revenue through real conversations. F25 batch. San Francisco."
+"Standard win-back emails get ignored and cancel flows only catch users when they are already at the door. Boom instead runs proactive, two-way AI conversations across SMS, email, WhatsApp, or phone in the customer's language, giving you 1,000x the reach of manual human outreach while letting customers actually reply."

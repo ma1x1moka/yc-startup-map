@@ -10,6 +10,6 @@ A learning engine: links document-level signals to repayment outcomes, allowing 
 
 _Usage:_
 
-"What does Kita do?"
+"What specific document-level signals does Kita use to predict repayment, and how does that differ from traditional manual credit review?"
 
-"AI platform for lending operations in emerging markets. W26 batch. San Francisco."
+"Kita extracts structured data from unstructured sources like e‑wallet transaction logs, bank statements, and utility bills, then feeds those document‑level features—such as payment regularity, bill amounts, and transaction patterns—into a learning engine that ties each signal to actual repayment outcomes, allowing the model to continuously refine fraud detection and risk scoring, whereas traditional manual review relies on human analysts interpreting the same documents without systematic, outcome‑driven feedback loops."

@@ -18,6 +18,6 @@ The Accel and Sequoia scout backing pre-YC signals that institutional investors 
 
 _Usage:_
 
-"Did Pothen go to medical school?"
+"What specific AI‑based solution is the company building to reduce physicians' administrative workload?"
 
-"No, but the combination of growing up in primary care, 6 months embedded in a clinic, and prior healthcare startup experience gives him the clinical workflow understanding that makes the EHR integration decisions correct."
+"The startup is creating an AI‑driven platform that automates routine admin tasks—like prior authorizations, screenings, and referral coordination—by embedding directly into EHR workflows, leveraging the founder’s six‑month hands‑on clinic experience to address the exact pain points he observed."

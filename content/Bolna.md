@@ -16,6 +16,6 @@ The geographic specificity is the moat — a global voice AI provider cannot eas
 
 _Usage:_
 
-"Why not use a global voice AI provider with Hindi support?"
+"Why can't global voice AI providers just add a translation layer to support Indian languages?"
 
-"Adding Hindi support to an English-first system means bolt-on translation and accent-insensitive ASR. Bolna trained on vernacular audio from the start — the quality gap is significant and hard to close retroactively."
+"Bolna trains directly on native vernacular audio rather than wrapping an English-first system in a translation layer. Global platforms can't easily close the resulting quality gap retroactively because replicating the underlying data infrastructure across 10+ Indian languages and 50+ accents requires building it from scratch."

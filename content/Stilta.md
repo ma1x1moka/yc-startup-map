@@ -10,6 +10,6 @@ The key differentiation: every output is source-backed, referenced, and auditabl
 
 _Usage:_
 
-"What does Stilta do?"
+"How does Stilta ensure its AI outputs are source‑backed and auditable compared to other AI patent‑drafting tools?"
 
-"Agentic AI for intellectual property. W26 batch. Stockholm, Sweden."
+"Stilta ties every piece of analysis to the underlying documents it retrieved, storing the exact search queries, the prior‑art excerpts, and the citations that support each conclusion, so users can trace any recommendation back to a verifiable source, unlike typical AI drafting tools that generate text without exposing the data that generated it."

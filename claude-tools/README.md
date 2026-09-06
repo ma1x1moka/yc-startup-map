@@ -67,4 +67,30 @@ per-company rewrite):
   the printed breakdown before writing
 
 Last real run: 2026-08-27, added 54 companies (see git log "Add 51/54
-companies from YC API").
+companies from YC API"). 2026-08-31: pulled 25 more batches (Winter 2016 -
+Fall 2026, ~10 years), 5,269 companies total across 27 batches.
+
+### generate-qa.mjs — the "intelligence" step
+
+Replaces a card's templated `_Usage:_` Q&A with one tailored to what that
+specific company's text actually emphasizes — a script can't judge that, an
+LLM call per company can. Needs `GROQ_API_KEY` in `claude-tools/.env`.
+
+```bash
+node claude-tools/yc-api/generate-qa.mjs "Company Name.md"   # one card
+node claude-tools/yc-api/generate-qa.mjs --all               # every card
+node claude-tools/yc-api/generate-qa.mjs --from-file list.txt  # from a list
+```
+
+**Provider history (read before reaching for Gemini again):** this used
+Google's Gemini API first. Its free tier turned out to be 20 requests/DAY
+per project for `gemini-3.6-flash` (Google cut it from 250 on 2025-12-07,
+citing abuse) — not a per-minute limit as the first 429 message's short
+retry-delay misleadingly suggested. Rotating 3 personal Google accounts'
+keys to multiply that quota mechanically works (quota is scoped per-project,
+not per-key), but Google's ToS explicitly bans multi-account quota
+circumvention, and a March 2026 anti-abuse crackdown has been zeroing out
+flagged accounts' free-tier quota entirely. Switched to **Groq**
+(api.groq.com, OpenAI-compatible endpoint, single free account, no card) —
+14,400 requests/day, no multi-account gray area needed. See git log
+2026-08-31 for the full incident if this comes up again.

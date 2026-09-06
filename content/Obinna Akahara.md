@@ -23,6 +23,6 @@ The Conversion.ai/Jasper background is particularly notable: Jasper was building
 
 _Usage:_
 
-"Why does a healthcare AI CTO need a physics degree?"
+"How does Akahara's early generative‑AI work at Jasper shape Beacon Health's approach to LLM reliability and evaluation?"
 
-"EHR system integration and AI agent reliability are complex systems problems. Physics trains the kind of rigorous reasoning about edge cases and failure modes that clinical AI requires — the same mathematical discipline, different application domain."
+"His time building Jasper's LLM products in 2020‑21 gave him hands‑on experience with the reliability and evaluation problems that appear before the hype settles, so at Beacon Health he applies the same systematic testing pipelines and uncertainty‑aware modeling he used at Jasper to ensure the health‑focused models are robust and trustworthy."

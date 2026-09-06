@@ -17,6 +17,6 @@ The engineer-to-consultant path builds the rare skill of translating between tec
 
 _Usage:_
 
-"What does the consulting background add to an AI startup?"
+"How does Bolna's voice AI improve on the manual phone‑based processes it’s targeting in Indian enterprises?"
 
-"The ability to diagnose an enterprise's actual workflow problem, not just the stated one. Enterprises don't always know what they need to automate — a consultant-trained founder asks the right questions to find the real pain."
+"Bolna replaces human operators handling phone calls with an AI that can understand and respond to voice interactions, letting enterprises automate the same workflows without a live agent; the fact they’re already processing over 500,000 minutes of calls each month shows the AI can handle large call volumes that would otherwise require a proportional staff effort, cutting labor costs and speeding up the process."

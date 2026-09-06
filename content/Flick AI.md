@@ -12,6 +12,6 @@ Competes in the same creator tooling space as [Cardboard](./Cardboard.md), which
 
 _Usage:_
 
-"How is this different from CapCut or Adobe Express?"
+"How does Flick AI differ from Cardboard?"
 
-"CapCut is template-based; Premiere is professional-grade. Flick AI is AI-first — the editing operations themselves are expressed in natural language, not manual timeline cuts. Different workflow, not a feature upgrade."
+"While both target creator video tooling, Flick AI replaces traditional timeline editors with a canvas interface where users generate, edit, and combine clips using natural language and visual drag-and-drop. Cardboard, by contrast, uses a browser-native agentic approach to video editing rather than a canvas model."

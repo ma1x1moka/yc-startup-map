@@ -12,6 +12,6 @@ Palus will save you dozens of hours on operations work, help you avoid making fi
 
 _Usage:_
 
-"What does Palus Finance do?"
+"How does Palus generate the $100s of thousands in extra yield on a fundraise without switching banks or taking on additional risk?"
 
-"Your startup's financial advisor. W26 batch."
+"Palus uses its cash‑management service to automatically allocate a startup’s idle cash into low‑risk, higher‑yield instruments that sit on top of the existing bank accounts, so the company earns extra interest without moving money to a new bank or exposing itself to risky investments."

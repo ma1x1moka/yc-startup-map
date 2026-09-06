@@ -12,6 +12,6 @@ Ray and Richard (twin brothers) dropped out of UWaterloo and UIUC to build Aemon
 
 _Usage:_
 
-"What does Aemon do?"
+"How does Aemon compare to Google DeepMind on optimization problems?"
 
-"The Forward-Deployed AI Research Engineer. W26 batch. San Francisco."
+"Aemon operates as an autonomous research engineer that generates, tests, and evolves thousands of candidate solutions at machine speed. Using this evolutionary approach, it broke Google DeepMind's 2025 world record on an NP-hard math optimization problem while spending under $10 on compute."

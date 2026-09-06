@@ -12,6 +12,6 @@ It starteds with fenestration (shutters, windows, garage doors), a large, comple
 
 _Usage:_
 
-"What does Bravi do?"
+"What is Bravi's wedge into the home-services market?"
 
-"The AI operating system powering home services businesses. F25 batch. Paris."
+"Bravi enters through front-office automation, using AI agents to handle calls, chats, and follow-ups so businesses don't miss leads. It targets fenestration (windows, shutters, garage doors) first because it is a complex vertical with no modern software, pairing lead capture with an internal AI copilot for products, pricing, and technical documentation before expanding into adjacent trades."

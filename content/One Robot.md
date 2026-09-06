@@ -12,6 +12,6 @@ One Robot uses task-specific data to build world model-based simulation environm
 
 _Usage:_
 
-"What does One Robot do?"
+"How does One Robot achieve realistic interaction in its simulations compared to generic physics‑based simulators?"
 
-"World models for robot evals and training. W26 batch. San Francisco."
+"One Robot trains a task‑specific world model from real‑world data for each manipulation scenario (e.g., textiles or box folding); the model directly learns visual appearance and contact dynamics, so the simulated environment reproduces the exact friction, deformation, and visual cues of the real task, whereas generic simulators rely on hand‑tuned physics parameters that often miss these nuances."

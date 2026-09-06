@@ -24,6 +24,6 @@ SolidRoad's $25M Series A (April 2026) is the outcome: institutional investors b
 
 _Usage:_
 
-"What's Hughes' role vs Finlay?"
+"What specific go‑to‑market advantage does Mark Hughes bring to SolidRoad from his early sales role at Intercom?"
 
-"Hughes is CEO — sales, fundraising, strategy, customer relationships. Finlay is CTO — product and engineering. The Trinity Dublin classmates co-founder structure is one of the more common patterns in European YC companies."
+"Hughes’ early‑sales stint at Intercom gave him a proven playbook for scaling revenue in a new geography – identifying the right ICP, designing an outbound motion and closing enterprise deals – and he’s applying that exact template to SolidRoad’s go‑to‑market, which helped secure real enterprise traction and a $25 M Series A."

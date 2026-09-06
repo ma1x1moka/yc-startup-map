@@ -12,6 +12,6 @@ You don't have to choose anymore.
 
 _Usage:_
 
-"What does Semiotic do?"
+"What makes Semiotic’s AI design agents produce higher‑quality landing pages compared to existing AI website builders?"
 
-"Studio-Grade Design at Scale. F25 batch. San Francisco."
+"Semiotic’s agents don’t just stitch together pre‑made templates; they use an AI‑driven design workflow that applies real design principles to each page, generating custom layouts and visual choices instead of the generic “blue‑purple gradient” outputs other builders produce, so the result looks like a professionally crafted landing page without the agency cost or wait."

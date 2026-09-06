@@ -13,6 +13,6 @@ Sits in the same data infrastructure layer as [Ndea](./Ndea.md)'s training data 
 
 _Usage:_
 
-"Isn't synthetic data replacing real demonstrations for robot training?"
+"Why not just use raw video or standard lab demonstrations for robot training?"
 
-"Not yet at the manipulation skill level. Synthetic data works for navigation; for fine manipulation tasks — screwing a bolt, folding fabric — real demonstration data still produces better policies."
+"Standard lab demonstrations are expensive, hard to collect, and too sterile compared to actual deployment environments, while raw video lacks the structure models need to learn. Cortex AI collects egocentric video directly in real factories and warehouses, then adds an annotation layer for hand pose, body pose, and object interactions so embodied AI can actually learn from realistic, messy real-world data."

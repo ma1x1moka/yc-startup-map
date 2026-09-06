@@ -16,6 +16,6 @@ Alongside [Vivek Nair](./Vivek%20Nair.md)'s CIA cyber background, Multifactor ha
 
 _Usage:_
 
-"Why does zero-trust auth for AI agents need a PhD mathematician?"
+"What is Multifactor's technical approach to securing AI agents?"
 
-"Post-quantum cryptography — which Multifactor uses — is mathematically complex. Getting the implementation wrong doesn't produce obvious errors; it produces vulnerabilities that look secure until a nation-state finds them. You want someone who can verify correctness at the proof level."
+"Multifactor builds enterprise authentication infrastructure for AI agents using post-quantum cryptography. Because the security of post-quantum crypto relies directly on mathematical depth, the platform leverages Ph.D.-level mathematical rigor and high-stakes security experience—from NASA, CIA cyber, and over a decade in cybersecurity—to ensure its cryptographic claims are mathematically verifiable rather than just marketed."

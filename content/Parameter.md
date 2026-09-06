@@ -10,6 +10,6 @@ Formerly Hex Security. Team of 10. The shift from annual pentests to continuous 
 
 _Usage:_
 
-"What does Parameter do?"
+"How does Parameter's continuous AI-driven penetration testing differ from traditional annual pentest services?"
 
-"Agentic Offensive Security at Scale. W26 batch. San Francisco."
+"Parameter deploys AI agents that run 24/7, continuously probing your apps and infrastructure to find and verify critical vulnerabilities, whereas traditional services perform a manual test once a year, leaving gaps as the threat landscape evolves."

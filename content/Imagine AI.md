@@ -12,6 +12,6 @@ Imagine AI builds coordinated content systems for executive teams, where the CEO
 
 _Usage:_
 
-"What does Imagine AI do?"
+"How does Imagine AI's approach differ from standard single-founder LinkedIn posting?"
 
-"Imagine AI reverse-engineers B2B growth, starting with LinkedIn. F25 batch. San Francisco."
+"Instead of relying on a solo founder posting in isolation, Imagine AI coordinates the entire executive team—such as the CEO, VP of Sales, and Head of Marketing—from a single shared calendar. Aligning narrative threads across multiple leaders creates compounding reach on LinkedIn that single-author strategies cannot match."

@@ -8,6 +8,6 @@ Crosslayer Labs detects impersonation attacks on websites and APIs. Crosslayer L
 
 _Usage:_
 
-"What does Crosslayer Labs do?"
+"How does Crosslayer's "outside-in" monitoring actually detect impersonation attacks?"
 
-"Protect, monitor and defend your Internet presence. W26 batch. New York City."
+"Instead of relying on internal server logs, Crosslayer monitors your public internet dependencies from the outside—tracking DNS, BGP, TLS certificates, and JavaScript. It correlates anomalies across these different layers of the stack to surface impersonation patterns, delivering alerts with root-cause analysis and remediation steps. The founding team previously invented the MPIC standard, which is used by CAs like Google, Apple, and Amazon to protect HTTPS issuance globally."

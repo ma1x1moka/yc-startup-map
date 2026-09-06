@@ -10,6 +10,6 @@ Long-range, weatherized flying robots work with charging pads installed directly
 
 _Usage:_
 
-"What does Voltair do?"
+"How does Voltair’s drone network differ from other drone inspection services that rely on centralized charging stations?"
 
-"Autonomous Drones for Earth Observation. W26 batch. San Francisco."
+"Voltair equips utility poles with weather‑hardened charging pads, so each pad creates a local power hub that lets a drone take off, fly up to about 1,000 sq mi, and return without needing to travel back to a central base; traditional services typically use a single charging site and must ferry drones back and forth, limiting range and increasing downtime."

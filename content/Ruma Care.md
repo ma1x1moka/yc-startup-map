@@ -10,6 +10,6 @@ When denials happen, or workflows fail, or patients are infused before paperwork
 
 _Usage:_
 
-"What does Ruma Care do?"
+"What specific steps in the prior authorization and copay assistance enrollment workflow does Ruma Care automate, and how does that differ from existing manual or EHR‑based processes?"
 
-"Operations stack for biologic infusion clinics. W26 batch. San Francisco."
+"Ruma Care builds a software pipeline that pulls patient and prescription data, fills out insurer‑specific prior‑auth forms, submits them electronically, and tracks approval status and copay‑assistance enrollment in real time, replacing the manual collection of paperwork, phone calls, and spreadsheet tracking that clinics currently use or that are only loosely integrated in generic EHR systems."

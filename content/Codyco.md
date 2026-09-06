@@ -12,6 +12,6 @@ This it how it works:
 
 _Usage:_
 
-"What does Codyco do?"
+"How does Codyco convert missed hotel calls into revenue?"
 
-"The AI Reservation Team for Hotel Groups. F25 batch. BY."
+"Codyco helps hotel groups capture lost demand by converting missed inbound calls into direct bookings. In a 53-room property, the service generated €5,000 in additional bookings within four weeks."

@@ -10,6 +10,6 @@ Builds AI-powered software that clients use to optimize energy procurement, ensu
 
 _Usage:_
 
-"What does Condor Energy do?"
+"How does Condor's software lower electricity costs for large energy consumers?"
 
-"Software for enterprise energy procurement. W26 batch. Paris, France."
+"Condor builds AI-powered software that optimizes energy procurement for C&I companies and data centers. Founded by former electricity traders and energy physicists, their platform addresses both commercial trading and grid physics, helping clients secure cheap, reliable power while cutting costs through active grid support."

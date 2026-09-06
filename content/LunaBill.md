@@ -12,6 +12,6 @@ Positioned alongside [Beacon Health](./Beacon%20Health.md) in the healthcare AI 
 
 _Usage:_
 
-"Why can't hospitals just train staff better instead of using AI for billing calls?"
+"What technical moat makes LunaBill hard for competitors to replicate?"
 
-"Staff turnover in medical billing is 30-40% annually. Every new hire requires months of training. AI agents don't quit, don't need training resets, and can handle 10x the call volume of a human team."
+"LunaBill’s moat is its HIPAA‑compliant integration with major EHR platforms—Epic, Cerner, and Athenahealth—which requires security certifications and substantial integration work; once a hospital validates that connection, the switching cost is high because any competitor would have to redo the compliance and integration effort."

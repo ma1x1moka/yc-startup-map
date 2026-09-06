@@ -10,6 +10,6 @@ Already working with payers and plan administrators representing ~100K members. 
 
 _Usage:_
 
-"What does Amera do?"
+"How does Amera fit into a payer's existing claims infrastructure?"
 
-"Automating claims processing for health insurance payers. F25 batch. New York City."
+"Amera acts as an ingestion layer that takes unstructured and non-standard inputs—like PDFs, bills, and receipts—alongside standard EDI formats, converts them into structured data, and feeds that output directly into a payer's existing systems. This avoids tech stack overhauls while cutting down on the manual entry and exception handling that slow down claims processing."

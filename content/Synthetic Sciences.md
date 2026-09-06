@@ -19,6 +19,6 @@ Both are Z-Fellows and Emergent Ventures recipients — independent signals of e
 
 _Usage:_
 
-"Is this just a paper-reading assistant?"
+"How does Synthetic Sciences’ focus on the application layer differ from competitors that focus on model architecture, such as NDEA?"
 
-"No. The agents run full research workflows — designing experiments, analysing results, synthesising across literature. The 92% BixBench score suggests it handles non-trivial biological reasoning."
+"Synthetic Sciences builds on existing large‑language models and adds an orchestration stack that lets AI agents autonomously synthesize literature, generate hypotheses, design experiments, run code, analyze data, and produce publishable output, effectively turning the model into a co‑scientist, whereas competitors like NDEA aim to improve the underlying model architecture itself; the former is about delivering usable scientific workflows today, the latter is about advancing the raw model capabilities."

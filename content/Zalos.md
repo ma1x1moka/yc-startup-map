@@ -16,6 +16,6 @@ It doesn’t have to be this way.
 
 _Usage:_
 
-"What does Zalos do?"
+"How does Zalos actually overcome the integration and authentication barriers of legacy ERPs, protected portals, and fragmented finance systems to enable FinOps automation?"
 
-"Computer Agents for Finance tasks like reconciliation, in your system!. F25 batch. London."
+"Zalos positions its platform as the breakthrough that eliminates those obstacles, claiming it can directly connect to legacy ERP systems, work through authentication‑protected websites and portals, and unify multiple finance tools so that FinOps processes can be automated without the usual custom integration effort."

@@ -18,6 +18,6 @@ Monga's role at RunAnywhere is the distribution and market layer: making sure de
 
 _Usage:_
 
-"Is the Intuit background relevant to building AI inference infrastructure?"
+"How does RunAnywhere’s SDK distribution model differ from other mobile SDKs that already serve tens of millions of users?"
 
-"The SDK experience is directly relevant — RunAnywhere is a developer SDK. Knowing how to build and maintain something 50M people depend on without breaking changes is a rare operational skill."
+"RunAnywhere applies the same distribution discipline Sanchit used at Intuit: strict versioning, guaranteed backward compatibility, enterprise‑grade documentation, and a control‑plane layer that lets developers adopt the SDK with minimal friction, whereas many mobile SDKs rely on ad‑hoc releases and limited tooling, making RunAnywhere’s approach more predictable and trust‑focused for large‑scale adoption."

@@ -21,6 +21,6 @@ Austria-based founding team in a Valley-dominated ecosystem: the geographic dist
 
 _Usage:_
 
-"Is Metorial betting on MCP specifically or on the general agent integration concept?"
+"How does Metorial’s MCP runtime improve reliability and cold‑start performance compared to Vercel’s deployment platform?"
 
-"Both — but MCP is the bet. Anthropic released the protocol and the industry is converging on it. If MCP becomes the standard (signs point that way), Metorial is positioned as Vercel of that standard."
+"Metorial builds on peer‑reviewed distributed‑systems research to guarantee sub‑second cold starts, multi‑region failover, and high‑availability across regions, whereas Vercel’s platform mainly scales existing deployment tooling without those specific low‑latency, fault‑tolerant guarantees."

@@ -10,6 +10,6 @@ Gained ~15,000 downloads in the first two weeks. Power users spend 3+ hours dail
 
 _Usage:_
 
-"What does Doomersion do?"
+"What makes this different from a standard short-form video feed?"
 
-"Doomscroll to learn languages. W26 batch. San Francisco."
+"Standard feeds aren't calibrated to your vocabulary. Doomersion serves viral videos matched precisely to your current language proficiency, gradually increasing the difficulty as you scroll to turn existing 2.5–3 hour daily doomscrolling habits into language immersion."

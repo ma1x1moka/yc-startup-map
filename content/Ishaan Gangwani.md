@@ -17,6 +17,6 @@ The IOI-AI and USACO credentials together signal the kind of algorithmic reasoni
 
 _Usage:_
 
-"Why do competitive programming rankings matter for an AI startup?"
+"How does Synthetic Sciences' approach to building AI agents differ from the more common prompt‑engineering‑centric methods?"
 
-"The kind of thinking required for USACO Platinum — algorithmic correctness under constraints, efficient data structures, edge case reasoning — transfers directly to building reliable AI evaluation systems and RL environments."
+"Synthetic Sciences builds AI agents by designing rigorous evaluation frameworks and reinforcement‑learning environments that test algorithmic reasoning, a process that mirrors competitive programming challenges, whereas most AI products focus on prompt engineering to tweak large language models without such structured, performance‑driven testing."

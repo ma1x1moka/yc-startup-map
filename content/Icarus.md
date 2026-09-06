@@ -10,6 +10,6 @@ The stratosphere is the forgotten frontier: above commercial air traffic, below 
 
 _Usage:_
 
-"What does Icarus do?"
+"Why operate in the stratosphere instead of using traditional satellites?"
 
-"Stratospheric solar drones for defense intelligence. F25 batch. Los Angeles."
+"Flying autonomous solar aircraft at 60,000 feet places them in the largely unoccupied stratosphere—above commercial air traffic and weather, but below satellites. This allows them to stay airborne for weeks at a time to provide persistent military ISR and connectivity at a fraction of the cost of traditional satellite systems."

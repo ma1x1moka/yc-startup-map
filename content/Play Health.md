@@ -12,6 +12,6 @@ Play Health is bringing evidence-based perimenopause care to women through partn
 
 _Usage:_
 
-"What does Play Health do?"
+"How does Play Health's platform differ from the generic perimenopause solutions most women currently receive?"
 
-"Perimenopause Care Platform. F25 batch. Boulder."
+"Play Health combines personalized symptom, medication, and lifestyle data from each user and feeds it into AI‑driven models that produce evidence‑based insights and clinical protocols, which are then delivered through partnerships with medical practices and employer health programs—unlike the generic, one‑size‑fits‑all approaches that dominate the market."

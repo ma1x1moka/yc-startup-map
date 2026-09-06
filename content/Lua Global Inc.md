@@ -12,6 +12,6 @@ It scales through developer agencies and channel partners, enabling rapid distri
 
 _Usage:_
 
-"What does Lua Global Inc do?"
+"How does Lua handle deployment and scaling without forward-deployed engineering teams?"
 
-"The mid-market agent platform. F25 batch. London."
+"Lua operates as an 'agentOS' that abstracts the technical complexity of building and running enterprise-grade agents for sales, support, and operations. Instead of building out direct enterprise sales reps or dedicated forward-deployed engineering teams, Lua relies on developer agencies and channel partners to distribute and deploy its platform for mid-market clients."

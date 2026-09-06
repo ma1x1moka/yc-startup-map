@@ -20,6 +20,6 @@ The Austria location is an operational choice: Vienna has a growing technical ta
 
 _Usage:_
 
-"Won't AWS just build native MCP support and make Metorial obsolete?"
+"How does Metorial’s platform differ from Vercel’s approach, especially regarding enterprise compliance and audit capabilities?"
 
-"They will, eventually. But enterprise developers need MCP support now, not in 18 months on an AWS roadmap. Metorial's open-source runtime creates switching costs that make cloud-native MCP less attractive even when it ships."
+"Metorial combines a clean MCP connection API for developer ergonomics with built‑in enterprise features like audit logs, compliance controls, and service‑level agreements, targeting regulated European customers, whereas Vercel focuses on fast web deployment without those specific compliance and audit mechanisms."

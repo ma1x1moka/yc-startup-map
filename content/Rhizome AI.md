@@ -12,6 +12,6 @@ It’s the best because it haves the best retrieval engine. We’ve tuned it on 
 
 _Usage:_
 
-"What does Rhizome AI do?"
+"How does Rhizome AI’s research agent claim to cut the drug development timeline from 500,000 days to five days?"
 
-"Agent Platform for Life Sciences. W26 batch. New York City."
+"By using AI‑driven research agents that automatically retrieve and cite up to 1,000 FDA‑relevant documents, leveraging a life‑science‑tuned retrieval engine that finds information other tools miss, so the bulk of the document‑review work that normally takes years can be done automatically in days."

@@ -10,6 +10,6 @@ Directed toward the grand challenges of biology and materials science. Mission: 
 
 _Usage:_
 
-"What does Thesis do?"
+"How does Darwin’s hill‑climbing approach differ from typical AutoML or hyperparameter‑optimization tools?"
 
-"Autonomous AI research — machines that discover machines. F25 batch. San Francisco."
+"Darwin treats the research process as a sequential, feedback‑driven search: each experiment’s result directly informs the next, effectively “climbing” toward better configurations in a massive combinatorial space, whereas most AutoML or hyperparameter tools evaluate trials largely independently and rely on static search strategies like grid or random sampling, so they don’t compound knowledge across runs the way Darwin does."

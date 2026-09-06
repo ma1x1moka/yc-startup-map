@@ -10,6 +10,6 @@ Team of 22. Addresses the trillion-dollar waste in bad ads, mismatched landing p
 
 _Usage:_
 
-"What does Uplane do?"
+"How does Uplane’s AI actually learn what drives profits and allocate ad spend compared to traditional marketing agencies?"
 
-"Replace marketing agencies with AI. F25 batch. San Francisco."
+"Uplane hooks into a company’s CRM and ERP systems to pull real revenue and cost data, then uses that feedback to label which ads and landing pages generate profit; the AI runs continuous experiments across Meta, Google, LinkedIn, etc., and automatically shifts budget toward the combinations that the model predicts will maximize profit, effectively replacing the manual optimization and reporting that agencies and spreadsheets provide with a self‑improving, data‑driven loop."

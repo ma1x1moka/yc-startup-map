@@ -10,6 +10,6 @@ Team of three PhD scientists from UCSF, UCSD, and UC Berkeley with deep expertis
 
 _Usage:_
 
-"What does Ditto Biosciences do?"
+"How does Ditto use parasite biology to target autoimmune diseases?"
 
-"Evolutionary intelligence for autoimmune disease. W26 batch. San Francisco."
+"Rather than building therapies from scratch, Ditto leverages proteins that viruses, ticks, and worms evolved over millions of years to manipulate the human immune system. The team uses computational biology and AI-based protein structure prediction to identify these naturally occurring immune-modulating proteins and engineer them into next-generation drugs."

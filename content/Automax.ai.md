@@ -8,6 +8,6 @@ Automax.ai does property appraisals faster and more transparent. Automax.ai's mo
 
 _Usage:_
 
-"What does Automax.ai do?"
+"How does Automax generate a compliant appraisal in under 20 minutes?"
 
-"AI native real-estate appraisal firm. F25 batch. San Francisco."
+"Its mobile app uses LiDAR and computer vision to capture property details on-site. Custom-trained AI agents then aggregate and analyze that data to generate a complete valuation report that meets Fannie Mae and Freddie Mac standards."

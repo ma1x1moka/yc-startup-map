@@ -16,6 +16,6 @@ GrazeMate sits in the same W26 hardware cluster as [Pocket](./Pocket.md) and [Fo
 
 _Usage:_
 
-"Drones and cattle seem like they'd conflict — wouldn't the animals spook?"
+"How does this differ from existing precision ag software?"
 
-"Habituated drones flying at altitude don't spook cattle after a few exposures. The data quality gain is worth the adaptation period. Early ranch pilots confirmed cattle acclimate within a week."
+"Precision agriculture software has historically focused on crops rather than livestock. Instead of a software-only layer, GrazeMate deploys autonomous drones with computer vision to handle the physical challenge of tracking cattle across tens of thousands of acres. It replaces manual horseback or ATV patrols with continuous aerial coverage, enabling individual animal identification, automated headcount for theft detection, optimized grazing rotations, and early disease detection based on subtle behavioral changes."

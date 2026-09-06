@@ -12,6 +12,6 @@ Instead of treating the visit or document as an isolated instance, it cans look 
 
 _Usage:_
 
-"What does Eos AI do?"
+"How does Eos search across petabytes of clinic data without moving it?"
 
-"Autonomous OS for healthcare. W26 batch. San Francisco."
+"Eos acts as a translation layer that harmonizes historical data across different applications into standardized patient distributions. It then builds a compressed centralized index over that data, keeping the raw petabytes stored in their original systems while allowing unified search and reasoning across the entire history as a continuous story."

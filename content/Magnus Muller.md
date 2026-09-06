@@ -24,6 +24,6 @@ The Browser Use open-source strategy was Muller's distribution decision: release
 
 _Usage:_
 
-"Why did two ETH Zurich data scientists build browser automation?"
+"How does Browser Use’s open‑source strategy translate into commercial cloud revenue?"
 
-"They saw the gap that frontier AI created: models can reason, but they can't act unless you give them the web. Browser Use was the missing action layer — and ETH's research tradition of building rigorous systems, not just demos, shows in the product reliability."
+"Muller’s approach is to publish the Browser Use framework for free, let developers and users validate and adopt it on GitHub (as shown by the 97,600 stars), and then monetize the same technology by offering a hosted cloud version—charging customers for the managed, scalable service that runs the open‑source code rather than selling the code itself."

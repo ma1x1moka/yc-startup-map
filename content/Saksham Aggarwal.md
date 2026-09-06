@@ -23,6 +23,6 @@ The PYOR first-engineer role (Coinbase-backed) means Aggarwal has seen what earl
 
 _Usage:_
 
-"Does a video editing startup need NLP research credentials?"
+"How does Saksham Aggarwal's ACL‑published NLP research make the company's agentic video‑editing pipeline credible?"
 
-"Cardboard's core product is agents that understand natural language instructions about video. The ACL research background is directly relevant — it means the language understanding is built by someone who knows the state of the art."
+"His peer‑reviewed ACL paper, completed at age 22, demonstrates deep expertise in natural‑language processing, which underpins the agentic video‑editing pipeline; this technical foundation shows the system can reliably interpret and act on textual instructions, lending credibility beyond typical marketing claims."

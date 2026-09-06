@@ -17,6 +17,6 @@ The Zapier background is directly relevant: Zapier was built on connecting thing
 
 _Usage:_
 
-"Why leave Zapier for AGI research?"
+"How does Ndea's program synthesis approach differ from other AI code‑generation tools like GitHub Copilot?"
 
-"He's said he believes AGI is one of the most important problems humanity faces. Once you believe that, staying to optimise a profitable no-code tool is the wrong allocation of time."
+"Ndea composes whole programs by selecting and linking existing component modules rather than generating code token‑by‑token, mirroring Zapier's modular integration model; this lets the system build functionality from reusable parts instead of writing new code from scratch."

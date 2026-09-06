@@ -21,6 +21,6 @@ Left Google in 2025 to co-found [Ndea](./Ndea.md) — an AGI lab pursuing progra
 
 _Usage:_
 
-"Is Chollet right that scaling won't reach AGI?"
+"How does Chollet's approach to AGI differ from standard LLM scaling?"
 
-"His ARC benchmark has proved resistant to LLMs for five years. Whether that resistance is fundamental or temporary is the exact bet that [Ndea](./Ndea.md) and the frontier labs are making on opposite sides."
+"Standard LLMs rely on scaling pattern matching and memorization, which Chollet argues is fundamentally insufficient for genuine reasoning. Rather than scaling language models, his lab Ndea pursues program synthesis to solve tasks requiring visual reasoning and systematic generalization—the exact capabilities measured by his ARC-AGI benchmark that current LLMs consistently fail."

@@ -20,6 +20,6 @@ The India-first positioning is founder-market fit: Sachan built products for Ind
 
 _Usage:_
 
-"Why does Bolna need someone with Atlassian and BrowserStack experience?"
+"How does Bolna's voice AI differ from US-based competitors in serving Indian enterprise call centres?"
 
-"Those companies built developer infrastructure for enterprise customers at global scale. Bolna is building AI voice infrastructure for Indian enterprises at scale. The go-to-market playbook transfers — enterprise sales cycles, compliance requirements, integration complexity."
+"Bolna leverages an India‑first approach built on Sachan’s experience scaling products for Indian users, giving it deeper knowledge of local language diversity, business communication patterns, and enterprise sales culture, which US‑based voice AI firms lack."

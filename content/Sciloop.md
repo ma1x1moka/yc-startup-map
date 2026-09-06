@@ -10,6 +10,6 @@ On their benchmark, models like GPT 5.4 Pro and Gemini 3.1 Pro score 0–5% on t
 
 _Usage:_
 
-"What does Sciloop do?"
+"How does Sciloop’s problem set differ from existing AI evaluation benchmarks, and why can’t current frontier models solve them?"
 
-"Expert STEM reasoning data for frontier AI labs. F25 batch. San Francisco."
+"Sciloop’s problems are authored by IPhO and IMO medalists – the top 0.01 % of STEM talent – and are deliberately crafted to probe deep, multi‑step reasoning that goes beyond the textbook‑style or competition‑archive questions found in most public benchmarks; this novel, expert‑level design creates gaps that models like GPT 5.4 Pro and Gemini 3.1 Pro currently fill only 0–5 % of, which is why they can’t solve the hardest items."

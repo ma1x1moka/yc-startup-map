@@ -8,6 +8,6 @@ Expected Parrot helps companies simulate their customers with AI agents to explo
 
 _Usage:_
 
-"What does Expected Parrot do?"
+"How do you validate that the AI agent responses actually reflect real customer behavior?"
 
-"Simulate your customers with AI agents. F25 batch. Boston."
+"You can send the exact same surveys and interviews to real human respondents directly within the same interface. Because the agent results are cached and reproducible, you can directly compare LLM outputs against actual human feedback in one place to benchmark how accurately your custom personas simulate real target customers."

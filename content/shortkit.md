@@ -12,6 +12,6 @@ shortkit handles the full media stack, starting with short form video - client S
 
 _Usage:_
 
-"What does shortkit do?"
+"How does ShortKit’s recommendation system compare to TikTok’s built‑in recommendation engine?"
 
-"Media infra for consumer apps. W26 batch."
+"ShortKit builds on the same infrastructure that powers YouTube Shorts—thanks to its co‑founder’s six years on that team—so its recommendation stack is designed to deliver TikTok‑grade personalization, but it’s offered as a turnkey service rather than a proprietary TikTok algorithm."

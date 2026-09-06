@@ -20,6 +20,6 @@ The browser technology expertise is what makes Cardboard's browser-native bet cr
 
 _Usage:_
 
-"Why does CTO background at HackerRank matter for a video startup?"
+"Why bet on a browser-native video editor when most web-based tools are laggy?"
 
-"HackerRank runs computation-heavy tasks in the browser — code execution, real-time evaluation, latency-sensitive UX. The same performance engineering that makes code execution fast in a browser makes video editing fast in a browser."
+"In-browser video editing is a hard systems engineering problem, which is why most attempts result in laggy, limited experiences. Cardboard relies on co-founder Ishan Sharma's background in high-performance web systems and browser technology as the technical unlock to make browser-native video editing actually performant."

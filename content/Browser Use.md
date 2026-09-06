@@ -16,6 +16,6 @@ Natural integration with [Metorial](./Metorial.md) (MCP agent orchestration) and
 
 _Usage:_
 
-"Why not just use Playwright or Selenium?"
+"How does Browser Use differ from Playwright?"
 
-"Those tools were designed for deterministic scripts. Browser Use lets an LLM decide how to navigate — it handles sites it's never seen before and adapts to UI changes that break Playwright selectors overnight."
+"While Playwright relies on deterministic test scripts and pre-written selectors, Browser Use lets an LLM decide how to navigate. This allows agents to handle sites they've never seen before, adapt to UI changes automatically, and complete goal-directed web tasks without pre-written selectors."

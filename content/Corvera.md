@@ -10,6 +10,6 @@ Scaled from $0 to $33K MRR in 4 weeks, serving 12 brands, growing 130% week-on-w
 
 _Usage:_
 
-"What does Corvera do?"
+"How does Corvera connect brand data to AI tools like Cursor and Lovable?"
 
-"MCP context layer for AI-native CPG brands. W26 batch. San Francisco."
+"Corvera acts as a context layer for CPG brands by exposing unified brand data through the Model Context Protocol (MCP). This makes the data legible to any AI tool, allowing anyone in an organization to build dashboards in Cursor or Lovable, deploy AI agents, and automate workflows without requiring data engineers or AI specialists."

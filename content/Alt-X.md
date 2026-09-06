@@ -12,6 +12,6 @@ Alt-X uses AI to automate the core functions required to make private assets liq
 
 _Usage:_
 
-"What does Alt-X do?"
+"How does Alt-X replace traditional private-market workflows?"
 
-"Building the best venue for private markets exposure. W26 batch. Los Angeles."
+"Where private markets currently rely on brokers, spreadsheets, and manual effort to connect buyers and sellers, Alt-X uses AI to automate diligence, valuation, investor matching, and transaction execution. The goal is to bring public-market-style infrastructure to private assets, eliminating the friction that makes deals slow, expensive, and opaque."

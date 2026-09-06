@@ -10,6 +10,6 @@ Founded by Arvid (Broad Institute of MIT and Harvard, Nature-published researche
 
 _Usage:_
 
-"What does Anto Biosciences do?"
+"How does modeling the gut microbiome help prevent drug failures?"
 
-"Foundation Model for Microbial Communities. F25 batch. San Francisco."
+"The gut microbiome is a hidden root cause of most drug failures. Anto is building a foundation model for microbial communities to make the microbiome computable, allowing them to predict drug toxicity and efficacy across diverse populations and modify drugs so they work reliably for everyone."

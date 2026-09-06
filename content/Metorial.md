@@ -16,6 +16,6 @@ Natural stack with [Multifactor](./Multifactor.md) (what agents are allowed to d
 
 _Usage:_
 
-"Why not run MCP servers yourself?"
+"What does Metorial add beyond the base MCP protocol itself?"
 
-"You can, until you need multi-region failover, SOC2 compliance, audit logs, and 99.9% uptime SLAs. That's what Metorial provides on top of the open protocol."
+"Metorial supplies a serverless runtime that sits on top of the open‑source MCP protocol, handling idle‑server hibernation and sub‑second resume, securing and monitoring each integration, and meeting enterprise compliance, scaling and observability requirements that the raw protocol alone doesn’t provide."

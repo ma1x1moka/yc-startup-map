@@ -10,6 +10,6 @@ Working with Top 10 pharma companies. Team of 2. The 'agentic drug company' fram
 
 _Usage:_
 
-"What does CellType do?"
+"Is CellType selling software tools to pharma or developing drugs directly?"
 
-"The agentic drug company. We simulate human biology.. W26 batch. New York City."
+"CellType operates as a drug company rather than a SaaS vendor. Instead of licensing software to pharma, its two-person team uses AI agents built on biological foundation models—developed with Google DeepMind—to run the full drug discovery pipeline internally. They are working with Top 10 pharma companies and have already discovered and validated a new cancer treatment signal."

@@ -10,6 +10,6 @@ Founders: Frederik (former Blackstone Principal who bought these reports) and So
 
 _Usage:_
 
-"What does DiligenceSquared do?"
+"How does this compare to hiring a traditional consulting firm like McKinsey or BCG?"
 
-"AI-powered market due diligence for investment decisions. F25 batch. New York City."
+"Traditional consulting firms charge $500K to $1M for market due diligence that takes weeks and results in a static PowerPoint. DiligenceSquared automates that analysis using AI to deliver auditable reports at a fraction of the cost."

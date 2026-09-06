@@ -22,6 +22,6 @@ Raised **$15M**, the largest round in F25. Enterprise customers managing **$7.5B
 
 _Usage:_
 
-"Is the CIA background relevant to a startup or just a credential?"
+"How does Multifactor’s AI agent authentication achieve zero‑trust and prompt‑injection resistance compared to other AI authentication approaches?"
 
-"Directly relevant. Multifactor's patented prompt injection defense and zero-trust agent auth were designed by someone who built adversarial cyber systems professionally. The threat model is not theoretical."
+"Multifactor’s claim rests on the founder’s CIA cyber‑operations background: the system treats every AI agent as an untrusted endpoint and applies the same offensive‑defensive techniques used in elite intelligence work to verify each interaction and detect malicious prompt manipulation, whereas typical AI auth solutions assume the model is trustworthy and lack those hardened, zero‑trust checks."

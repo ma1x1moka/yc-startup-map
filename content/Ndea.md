@@ -18,6 +18,6 @@ _Avoid:_ Treating Ndea as another LLM startup. They are explicitly building some
 
 _Usage:_
 
-"Is Ndea competing with OpenAI and Anthropic?"
+"How does Ndea’s program‑synthesis approach differ from the typical large‑scale transformer models used by other AI‑for‑science startups?"
 
-"Not directly. They're betting the path to AGI runs through program synthesis, not scaling transformers. If they're right, the frontier labs are optimising the wrong variable."
+"Ndea trains models to output explicit, executable programs that solve a task, instead of producing probabilistic text completions like a transformer; this lets the system compose, verify, and reuse concrete code across domains (drug discovery, robotics, etc.) rather than relying on ever larger datasets and model sizes to infer solutions from patterns alone."

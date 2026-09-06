@@ -12,6 +12,6 @@ it alsos run AI invalidity and prior-art searches to help your patents hold up i
 
 _Usage:_
 
-"What does Patent Watch do?"
+"How does Patent Watch’s AI actually generate claim charts and prior‑art searches compared to manual patent analysis?"
 
-"AI for detecting patent infringements. F25 batch. San Francisco."
+"Patent Watch uses AI‑driven natural‑language processing to parse the text of a patent’s claims, then automatically maps those claim elements to features of competing products in its database, producing a claim chart that lists each claim and the corresponding infringing product detail; the same AI also scans prior‑art databases to flag earlier disclosures that could invalidate the patent, automating steps that lawyers normally perform manually."

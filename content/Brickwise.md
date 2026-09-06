@@ -12,6 +12,6 @@ Ismail, co-founder & CEO, is an ex-Founder at LiveLink AI, where he raised $3M, 
 
 _Usage:_
 
-"What does Brickwise do?"
+"What part of property management does Brickwise handle?"
 
-"AI property manager for landlords and estate agents. F25 batch. London."
+"It focuses specifically on maintenance workflows. The system acts as a 24/7 AI agent that fields tenant calls and messages, chases down contractors, and tracks issues through to resolution."

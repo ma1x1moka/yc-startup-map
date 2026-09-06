@@ -10,6 +10,6 @@ These systems have become increasingly opaque as original developers retire. Hyp
 
 _Usage:_
 
-"What does Hypercubic do?"
+"What makes legacy mainframe modernization such an urgent issue right now?"
 
-"Agentic AI for Mainframe Operations and Modernization. F25 batch. San Francisco."
+"Around 70% of Fortune 500 companies in sectors like banking, telecom, and retail still run core business applications on mainframes built between the 1960s and 1990s. As the original developers who built these systems retire, the codebase becomes increasingly opaque, which is why Hypercubic uses an AI platform to understand, reason about, and rebuild that legacy infrastructure."

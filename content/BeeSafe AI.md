@@ -12,6 +12,6 @@ BeeSafe is starting in financial crime, where banks already value its data again
 
 _Usage:_
 
-"What does BeeSafe AI do?"
+"How does BeeSafe defend against social engineering in encrypted channels where traditional tools lack visibility?"
 
-"Frontier AI Defenses for Social Engineering Attacks. W26 batch. San Francisco."
+"Rather than relying on passive traffic monitoring, BeeSafe deploys undercover AI agents that engage attackers directly across SMS, voice, email, and social platforms. These live conversations force attackers to expose hidden infrastructure and generate threat intelligence, creating a proprietary behavioral dataset used to train foundational models on counter-persuasion and deception."

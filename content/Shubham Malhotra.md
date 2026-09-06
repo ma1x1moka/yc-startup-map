@@ -18,6 +18,6 @@ The Amazon EC2 Spot background ($100M+ ARR product) means Malhotra understands l
 
 _Usage:_
 
-"How does RunAnywhere beat Apple's own MLX?"
+"What specific performance or cost advantages does MetalRT’s GPU‑kernel level optimisation give it over other on‑device AI inference engines for Apple Silicon?"
 
-"Malhotra built custom GPU kernels that extract more throughput from the same Apple Silicon hardware. MLX is general-purpose; MetalRT and RunAnywhere are specialised for inference. The same reason NVIDIA's cuDNN gets beat in certain workloads by specialised kernels."
+"MetalRT is the first complete multimodal inference engine that runs natively on Apple Silicon and it achieves its speed by hand‑optimising the GPU kernels at the low‑level, something most on‑device AI teams haven’t done; this kernel‑level work lets it squeeze more FLOPs per watt, delivering higher throughput for the same power budget, and because the founder also built large‑scale EC2 Spot workloads, the engine is architected to schedule work efficiently, which translates into lower compute costs for enterprise customers compared to generic on‑device solutions that rely on higher‑level libraries without those optimisations."

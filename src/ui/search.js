@@ -18,15 +18,7 @@ export class Search {
     this.clearButton = root.querySelector("#search-clear");
     this.count = root.querySelector("#search-count");
 
-    // Lower-cased once. Aliases are searchable so "away from keyboard" finds
-    // AFK, which is exactly when you need a dictionary.
-    this.haystack = graph.nodes.map((node) => ({
-      slug: node.slug,
-      text: [node.title, ...(node.aliases ?? []), node.description]
-        .join(" ")
-        .toLowerCase(),
-      title: node.title.toLowerCase(),
-    }));
+    this.setGraph(graph);
 
     this.openButton.addEventListener("click", () => this.open());
     this.clearButton.addEventListener("click", () => this.clear());
@@ -37,6 +29,25 @@ export class Search {
         this.input.value ? this.clear() : this.close();
       }
     });
+  }
+
+  /** Rebuilds the searchable index for a different graph (switching tabs)
+   *  without re-binding DOM listeners, which are bound once for the page's
+   *  lifetime to elements that never get re-created. */
+  setGraph(graph) {
+    // Lower-cased once. Aliases are searchable so "away from keyboard" finds
+    // AFK, which is exactly when you need a dictionary.
+    this.haystack = graph.nodes.map((node) => ({
+      slug: node.slug,
+      text: [node.title, ...(node.aliases ?? []), node.description]
+        .join(" ")
+        .toLowerCase(),
+      title: node.title.toLowerCase(),
+    }));
+    // Reset state without stealing focus — this runs at construction time too,
+    // before the input is meant to be interactive.
+    this.input.value = "";
+    this.run("");
   }
 
   get isOpen() {

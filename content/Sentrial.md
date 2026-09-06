@@ -10,6 +10,6 @@ When your AI product/agent loops indefinitely, hallucinates, or frustrates users
 
 _Usage:_
 
-"What does Sentrial do?"
+"How does Sentrial detect and diagnose issues like infinite loops or hallucinations in real‑time compared to traditional monitoring tools?"
 
-"Datadog for Agent Reliability. W26 batch. San Francisco."
+"Sentrary hooks into the live execution of your AI model, watches for patterns such as never‑ending response cycles or outputs that diverge from expected distributions, and flags them as they happen; it then traces the offending component back to its source and suggests concrete remediation steps, whereas traditional observability stacks only surface generic metrics and rely on offline evaluations that can’t see these runtime AI‑specific failure modes."

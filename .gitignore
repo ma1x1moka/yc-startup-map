@@ -1,3 +1,9 @@
 dist/
 node_modules/
 github.pointer.md
+claude-tools/.env
+# Scratch/working area for the 10-year mining pipeline — large intermediate
+# dumps (raw pulls, filter/generate logs), not the deliverable. The actual
+# output lives in content/*.md, already committed.
+claude-tools/yc-api/staging-10yr/
+claude-tools/yc-api/.compound-tpd-cooldown.json

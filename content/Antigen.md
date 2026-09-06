@@ -10,6 +10,6 @@ Backed by Lightspeed, DST Global, and Susa Ventures. Works with companies in fin
 
 _Usage:_
 
-"What does Antigen do?"
+"How does Antigen differ from traditional red teaming?"
 
-"Continuous offensive security for the enterprise. F25 batch. San Francisco."
+"Antigen operates as an always-on red team by combining nightly automated offensive testing with monthly human red team assessments. Rather than using external portals or static handoffs, it integrates directly into engineering workflows, delivering findings complete with traces, reproduction steps, and remediation straight to GitHub or Linear."

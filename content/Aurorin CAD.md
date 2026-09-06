@@ -10,6 +10,6 @@ Aurorin uses a custom parametric and B-Rep driven CAD Kernel built to take full 
 
 _Usage:_
 
-"What does Aurorin CAD do?"
+"How does Aurorin differ from established CAD tools like SolidWorks or Onshape?"
 
-"Claude Code for Mechanical Engineers. W26 batch. San Francisco."
+"Most major CAD platforms—including SolidWorks, NX, Creo, Catia, Fusion 360, and Onshape—run on 1980s-era kernels, which can cause files to take four hours to open and force AI to be bolted on top of legacy code. Aurorin replaces that legacy foundation entirely with a custom parametric and B-Rep kernel engineered specifically to utilize modern CPUs and GPUs with native AI built into the core stack."

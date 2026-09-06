@@ -10,6 +10,6 @@ Allows researchers to map research gaps, analyze trends, and draft literature re
 
 _Usage:_
 
-"What does AnswerThis do?"
+"How does AnswerThis condense weeks of literature research into hours?"
 
-"End-to-end workspace to accelerate scientific discovery. F25 batch. San Francisco."
+"Rather than forcing researchers to manually search, read, and organize dozens of individual papers across different tools, AnswerThis unifies the entire workflow. It finds relevant papers, visualizes how ideas connect, directly answers complex scientific questions, maps research gaps, and assists in drafting literature reviews—all while building a searchable library out of your personal research materials."

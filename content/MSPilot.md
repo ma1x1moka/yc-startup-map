@@ -10,6 +10,6 @@ MSPilot helps Managed Service Providers deploy, govern, and monetize AI agents a
 
 _Usage:_
 
-"What does MSPilot do?"
+"How does MSPilot’s per‑token billing with markup work for Managed Service Providers?"
 
-"Turn AI adoption into a recurring revenue line. F25 batch. San Francisco."
+"MSPilot tracks the number of AI model tokens each agent consumes when serving a client’s workload, then applies a configurable markup on top of the underlying token cost; the MSP is invoiced for the total marked‑up token usage, so they can charge their customers a recurring fee based on actual consumption while keeping the margin they set."

@@ -12,6 +12,6 @@ It solves this by building high-frequency radar systems, designed from the groun
 
 _Usage:_
 
-"What does Milliray do?"
+"What makes Milliray’s radar able to detect nano‑drones that other radar systems miss?"
 
-"Technology to detect and track small drones. W26 batch. London."
+"Milliray’s radars operate at much higher frequencies than traditional air‑defense radars, which gives them finer resolution and better sensitivity to the tiny, low‑signature radar cross‑sections of nano‑drones; the hardware and signal‑processing stack was designed from the ground up for those weak returns, so it can pick up and track $50 drones that conventional systems simply don’t see."

@@ -10,6 +10,6 @@ Founded by Mike Knoop and François Chollet. Through benchmarks, global competit
 
 _Usage:_
 
-"What does ARC Prize Foundation do?"
+"Why is ARC Prize focused on fluid intelligence rather than model scaling?"
 
-"AI benchmarks that measure general intelligence. W26 batch. San Francisco."
+"ARC Prize operates on the thesis that scaling existing models alone won't produce AGI. Instead, achieving true general intelligence requires systems capable of genuine fluid intelligence and adaptation to novel challenges, which is what their ARC-AGI benchmark measures for leading AI labs like OpenAI, Anthropic, Google DeepMind, and xAI."

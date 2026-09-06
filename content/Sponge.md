@@ -10,6 +10,6 @@ Addresses the missing financial primitive in the agentic stack: agents need to b
 
 _Usage:_
 
-"What does Sponge do?"
+"What financial primitive does Sponge add to enable AI agents to act as economic actors?"
 
-"Financial infrastructure for the agent economy. W26 batch. San Francisco."
+"Sponge gives AI agents a wallet‑like capability: they can hold funds and transact autonomously using linked bank accounts, cards, or crypto, letting them buy services such as email, browser access, or premium data without any human step, which fills the missing economic‑actor layer in the agentic stack."

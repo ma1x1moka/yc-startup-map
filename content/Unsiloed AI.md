@@ -10,6 +10,6 @@ Unsiloed AI has built state-of-the-art vision models as infrastructure for turni
 
 _Usage:_
 
-"What does Unsiloed AI do?"
+"How does Unsiloed AI achieve better performance than LlamaIndex, Gemini, Mistral, and Unstructured.io on multimodal documents?"
 
-"API for parsing multimodal unstructured data. F25 batch. San Francisco."
+"Unsiloed AI uses state‑of‑the‑art vision models as the core of its parsing pipeline, treating each document as an image and jointly extracting text, tables, images, and charts, whereas the listed competitors rely on generic LLM parsers or OCR that struggle with multimodal content; this vision‑first approach lets Unsiloed consistently beat them on public benchmarks."

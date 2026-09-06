@@ -10,6 +10,6 @@ The workplace data collection angle is Cortex AI's differentiation: lab data pro
 
 _Usage:_
 
-"Why is embodied AI training data a separate company and not something robotics labs build internally?"
+"How does Cortex AI's strategy compare to Scale AI?"
 
-"Because the data collection, annotation, and quality assurance pipeline is a full-time operation that distracts from the actual model and hardware work. It's the same reason Scale AI exists — specialization produces better data faster."
+"It uses the same playbook, but for embodied AI rather than autonomous vehicles. Just as Scale AI built an outsourced perception data pipeline for AV teams, Cortex AI provides hand and body pose annotation pipelines for robotics models. Its core focus is capturing real worker data on factory floors rather than in lab settings, ensuring the resulting policies actually generalize to real-world deployment."

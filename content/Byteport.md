@@ -12,6 +12,6 @@ Sits alongside [RunAnywhere](./RunAnywhere.md) and [S2](./S2.md) in the AI infra
 
 _Usage:_
 
-"Is this just a different TCP implementation?"
+"Why build a custom protocol instead of using QUIC?"
 
-"It's a different congestion control approach at the transport layer, optimized for large file transfers rather than general web traffic. The gains come from not sharing TCP's conservative assumptions about what the network can handle."
+"While QUIC demonstrated that TCP's 1988 congestion control limits general web traffic, Byteport targets bulk file transfers specifically—such as large model downloads, training data, and cross-region backups. It bets that dedicated file transfer has worse protocol bottlenecks and more room for optimization than general web traffic, aiming for 10x speedups on standard networks and up to 1000x on high-latency, unreliable links."

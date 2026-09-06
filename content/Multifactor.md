@@ -18,6 +18,6 @@ Natural stack with [Metorial](./Metorial.md) (agent-to-tool connections) and [Br
 
 _Usage:_
 
-"Can't I just use OAuth for agent auth?"
+"How does Multifactor’s per‑operation, zero‑trust authentication for AI agents differ from traditional IAM approaches that grant full user permissions or block access entirely?"
 
-"OAuth works for humans following an interactive login flow. Agents run headlessly, often calling thousands of APIs per session. You need per-operation authorization with audit trails, not a token granting broad access for 24 hours."
+"Multifactor inserts a signed “checkpoint link” that the agent presents when calling an API or running a DB query; the link encodes the exact operation allowed and is verified without exposing the underlying password, and each use is logged, so the agent gets only the minimal rights needed instead of the full user’s credentials, which is what conventional IAM systems provide."

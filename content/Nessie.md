@@ -10,6 +10,6 @@ No browser extension. No manual capture. Thinking flows in automatically and com
 
 _Usage:_
 
-"What does Nessie do?"
+"How does Nessie capture and sync AI conversations across providers without using a browser extension?"
 
-"Shared context layer for you, your team, and your agents. F25 batch. San Francisco."
+"Nessie connects directly to each AI service’s API (e.g., ChatGPT, Claude, Gemini, Perplexity, Codex) and automatically pulls the conversation and agent trace data as it happens, storing it in a centralized, queryable context layer; this backend integration removes the need for any browser‑side extension or manual copy‑paste."

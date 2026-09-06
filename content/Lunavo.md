@@ -12,6 +12,6 @@ Lunavo helps carriers scale operations without scaling headcount.
 
 _Usage:_
 
-"What does Lunavo do?"
+"How does Lunavo differ from typical robotic process automation (RPA) tools for carrier back‑office operations?"
 
-"Lunavo is the AI assistant for carriers. F25 batch. BY."
+"Lunavo isn’t just a script‑driven RPA layer; it plugs into a carrier’s existing toolstack, learns their specific processes, continuously monitors incoming data, and uses AI to autonomously resolve issues and only escalates exceptions, effectively handling end‑to‑end back‑office work without needing additional headcount, whereas standard RPA typically follows static workflows and requires manual oversight for exceptions."

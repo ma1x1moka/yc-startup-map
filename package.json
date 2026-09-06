@@ -6,6 +6,8 @@
   "description": "A 3D term atlas: fixed-viewport WebGL graph plus a deep-linkable term panel, driven by a folder of markdown.",
   "scripts": {
     "graph": "node pipeline/build-graph.mjs",
+    "graph:review": "node pipeline/build-graph.mjs --sections content/sections.review.json --out data/graph-review.json",
+    "graph:all": "npm run graph && npm run graph:review",
     "build": "node build.mjs",
     "dev": "node build.mjs && python3 -m http.server 8100 --directory dist"
   },

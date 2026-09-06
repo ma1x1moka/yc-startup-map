@@ -12,6 +12,6 @@ Competes for the same serious athlete audience as [Pocket](./Pocket.md) competes
 
 _Usage:_
 
-"How does Fort measure muscle force without being invasive?"
+"How does Fort differ from existing fitness wearables like Apple Watch or Whoop?"
 
-"Surface EMG (electromyography) — electrodes on skin detect the electrical signals that precede muscle contraction, which correlate with force output. The challenge is signal noise and calibration, which is where Fort's hardware differentiation lives."
+"Existing wearables like Apple Watch, Whoop, and Garmin measure external proxies like heart rate or rep counts via accelerometers. Fort measures actual contractile muscle force output during strength training. This matters technically because two people lifting the same weight can produce dramatically different muscle force outputs depending on their tempo, range of motion, and neuromuscular activation, so Fort tracks the actual signal determining training adaptation."

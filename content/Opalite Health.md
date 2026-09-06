@@ -10,6 +10,6 @@ Built a voice AI system positioned as the safest, most compliant, and most accur
 
 _Usage:_
 
-"What does Opalite Health do?"
+"How does Opalite’s voice AI integrate into existing clinical workflows without requiring separate tooling?"
 
-"Helping Healthcare Providers Speak Any Language. W26 batch. San Francisco."
+"Opalite embeds its voice‑AI interpreter directly into the clinician’s existing EHR or telehealth interface, exposing a simple start‑translation button that launches a real‑time, 24/7 multilingual conversation within the same screen, so providers never have to switch to a separate app or platform."

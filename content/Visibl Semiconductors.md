@@ -12,6 +12,6 @@ Visibl Semiconductors handles the full path from architecture and design through
 
 _Usage:_
 
-"What does Visibl Semiconductors do?"
+"How does Visibl’s end‑to‑end approach make custom ASICs faster and cheaper than going through an incumbent like Broadcom or a traditional design house?"
 
-"A faster, lower cost path to custom silicon. W26 batch. San Francisco."
+"Visibl handles the entire flow—from architecture and design through verification, foundry management, and production—so customers don’t have to sign massive contracts with incumbents, pay multi‑million‑dollar design fees, or wait 18+ months; by integrating these steps in‑house they can run smaller, optimized fab orders that cut both time and cost for robotics, drones, IoT, and edge hardware."

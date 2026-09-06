@@ -12,6 +12,6 @@ Ashr works with voice, text, automated website generation, image, file generatio
 
 _Usage:_
 
-"What does Ashr do?"
+"How does Ashr test AI agents differently than standard one-off test cases?"
 
-"Automated Multi-Modal Testing for Agents. W26 batch. San Francisco."
+"Instead of generating isolated, single-step tests, Ashr builds complete user journeys by executing across your agent's tool calls, results, and questions. It creates large volumes of authentic user stories across text, voice, image, file, website generation, and multimodal inputs to surface errors, inconsistencies, and failures before they hit manual QA or customers."

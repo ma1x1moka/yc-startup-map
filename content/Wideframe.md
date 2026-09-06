@@ -10,6 +10,6 @@ One agency reported saving editors 10 hours per week. Another organized an entir
 
 _Usage:_
 
-"What does Wideframe do?"
+"What specific tasks in footage preparation does Wideframe automate that lead to the reported 10‑hour‑per‑week savings?"
 
-"AI coworker for video editors to ship more video faster. W26 batch. San Francisco."
+"Wideframe uses AI to scan raw footage, generate searchable tags, auto‑label clips, group them into bins, and build preliminary sequences, then writes those changes back into a Premiere Pro .prproj file so editors can pick up a pre‑organized project instead of manually ingesting, tagging, and arranging each clip."

@@ -10,6 +10,6 @@ Not just a chatbot: full-stack medical provider. AI acts as always-on physician 
 
 _Usage:_
 
-"What does Prana do?"
+"What parts of the traditional annual physical are automated by Prana’s AI, and how does it ensure that its continuous monitoring of clinical drift is as reliable as a doctor’s in‑person assessment?"
 
-"An AI primary care doctor in your pocket. W26 batch. San Francisco."
+"Prana pulls data from your medical records and wearables, continuously tracks lab values and vital trends, and the AI flags any subtle deviations—what they call clinical drift—so a human physician can review those alerts; the system automates about 90% of the routine data‑collection, lab‑explanation, and prescription‑management tasks, leaving doctors to make the higher‑level diagnostic and treatment decisions, which is how it aims to match or exceed the reliability of a periodic physical."

@@ -10,6 +10,6 @@ Result: investors spend less time buried in decks and spreadsheets, and more tim
 
 _Usage:_
 
-"What does Zarna do?"
+"How does Zarna’s AI actually access and use a firm’s proprietary data to perform tasks like building LBOs and drafting memos?"
 
-"AI Associates for Private Capital. F25 batch. San Francisco."
+"Zarna’s agents connect straight into a firm’s internal data sources, using the same access rights that human analysts have, and then apply the firm’s decades‑old proprietary knowledge to automate tasks such as CIM analysis, LBO modeling, CRM updates, and IC memo drafting."

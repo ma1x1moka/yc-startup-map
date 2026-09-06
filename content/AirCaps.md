@@ -10,6 +10,6 @@ Processed 16,500 hours of real-world conversations. AirCaps assists with 11% of 
 
 _Usage:_
 
-"What does AirCaps do?"
+"How does AirCaps deliver AI assistance during in-person conversations?"
 
-"AI copilot for in-person conversations via AR glasses. F25 batch. San Francisco."
+"It deploys as an app on lightweight AR glasses, overlaying real-time visual information—including live captions, translations, meeting notes, and insights—directly onto the user's field of vision."

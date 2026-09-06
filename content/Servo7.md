@@ -10,6 +10,6 @@ Customers include CEVA, Stord (3PLs), DHL, and PostNL. Amsterdam-based team with
 
 _Usage:_
 
-"What does Servo7 do?"
+"How does Servo7's robot handle the unstructured, loose-loaded containers differently from typical warehouse robots that work with pallets?"
 
-"Container unloading robots for warehouses. W26 batch. Amsterdam, Netherlands."
+"Servo7’s system places a robot inside the shipping container and directly picks individual boxes from the chaotic interior, rather than relying on pre‑arranged pallets; this lets it automate the physically exhausting task of unloading loose‑loaded containers that other automation solutions avoid because they need a structured layout."

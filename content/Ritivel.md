@@ -12,6 +12,6 @@ Ritivel deploys AI agents that transform how regulatory teams work. Its agents g
 
 _Usage:_
 
-"What does Ritivel do?"
+"How does Ritivel ensure that its AI‑generated regulatory drafts are accurate and meet FDA formatting requirements?"
 
-"AI-native platform for Life-Sciences Documentation. W26 batch. Bengaluru."
+"Ritivel’s agents build the first draft directly in Microsoft Word using built‑in FDA formatting templates, and every data point they insert is automatically linked back to the original source in SharePoint or Veeva, so reviewers can click a citation to verify the underlying information before final submission."

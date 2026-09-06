@@ -10,6 +10,6 @@ Customers include Mintlify, Deepgram, Giga, and other fast-growing companies rep
 
 _Usage:_
 
-"What does Cardinal do?"
+"What does Cardinal actually replace in a GTM stack?"
 
-"Revenue Agents for GTM teams. W26 batch. San Francisco."
+"Instead of having a GTM engineer stitch together a patchwork of 10+ separate tools, Cardinal unifies those workflows into a single agent-driven system. The AI agents handle the pipeline end-to-end—tracking website visitors, mapping inbound leads from signups and ads, finding signals across different sources, and maintaining ongoing prospect outreach."

@@ -10,6 +10,6 @@ Achieved state-of-the-art on agentic browsing benchmarks, surpassing OpenAI and 
 
 _Usage:_
 
-"What does Aside do?"
+"How does Aside differ from traditional AI agents?"
 
-"The browser built to do real work for you. F25 batch. San Francisco."
+"Rather than relying on API integrations, Aside works directly through your browser, signing in and navigating web interfaces like email, dashboards, internal tools, docs, and spreadsheets just like a human user. This approach allows it to execute long-running tasks over minutes or hours, placing it #1 on agentic browsing benchmarks like Mind2Web, Odyssey, and bu-bench-v1 ahead of OpenAI and Anthropic."

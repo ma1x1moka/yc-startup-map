@@ -12,6 +12,6 @@ At YC demo day, GRU Space had the highest novelty premium of the batch — the k
 
 _Usage:_
 
-"Is this a real company or a marketing play?"
+"How is GRU Space distinct from SpaceX or NASA's lunar plans?"
 
-"Skyler Chan is building real habitat design work. Whether the timeline (lunar hotels in a decade) is realistic is the question — but the same criticism was made of commercial satellite launches in 2010."
+"GRU Space leaves rockets and landers to SpaceX, NASA's Artemis program, and prime contractors, focusing strictly on the habitat layer. Their thesis is that commercial hospitality infrastructure—safe, comfortable lunar habitats—is a separate problem. They target the same $250K–$1M buyer as Virgin Galactic to fund habitat development, meaning their business viability depends entirely on the pace of SpaceX and NASA delivering the underlying transport."

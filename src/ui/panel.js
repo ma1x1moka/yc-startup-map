@@ -7,6 +7,7 @@
  */
 
 import { renderMarkdown, renderInline, escapeHtml } from "./markdown.js";
+import { highlightDuplicateWords } from "./lint.js";
 
 const ICONS = {
   close: `<path d="M7 7l10 10M17 7L7 17" stroke-linecap="round"/>`,
@@ -414,6 +415,17 @@ export class Panel {
     this.element.scrollTop = 0;
     const scroll = this.element.querySelector(".panel-scroll");
     if (scroll) scroll.scrollTop = 0;
+
+    // Draft-review aid: flag immediately-repeated words ("the the") so a
+    // batch-generated card can be skimmed for this instead of read in full.
+    const dupeCount = highlightDuplicateWords(this.element.querySelector(".slide") ?? this.element);
+    const meta = this.element.querySelector(".panel-meta");
+    if (dupeCount && meta) {
+      const badge = document.createElement("p");
+      badge.className = "panel-dupes";
+      badge.textContent = dupeCount === 1 ? "1 repeat" : `${dupeCount} repeats`;
+      meta.appendChild(badge);
+    }
   }
 
   destroy() {

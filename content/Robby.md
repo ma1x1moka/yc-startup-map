@@ -10,6 +10,6 @@ On launch day, helped close $40K in new business within an hour. Paying customer
 
 _Usage:_
 
-"What does Robby do?"
+"What data does Robby combine to generate leads and talking points, and how does it turn that into actionable insights?"
 
-"AI agents that grow revenue for home services businesses. W26 batch. New York City."
+"Robby pulls both the business’s own customer data and third‑party data, then runs an AI model that matches service‑need signals with the technicians’ expertise to produce a daily list of new leads and a set of talking points that technicians can use to improve close rates."

@@ -13,6 +13,6 @@ In the W26 batch, GRU Space stood out for audacity: it's the kind of company tha
 
 _Usage:_
 
-"Is GRU Space a real company or a concept?"
+"Which contractors or aerospace partners is GRU Space relying on to build and operate its lunar hotel?"
 
-"Real company with actual reservation intake and habitat design work underway. Whether the timeline holds — commercial lunar hotels in the 2030s — is genuinely uncertain. But the company is operating, not just pitching."
+"According to the description, GRU Space plans to lean heavily on external contractors and aerospace partners—combined with resources from the YC alumni network—to provide the hardware, engineering, regulatory compliance, and hospitality expertise needed for a lunar hotel, rather than building everything in‑house; the text does not name any specific firms."

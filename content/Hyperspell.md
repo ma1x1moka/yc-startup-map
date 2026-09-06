@@ -10,6 +10,6 @@ AI agents are brilliant and clueless — they ace any test and have no idea how 
 
 _Usage:_
 
-"What does Hyperspell do?"
+"How do AI agents actually interface with Hyperspell?"
 
-"Your Company Brain. F25 batch. San Francisco."
+"Hyperspell connects your existing tools and synthesizes documents and conversations into a live, permissioned context graph. Agents simply interact with this graph like a filesystem—reading institutional knowledge from it and writing updates back to it—with every fact strictly traced back to its source."

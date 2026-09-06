@@ -10,6 +10,6 @@ Goldbridge solves this problem by creating the first AI-powered banking platform
 
 _Usage:_
 
-"What does Goldbridge do?"
+"How does an AI banking platform help real estate owners handle upcoming loan maturities?"
 
-"Ramp for Real Estate. F25 batch."
+"With $2.5T in real estate loans maturing in 2027/28, property owners urgently need to boost income. Over $1T in rent flows through landlord accounts annually, but roughly a quarter gets locked in idle reserves and security deposits while billions leak to unnecessary property expenses; Goldbridge uses an AI-powered banking platform to plug those expense leaks and put idle capital to work."

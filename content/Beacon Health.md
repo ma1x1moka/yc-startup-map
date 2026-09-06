@@ -18,6 +18,6 @@ Works alongside [LunaBill](./LunaBill.md) in healthcare AI: [LunaBill](./LunaBil
 
 _Usage:_
 
-"How did a startup get EHR access?"
+"How does Beacon Health compare to healthcare AI tools like LunaBill?"
 
-"Slowly. Pothen's clinical background and 6-month clinic embedding built the relationships before the company existed. The Accel/Sequoia backing then accelerated the certification process."
+"Beacon Health operates directly inside existing EHR systems on clinical administrative workflows—such as prior authorizations, risk adjustments, and referral coordination—whereas tools like LunaBill handle the financial layer through billing calls outside the EHR."

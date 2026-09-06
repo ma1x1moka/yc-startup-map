@@ -8,6 +8,6 @@ An AI-run performance marketing agency. Tell if AI deploys autonomous agents on 
 
 _Usage:_
 
-"What does Tell if AI do?"
+"How does Tell if AI ensure its autonomous agents aren’t flagged as bots or violate platform policies?"
 
-"AI agents on real phones, growing brands across every platform. F25 batch. Austin."
+"Tell if AI runs its agents on a fleet of real mobile phones, so each account uses genuine device signatures and behaves like a human creator—posting, commenting and engaging in the same patterns a person would—making the activity indistinguishable from normal user behavior and reducing the chance of platform detection."

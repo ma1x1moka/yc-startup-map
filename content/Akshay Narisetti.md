@@ -18,6 +18,6 @@ The prior Omi experience mattered: he didn't walk into hardware AI cold. He unde
 
 _Usage:_
 
-"What made Pocket succeed where Humane AI Pin failed?"
+"How does Pocket avoid the failure modes of earlier AI wearables like the Humane AI Pin or Google Glass?"
 
-"Scope. Humane tried to replace the phone. Pocket has one job: capture the conversation you would have forgotten. The narrower the wedge, the clearer the value, the faster the adoption."
+"Based on lessons from building the Omi note-taking device, Pocket addresses the bad form factors, wrong use cases, and high friction of past hardware by taking a narrower approach: it is smaller, operates more passively, and focuses on solving a single specific pain point rather than trying to replace the phone."

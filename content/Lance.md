@@ -10,6 +10,6 @@ Built on Computer Use Agent technology: agents navigate existing hotel software,
 
 _Usage:_
 
-"What does Lance do?"
+"What is the "Computer Use Agent" technology that Lance’s AI agents rely on, and how does it let them operate within existing hotel software?"
 
-"AI Agents That Run Hotel Operations. W26 batch. San Francisco."
+"Computer Use Agent technology lets Lance’s AI agents act like a human user of the hotel’s existing systems – they can click through the UI, read screens, and input data in real time, making decisions on the fly to complete multi‑step tasks such as answering calls, booking rooms, or handling operations without needing custom integrations or APIs."

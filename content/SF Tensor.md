@@ -10,6 +10,6 @@ Founded by researchers who trained their own models across thousands of GPUs and
 
 _Usage:_
 
-"What does SF Tensor do?"
+"What evidence supports the claim that SF Tensor's automatic kernel optimization often beats hand‑tuned implementations?"
 
-"Infrastructure for AI labs to focus on research. F25 batch. San Francisco."
+"The company says its optimizer models the hardware topology of the GPU cluster and automatically selects kernel configurations, which in practice has been observed to run training code faster than manually tuned versions, indicating that the topology‑aware approach can uncover performance improvements that hand‑tuning misses."

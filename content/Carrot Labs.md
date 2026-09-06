@@ -10,6 +10,6 @@ Answers questions like: which customers are unprofitable once you subtract AI co
 
 _Usage:_
 
-"What does Carrot Labs do?"
+"How does this differ from standard provider billing dashboards?"
 
-"AI Cost Management across every provider. W26 batch. San Francisco."
+"Standard provider consoles only show a single aggregate cost figure at month-end scattered across separate dashboards. Carrot Labs unifies tracking across 14 providers into one place and breaks down spend granularly, helping you attribute AI costs directly to specific features, customer profitability, and anomalous spikes like runaway loops versus real growth."

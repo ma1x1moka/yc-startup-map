@@ -8,6 +8,6 @@ Revion is building the operating system for Automotive Retail. Revion's first pr
 
 _Usage:_
 
-"What does Revion do?"
+"How does automating administrative work let retailers service more vehicles and boost high‑margin revenue?"
 
-"Intelligence for Automotive Operations. W26 batch. New York City."
+"By cutting out the 30‑40% of a technician’s day spent on paperwork and other admin tasks, Revion frees up that time for actual vehicle work, increasing the number of cars that can be serviced and thereby generating more high‑margin revenue for the retailer."

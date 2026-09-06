@@ -10,6 +10,6 @@ If you're selling EV charging stations, your support person needs to be a certif
 
 _Usage:_
 
-"What does Prox do?"
+"How does Prox’s AI replace the need for a certified electrician when supporting EV charging stations?"
 
-"AI technical support for complex physical products. F25 batch. San Francisco."
+"Prox’s AI is positioned as a knowledge layer that fills the domain‑expertise gap – it encodes the installation codes, power‑grid specifics and compatibility matrices that a certified electrician would normally provide, letting support staff answer complex EV‑charging queries without hiring a specialist."

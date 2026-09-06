@@ -8,6 +8,6 @@ CatchBack Cards is a mobile app and website platform for maximizing the thrill o
 
 _Usage:_
 
-"What does CatchBack Cards do?"
+"How does CatchBack Cards handle digital mystery packs and payouts?"
 
-"The most thrilling way to create and rip digital collectible packs. W26 batch. San Francisco."
+"The platform lets collectors create and open digital Pokemon and Sports mystery packs using cryptographically trusted tooling to enforce custom odds and personalized chases. After opening a digital pack, users can either have the physical card shipped to their door, accept a cash buyback offer sent directly to Venmo or PayPal, or trade cards through an integrated $1 marketplace."

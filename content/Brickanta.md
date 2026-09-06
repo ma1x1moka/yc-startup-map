@@ -8,6 +8,6 @@ Brickanta  – agentic AI for society builders. Hundreds of construction-specifi
 
 _Usage:_
 
-"What does Brickanta do?"
+"How does Brickanta apply AI specifically to construction workflows?"
 
-"Agentic AI for Society Builders. F25 batch. Stockholm."
+"Rather than relying on generic AI tools, Brickanta uses hundreds of construction-specific agents tailored for tasks like project analysis, tendering, and procurement. It integrates directly with a firm's internal project data, templates, and workflows to identify early risks and opportunities and provide structured decision support."

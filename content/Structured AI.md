@@ -10,6 +10,6 @@ Run compliance reviews across thousands of pages in minutes. Chat with your draw
 
 _Usage:_
 
-"What does Structured AI do?"
+"How does Structured AI actually learn and enforce a firm’s specific standards and building codes—does it require manually authored rules or can it infer them automatically?"
 
-"AI drawing review platform for architects and engineers. F25 batch. New York City."
+"Structured AI trains its AI agents on the firm’s own drawing archives and documented standards, so the system picks up the patterns and code requirements from existing approved sets; users can also add custom checks in plain English, which the agents incorporate without needing a full rule‑authoring language, allowing the platform to apply those learned standards across new PDFs or Revit models automatically."

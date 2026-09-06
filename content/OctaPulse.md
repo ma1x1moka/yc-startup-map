@@ -12,6 +12,6 @@ It signeds a 6-figure paid pilot with the largest trout producer in the United S
 
 _Usage:_
 
-"What does OctaPulse do?"
+"How does OctaPulse achieve >90% accuracy and cut inspection time from 5 minutes to under 30 seconds compared to manual QA?"
 
-"CV and robotics to automate quality inspection in fish farms. W26 batch."
+"OctaPulse runs an AI vision platform on off‑the‑shelf cameras that captures each fish, then applies models trained on a proprietary multi‑species dataset to automate phenotyping and deformity inspection; this automation lets it process a fish in under 30 seconds with >90 percent accuracy, whereas manual inspection by technicians takes about five minutes per fish."
