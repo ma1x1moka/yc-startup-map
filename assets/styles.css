@@ -183,44 +183,145 @@ body::after {
   opacity: 1 !important;
 }
 
-/* --- graph tabs ------------------------------------------------------------
-   Two independent graphs (main atlas, Review Queue) live in one build;
-   these are literal browser-style tabs sitting flush at the top edge, the
-   active one "lifted" to look continuous with the atlas below it. */
+/* --- timeline (year navigator) ---------------------------------------------
+   A single metro line across the top: one dot per YC batch year. Collapsed,
+   it reads as a straight line of evenly spaced stops. Clicking a year drops
+   an expanded row of its spheres-of-activity below it, each a pill with a
+   count — the same "highlight this subset, dim the rest" that `/` search
+   drives, just entered by clicking a stop on a line instead of typing. */
 
-.graph-tabs {
+.timeline {
   position: fixed;
-  top: 0;
-  left: 50%;
+  top: 26px;
+  /* Centred over the *atlas*, not the window: when the panel is open it eats
+     the right --panel-inset pixels, so the remaining space's true centre is
+     shifted left by half of that (same trick the atlas itself uses to
+     re-centre — see setPanelFraction). Identity when the panel is closed. */
+  left: calc(50% - (var(--panel-inset) / 2));
   transform: translateX(-50%);
+  transition: left var(--duration) var(--ease-gleasing);
   z-index: 25;
   display: flex;
-  gap: 2px;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  /* Fixed, not just capped: a flex child sizes to its own content unless the
+     parent gives it something concrete to be 100% *of* — without a real width
+     here the sphere row below ignores this box entirely and overflows past
+     the viewport edge instead of wrapping. */
+  width: min(62vw, 620px);
 }
-.graph-tab {
+
+.timeline-line {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
+  column-gap: clamp(8px, 2vw, 22px);
+  padding: 0 4px;
+}
+.timeline-line::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 50%;
+  height: 1px;
+  background: var(--line-strong);
+  transform: translateY(-50%);
+  z-index: -1;
+}
+
+.timeline-stop {
   appearance: none;
-  border: 1px solid var(--line-strong);
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
-  padding: 9px 18px 8px;
-  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 2px;
+  cursor: pointer;
   color: var(--faint);
-  font: 500 11.5px/1 var(--mono);
+}
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  transition: background var(--duration-fast) var(--ease-gleasing),
+    border-color var(--duration-fast) var(--ease-gleasing),
+    transform var(--duration-fast) var(--ease-gleasing);
+}
+.timeline-label {
+  font: 500 10.5px/1 var(--mono);
   letter-spacing: 0.04em;
+  transition: color var(--duration-fast) var(--ease-gleasing);
+}
+.timeline-stop:hover .timeline-dot {
+  border-color: var(--section-ink);
+}
+.timeline-stop:hover .timeline-label {
+  color: var(--section-ink);
+}
+.timeline-stop.is-active .timeline-dot {
+  background: var(--section-ink);
+  border-color: var(--section-ink);
+  transform: scale(1.35);
+}
+.timeline-stop.is-active .timeline-label {
+  color: var(--section-ink);
+}
+
+.timeline-spheres {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  animation: timeline-spheres-in var(--duration) var(--ease-gleasing);
+}
+.timeline-sphere {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  color: var(--muted);
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.02em;
+  padding: 6px 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
   transition: background var(--duration-fast) var(--ease-gleasing),
+    border-color var(--duration-fast) var(--ease-gleasing),
     color var(--duration-fast) var(--ease-gleasing);
 }
-.graph-tab:hover {
+.timeline-sphere:hover {
+  border-color: var(--section-ink);
   color: var(--section-ink);
 }
-.graph-tab.is-active {
-  background: var(--panel);
+.timeline-sphere em {
+  font-style: normal;
+  color: var(--faint);
+}
+.timeline-sphere:hover em {
   color: var(--section-ink);
-  /* Sits one pixel lower so its bottom border merges into the content edge
-     it belongs to, the way a real browser tab reads as "this one is open." */
-  padding-bottom: 9px;
-  margin-bottom: -1px;
+}
+
+@keyframes timeline-spheres-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* --- corner controls ----------------------------------------------------- */

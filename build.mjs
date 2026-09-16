@@ -45,7 +45,6 @@ for (const file of ["JetBrainsMono-Regular.woff2", "JetBrainsMono-Medium.woff2"]
 // `</script>` anywhere in the content would close the tag early.
 const inlineable = (json) => JSON.stringify(JSON.parse(json)).replaceAll("</", "<\\/");
 const graph = inlineable(await read("data/graph.json"));
-const reviewGraph = inlineable(await read("data/graph-review.json"));
 
 /* --- assemble ------------------------------------------------------------ */
 
@@ -60,8 +59,7 @@ const out = html
   )
   .replace(
     '<script type="module" src="assets/app.js"></script>',
-    () =>
-      `<script type="module">\nglobalThis.__ATLAS_GRAPH__ = ${graph};\nglobalThis.__REVIEW_GRAPH__ = ${reviewGraph};\n${script}\n</script>`
+    () => `<script type="module">\nglobalThis.__ATLAS_GRAPH__ = ${graph};\n${script}\n</script>`
   );
 
 /* --- guards -------------------------------------------------------------- */
@@ -71,8 +69,8 @@ for (const pattern of [/href="assets\//, /src="assets\//, /url\("fonts\//]) {
     throw new Error(`build: an asset reference survived inlining (${pattern})`);
   }
 }
-if (!out.includes("__ATLAS_GRAPH__") || !out.includes("__REVIEW_GRAPH__")) {
-  throw new Error("build: a graph was not inlined");
+if (!out.includes("__ATLAS_GRAPH__")) {
+  throw new Error("build: the graph was not inlined");
 }
 
 await mkdir(join(here, "dist"), { recursive: true });
@@ -80,6 +78,5 @@ await writeFile(join(here, "dist/index.html"), out);
 
 const kb = (text) => `${(Buffer.byteLength(text) / 1024).toFixed(1)}kb`;
 console.log(
-  `dist/index.html  ${kb(out)}  (css ${kb(css)}, js ${kb(script)}, ` +
-    `graph ${kb(graph)}, review ${kb(reviewGraph)})`
+  `dist/index.html  ${kb(out)}  (css ${kb(css)}, js ${kb(script)}, graph ${kb(graph)})`
 );
