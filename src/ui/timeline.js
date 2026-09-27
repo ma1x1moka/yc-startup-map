@@ -52,6 +52,9 @@ export class Timeline {
   _render() {
     this.root.innerHTML = `
       <div class="timeline-rail" role="group" aria-label="Choose a year">
+        <span class="timeline-runner" aria-hidden="true"></span>
+        <span class="timeline-runner timeline-runner--b" aria-hidden="true"></span>
+        <span class="timeline-runner timeline-runner--c" aria-hidden="true"></span>
         ${this.index.years
           .map(
             (year) => `

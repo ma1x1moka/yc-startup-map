@@ -336,11 +336,17 @@ body[data-stage="graph"] .atlas {
   opacity: 1;
   transition: opacity 0.4s var(--ease-gleasing);
 }
+/* A solid ribbon with a small square travelling it — what a company-founder
+   edge actually looks like in the 3D atlas (src/atlas/edges.js), not a
+   dashed line. The landing page borrows that *look*, not the machinery —
+   these are plain SVG, animated with <animateMotion>, not a shader — but the
+   line itself has to read as the same kind of connection, so it stays solid. */
 .web-line {
   fill: none;
   stroke: var(--line-strong);
-  stroke-width: 1;
-  opacity: 0.55;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  opacity: 0.6;
   transition: opacity var(--duration-fast) var(--ease-gleasing),
     stroke var(--duration-fast) var(--ease-gleasing);
 }
@@ -348,12 +354,21 @@ body[data-stage="graph"] .atlas {
    of the web, just too faint to read as an invitation. */
 .web-line.is-empty {
   stroke: var(--line);
-  opacity: 0.15;
+  opacity: 0.2;
 }
 .web-line.is-active {
   stroke: var(--section-ink);
-  stroke-width: 1.4;
-  opacity: 0.8;
+  stroke-width: 1.8;
+  opacity: 0.85;
+}
+.web-dot {
+  fill: var(--section-ink);
+  opacity: 0.75;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ink) 40%, transparent));
+}
+.web-dot.is-empty {
+  opacity: 0.25;
+  filter: none;
 }
 
 /* --- the unfold burst ------------------------------------------------------
@@ -567,22 +582,61 @@ body[data-stage="graph"] .nav-item {
 body[data-stage="graph"] .timeline-rail {
   column-gap: clamp(9px, 1.6vw, 22px);
 }
-/* The line itself. Drawn behind the dots and inset by half a gap at each end
-   so it starts and finishes *at* the outermost stops, the way a route map
-   terminates at its terminus rather than running off into nothing. */
+/* A solid rule — the same ribbon a company-founder edge is drawn with, not a
+   UI divider — with a couple of small square dots travelling its length, the
+   same look as .web-dot below. Inset by half a gap at each end so it starts
+   and finishes *at* the outermost stops, the way a route map terminates at
+   its terminus rather than running off into nothing. */
 .timeline-rail::before {
   content: "";
   position: absolute;
   left: 8px;
   right: 8px;
   top: 14px;
-  height: 1px;
+  height: 1.3px;
   background: var(--line-strong);
   z-index: -1;
   transition: top 0.7s var(--ease-gleasing);
 }
 body[data-stage="graph"] .timeline-rail::before {
   top: 10px;
+}
+
+.timeline-runner {
+  position: absolute;
+  left: 8px;
+  top: 14px;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 1px;
+  background: var(--section-ink);
+  opacity: 0.7;
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ink) 40%, transparent));
+  pointer-events: none;
+  transition: top 0.7s var(--ease-gleasing);
+  animation: timeline-runner-move 5.5s linear infinite;
+}
+body[data-stage="graph"] .timeline-runner {
+  top: 10px;
+}
+.timeline-runner--b {
+  animation-duration: 7.5s;
+}
+.timeline-runner--c {
+  animation-duration: 10.5s;
+  animation-delay: -4s;
+  opacity: 0.4;
+}
+@keyframes timeline-runner-move {
+  from { left: 8px; }
+  to { left: calc(100% - 8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline-runner {
+    animation: none;
+    display: none;
+  }
 }
 
 .timeline-stop {
@@ -604,20 +658,22 @@ body[data-stage="graph"] .timeline-rail::before {
 body[data-stage="graph"] .timeline-stop {
   padding: 5px 4px 2px;
 }
+/* A filled, softly-lit disc — a year is a node, styled exactly like the
+   company and founder nodes in the atlas itself, not a hollow UI ring. */
 .timeline-dot {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: var(--panel);
-  border: 1.5px solid var(--line-strong);
+  background: var(--muted);
+  box-shadow: 0 0 5px 1px color-mix(in srgb, var(--ink) 20%, transparent);
   transition: background var(--duration-fast) var(--ease-gleasing),
-    border-color var(--duration-fast) var(--ease-gleasing),
+    box-shadow var(--duration-fast) var(--ease-gleasing),
     transform var(--duration-fast) var(--ease-gleasing),
     width 0.7s var(--ease-gleasing), height 0.7s var(--ease-gleasing);
 }
 body[data-stage="graph"] .timeline-dot {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
 }
 .timeline-label {
   font: 500 13px/1 var(--mono);
@@ -633,7 +689,7 @@ body[data-stage="graph"] .timeline-label {
   color: var(--faint);
 }
 .timeline-stop:hover .timeline-dot {
-  border-color: var(--section-ink);
+  background: var(--section-ink);
   transform: scale(1.15);
 }
 .timeline-stop:hover .timeline-label {
@@ -646,12 +702,13 @@ body[data-stage="graph"] .timeline-label {
   outline: none;
 }
 .timeline-stop:focus-visible .timeline-dot {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent),
+    0 0 5px 1px color-mix(in srgb, var(--ink) 20%, transparent);
 }
 .timeline-stop.is-active .timeline-dot {
   position: relative;
   background: var(--section-ink);
-  border-color: var(--section-ink);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--section-ink) 45%, transparent);
   transform: scale(1.5);
 }
 .timeline-stop.is-active:hover .timeline-dot {

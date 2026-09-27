@@ -58,8 +58,9 @@ export class Web {
       return;
     }
 
+    const NS = "http://www.w3.org/2000/svg";
     const frag = document.createDocumentFragment();
-    for (const pill of pills) {
+    pills.forEach((pill, i) => {
       const r = pill.getBoundingClientRect();
       // Bottom-centre: the edge nearest the timeline, so the line runs up
       // *into* the pill rather than crossing through its middle.
@@ -70,9 +71,14 @@ export class Web {
       // mostly upright before bending toward its pill.
       const midX = origin.x + dx * 0.5;
       const midY = origin.y - (origin.y - ay) * 0.62;
+      const d = `M ${origin.x} ${origin.y} Q ${midX} ${midY} ${ax} ${ay}`;
 
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", `M ${origin.x} ${origin.y} Q ${midX} ${midY} ${ax} ${ay}`);
+      // A stable-per-redraw id: <mpath> can only address a path by id, not by
+      // reference, so the travelling dot needs one to ride along.
+      const id = `web-line-${i}`;
+      const path = document.createElementNS(NS, "path");
+      path.setAttribute("id", id);
+      path.setAttribute("d", d);
       const isActive = Number(pill.dataset.section) === section;
       path.setAttribute(
         "class",
@@ -80,7 +86,27 @@ export class Web {
       );
       path.dataset.section = pill.dataset.section;
       frag.appendChild(path);
-    }
+
+      // The travelling dot — the other half of "looks like the atlas's own
+      // edges." Each line's dot rides at its own pace (varied by index) so
+      // eleven of them together read as alive rather than as one thing
+      // stamped out ten times in lockstep.
+      const dot = document.createElementNS(NS, "rect");
+      dot.setAttribute("class", `web-dot${pill.disabled ? " is-empty" : ""}`);
+      dot.setAttribute("width", "4");
+      dot.setAttribute("height", "4");
+      dot.setAttribute("x", "-2");
+      dot.setAttribute("y", "-2");
+      const anim = document.createElementNS(NS, "animateMotion");
+      anim.setAttribute("dur", `${(2.6 + (i % 5) * 0.35).toFixed(2)}s`);
+      anim.setAttribute("repeatCount", "indefinite");
+      anim.setAttribute("rotate", "auto");
+      const mpath = document.createElementNS(NS, "mpath");
+      mpath.setAttribute("href", `#${id}`);
+      anim.appendChild(mpath);
+      dot.appendChild(anim);
+      frag.appendChild(dot);
+    });
     this.svg.replaceChildren(frag);
   }
 
