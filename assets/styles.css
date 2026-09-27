@@ -94,6 +94,23 @@ body {
   transition: background var(--duration-slow) var(--ease-gleasing);
 }
 
+/* A whisper of light behind the masthead — not a graphic, just enough that
+   the page reads as lit rather than flat. Sits under the grain so it never
+   competes with it. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 60% 40% at 50% 12%,
+    color-mix(in srgb, var(--section-ink) 4%, transparent),
+    transparent 70%
+  );
+  transition: background var(--duration-slow) var(--ease-gleasing);
+}
+
 .skip {
   position: absolute;
   width: 1px;
@@ -136,10 +153,64 @@ body::after {
 
 /* --- atlas --------------------------------------------------------------- */
 
+/* The graph is closed until a year *and* a sphere are chosen, and it opens by
+   unfolding out of the timeline dot that opened it — --unfold-x/y are written
+   from that dot's screen position in main.js, so the circle grows from the
+   control you actually pressed rather than from the middle of the screen.
+
+   visibility (not display) does the hiding, so the canvas keeps its size and
+   the renderer never has to re-measure on open; its transition is delayed by
+   the length of the fold so it only takes effect once the circle has closed. */
 .atlas {
   position: fixed;
   inset: 0;
   z-index: 0;
+  visibility: hidden;
+  opacity: 0;
+  clip-path: circle(0px at var(--unfold-x, 50%) var(--unfold-y, 40%));
+  transition: opacity 0.45s var(--ease-gleasing),
+    clip-path 0.85s var(--ease-out-expo),
+    visibility 0s linear 0.85s;
+}
+body[data-stage="graph"] .atlas {
+  visibility: visible;
+  opacity: 1;
+  clip-path: circle(150% at var(--unfold-x, 50%) var(--unfold-y, 40%));
+  transition: opacity 0.5s var(--ease-gleasing),
+    clip-path 1s var(--ease-out-expo),
+    visibility 0s;
+}
+
+/* A clip-path animation on a full-screen canvas is the one piece of motion
+   here that cannot be reduced to a fade, so honour the preference outright. */
+@media (prefers-reduced-motion: reduce) {
+  .atlas,
+  body[data-stage="graph"] .atlas {
+    clip-path: none;
+    transition: opacity 0.2s linear, visibility 0s linear 0.2s;
+  }
+  body[data-stage="graph"] .atlas {
+    transition: opacity 0.2s linear, visibility 0s;
+  }
+}
+
+/* A quick collapse-and-reopen for switching between two already-open
+   selections (a different year, a different sphere) — the graph folds away
+   and back without the shell itself ever resizing, because data-stage stays
+   "graph" throughout. main.js only updates --unfold-x/y to the new target
+   once this collapse has finished, so it reopens from the new dot rather
+   than sliding across from the old one. */
+.atlas.is-refolding {
+  transition: opacity 0.32s var(--ease-gleasing),
+    clip-path 0.42s cubic-bezier(0.6, 0, 1, 0.4);
+  opacity: 0 !important;
+  clip-path: circle(0px at var(--unfold-x, 50%) var(--unfold-y, 40%)) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlas.is-refolding {
+    clip-path: none !important;
+    transition: opacity 0.15s linear;
+  }
 }
 
 #atlas-canvas {
@@ -183,55 +254,335 @@ body::after {
   opacity: 1 !important;
 }
 
-/* --- timeline (year navigator) ---------------------------------------------
-   A single metro line across the top: one dot per YC batch year. Collapsed,
-   it reads as a straight line of evenly spaced stops. Clicking a year drops
-   an expanded row of its spheres-of-activity below it, each a pill with a
-   count — the same "highlight this subset, dim the rest" that `/` search
-   drives, just entered by clicking a stop on a line instead of typing. */
-
-.timeline {
+/* --- idle backdrop --------------------------------------------------------
+   Two loose threads, stretched full-bleed, with a small scatter of dots along
+   them — the same visual language as the atlas (ink lines, ink dots), so the
+   empty landing page still reads as "a graph, at rest" instead of a blank
+   page. Idle-only: fades out the moment a graph is open, same treatment as
+   .hint and .legend below. */
+.backdrop {
   position: fixed;
-  top: 26px;
-  /* Centred over the *atlas*, not the window: when the panel is open it eats
-     the right --panel-inset pixels, so the remaining space's true centre is
-     shifted left by half of that (same trick the atlas itself uses to
-     re-centre — see setPanelFraction). Identity when the panel is closed. */
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.6s var(--ease-gleasing);
+}
+.backdrop-thread {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1.1;
+  vector-effect: non-scaling-stroke;
+}
+.backdrop-thread-b {
+  stroke: var(--line);
+}
+.backdrop-dots circle {
+  fill: var(--faint);
+}
+/* Slow enough to read as breathing, not motion — this is scenery, never the
+   subject. */
+@media (prefers-reduced-motion: no-preference) {
+  .backdrop-thread-a {
+    animation: backdrop-drift-a 26s ease-in-out infinite;
+  }
+  .backdrop-thread-b {
+    animation: backdrop-drift-b 32s ease-in-out infinite;
+  }
+  .backdrop-dots circle {
+    animation: backdrop-pulse 7s ease-in-out infinite;
+  }
+  .backdrop-dots circle:nth-child(2n) {
+    animation-delay: -3.2s;
+  }
+  .backdrop-dots circle:nth-child(3n) {
+    animation-delay: -5.1s;
+  }
+}
+@keyframes backdrop-drift-a {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-14px, 10px); }
+}
+@keyframes backdrop-drift-b {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(16px, -8px); }
+}
+@keyframes backdrop-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* --- the web (year -> sphere) -----------------------------------------------
+   The first hop of the graph the landing page itself is: real, persistent
+   lines from the chosen year's dot up to each sphere pill, drawn by
+   src/ui/web.js. Unlike .burst below, this is not a flourish that plays once
+   and disappears — it stays up for as long as the pills do, which is to say
+   for as long as a year is chosen at all, whether or not a sphere's own graph
+   is currently open on top of it. It is redrawn (never re-animated) on every
+   year or section change, on resize, and whenever the shell's own compacting
+   transition finishes moving the pills underneath it. Sits behind the
+   shell's own children in paint order (lower z-index, same stacking parent),
+   so a line runs *into* a pill or dot rather than across its face. */
+.web {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s var(--ease-gleasing);
+}
+.web-line {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  opacity: 0.55;
+  transition: opacity var(--duration-fast) var(--ease-gleasing),
+    stroke var(--duration-fast) var(--ease-gleasing);
+}
+/* A sphere with nothing in the chosen year — the line still shows the shape
+   of the web, just too faint to read as an invitation. */
+.web-line.is-empty {
+  stroke: var(--line);
+  opacity: 0.15;
+}
+.web-line.is-active {
+  stroke: var(--section-ink);
+  stroke-width: 1.4;
+  opacity: 0.8;
+}
+
+/* --- the unfold burst ------------------------------------------------------
+   A handful of lines drawn by src/ui/burst.js, radiating from the timeline
+   dot that was clicked and retracting back into it on close — the "bundles
+   of connections unfurling" effect layered over the atlas's own clip-path
+   reveal. Purely decorative: it never carries real edge data, so it can be
+   generated instantly instead of waiting on the actual subset layout. */
+.burst {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+}
+.burst-line {
+  fill: none;
+  stroke: var(--section-ink);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+/* --- the shell: masthead, menu, timeline -----------------------------------
+   Everything the landing page is made of lives in one fixed column, and the
+   difference between "landing" and "graph open" is the size of its padding and
+   gaps. One column in two sizes, rather than two layouts that swap: the menu
+   and the timeline are the same elements throughout, so a selection made on
+   the landing page stays exactly where you left it once the graph opens.
+
+   The column is pointer-transparent and its children are not, so the atlas can
+   still be dragged through the gaps between the controls. */
+
+.shell {
+  position: fixed;
+  top: 0;
+  /* Centred over the atlas rather than the window, so an open term panel does
+     not push the column off-centre. */
   left: calc(50% - (var(--panel-inset) / 2));
   transform: translateX(-50%);
-  transition: left var(--duration) var(--ease-gleasing);
-  z-index: 25;
+  z-index: 30;
+  width: min(92vw, 940px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 3.4vh, 34px);
+  padding-top: clamp(64px, 20vh, 170px);
+  pointer-events: none;
+  transition: padding-top 0.7s var(--ease-gleasing),
+    gap 0.7s var(--ease-gleasing),
+    left var(--duration) var(--ease-gleasing);
+}
+.shell > * {
+  pointer-events: auto;
+}
+body[data-stage="graph"] .shell {
+  padding-top: 22px;
+  gap: 12px;
+}
+
+/* --- masthead --- */
+
+.masthead {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  /* Fixed, not just capped: a flex child sizes to its own content unless the
-     parent gives it something concrete to be 100% *of* — without a real width
-     here the sphere row below ignores this box entirely and overflows past
-     the viewport edge instead of wrapping. */
-  width: min(62vw, 620px);
+  text-align: center;
 }
 
-.timeline-line {
+.wordmark {
+  color: var(--section-ink);
+  font: 400 clamp(20px, 3.2vw, 30px) / 1 var(--mono);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: font-size 0.7s var(--ease-gleasing);
+}
+.wordmark b {
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+body[data-stage="graph"] .wordmark {
+  font-size: 13px;
+}
+
+.masthead-lede {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--muted);
+  font: 400 clamp(13px, 1.2vw, 15px) / 1.55 var(--sans);
+  /* Collapsed rather than hidden, so the column above the graph closes up
+     instead of leaving a hole where the sentence used to be. */
+  transition: opacity 0.35s var(--ease-gleasing),
+    max-height 0.7s var(--ease-gleasing),
+    margin 0.7s var(--ease-gleasing);
+  max-height: 6em;
+  overflow: hidden;
+}
+body[data-stage="graph"] .masthead-lede {
+  opacity: 0;
+  max-height: 0;
+  margin-top: -14px;
+  pointer-events: none;
+}
+
+/* --- the sphere menu --- */
+/* Hidden until a year is picked — the landing page's only graph element is
+   the timeline itself until then. Opacity only, never a transform or
+   display change: the pills stay in normal flow at their real position the
+   whole time, which is what lets src/ui/web.js read correct anchor points
+   for its connecting lines the instant the year changes, with no need to
+   wait out this fade first. */
+.nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease-gleasing), gap 0.7s var(--ease-gleasing);
+}
+.nav-row.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+body[data-stage="graph"] .nav-row {
+  gap: 6px;
+}
+
+.nav-item {
+  appearance: none;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 13px 22px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
+  color: var(--muted);
+  font: 500 14px/1 var(--mono);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background var(--duration-fast) var(--ease-gleasing),
+    border-color var(--duration-fast) var(--ease-gleasing),
+    color var(--duration-fast) var(--ease-gleasing),
+    opacity var(--duration-fast) var(--ease-gleasing),
+    transform var(--duration-fast) var(--ease-gleasing),
+    padding 0.7s var(--ease-gleasing),
+    font-size 0.7s var(--ease-gleasing);
+}
+/* Compact once a graph is open — the menu's job there is to stay legible as a
+   record of the choice, not to invite a second one. */
+body[data-stage="graph"] .nav-item {
+  padding: 8px 14px;
+  font-size: 11px;
+}
+.nav-item:hover:not(:disabled) {
+  border-color: var(--line-strong);
+  color: var(--section-ink);
+  transform: translateY(-1px);
+}
+.nav-item:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+}
+.nav-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent);
+}
+.nav-item.is-active {
+  background: var(--section-ink);
+  border-color: var(--section-ink);
+  color: var(--panel);
+}
+.nav-item.is-active:hover {
+  transform: none;
+}
+/* Empty for the chosen year: still listed, so the shape of that year is
+   readable, but plainly not a door you can open. */
+.nav-item:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+.nav-count {
+  font-size: 0.82em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.nav-item.is-active .nav-count {
+  color: color-mix(in srgb, var(--panel) 70%, transparent);
+}
+
+/* --- the timeline --- */
+
+.timeline-rail {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  row-gap: 10px;
-  column-gap: clamp(8px, 2vw, 22px);
-  padding: 0 4px;
+  row-gap: 8px;
+  column-gap: clamp(12px, 2.8vw, 38px);
+  padding: 0 8px;
+  transition: column-gap 0.7s var(--ease-gleasing);
 }
-.timeline-line::before {
+body[data-stage="graph"] .timeline-rail {
+  column-gap: clamp(9px, 1.6vw, 22px);
+}
+/* The line itself. Drawn behind the dots and inset by half a gap at each end
+   so it starts and finishes *at* the outermost stops, the way a route map
+   terminates at its terminus rather than running off into nothing. */
+.timeline-rail::before {
   content: "";
   position: absolute;
-  left: 4px;
-  right: 4px;
-  top: 50%;
+  left: 8px;
+  right: 8px;
+  top: 14px;
   height: 1px;
   background: var(--line-strong);
-  transform: translateY(-50%);
   z-index: -1;
+  transition: top 0.7s var(--ease-gleasing);
+}
+body[data-stage="graph"] .timeline-rail::before {
+  top: 10px;
 }
 
 .timeline-stop {
@@ -241,86 +592,203 @@ body::after {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
-  padding: 6px 2px;
+  gap: 9px;
+  padding: 8px 8px 4px;
   cursor: pointer;
   color: var(--faint);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: transform var(--duration-fast) var(--ease-gleasing),
+    padding 0.7s var(--ease-gleasing);
+}
+body[data-stage="graph"] .timeline-stop {
+  padding: 5px 4px 2px;
 }
 .timeline-dot {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--panel);
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--line-strong);
   transition: background var(--duration-fast) var(--ease-gleasing),
     border-color var(--duration-fast) var(--ease-gleasing),
-    transform var(--duration-fast) var(--ease-gleasing);
+    transform var(--duration-fast) var(--ease-gleasing),
+    width 0.7s var(--ease-gleasing), height 0.7s var(--ease-gleasing);
+}
+body[data-stage="graph"] .timeline-dot {
+  width: 9px;
+  height: 9px;
 }
 .timeline-label {
-  font: 500 10.5px/1 var(--mono);
+  font: 500 13px/1 var(--mono);
   letter-spacing: 0.04em;
-  transition: color var(--duration-fast) var(--ease-gleasing);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--duration-fast) var(--ease-gleasing),
+    font-size 0.7s var(--ease-gleasing);
+}
+body[data-stage="graph"] .timeline-label {
+  font-size: 11px;
+}
+.timeline-stop:hover {
+  color: var(--faint);
 }
 .timeline-stop:hover .timeline-dot {
   border-color: var(--section-ink);
+  transform: scale(1.15);
 }
 .timeline-stop:hover .timeline-label {
   color: var(--section-ink);
 }
+.timeline-stop:active .timeline-dot {
+  transform: scale(0.92);
+}
+.timeline-stop:focus-visible {
+  outline: none;
+}
+.timeline-stop:focus-visible .timeline-dot {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent);
+}
 .timeline-stop.is-active .timeline-dot {
+  position: relative;
   background: var(--section-ink);
   border-color: var(--section-ink);
-  transform: scale(1.35);
+  transform: scale(1.5);
+}
+.timeline-stop.is-active:hover .timeline-dot {
+  transform: scale(1.5);
 }
 .timeline-stop.is-active .timeline-label {
   color: var(--section-ink);
 }
-
-.timeline-spheres {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  animation: timeline-spheres-in var(--duration) var(--ease-gleasing);
+/* A quiet pulse on the chosen year's dot while the pills are up — this is the
+   web's root, and the ring says so without any more text on screen. Stops
+   once a graph is actually open: at that point the atlas itself is the thing
+   asking for attention. */
+body[data-stage="idle"] .timeline-stop.is-active .timeline-dot::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid var(--section-ink);
+  opacity: 0.5;
+  animation: timeline-pulse 2.4s ease-out infinite;
 }
-.timeline-sphere {
-  appearance: none;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--paper) 70%, transparent);
+@keyframes timeline-pulse {
+  0% { transform: scale(0.6); opacity: 0.5; }
+  70%, 100% { transform: scale(2); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body[data-stage="idle"] .timeline-stop.is-active .timeline-dot::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* --- the cue line --- */
+/* One slot, two messages: what to do next while the graph is closed, and what
+   you are looking at once it is open. */
+
+.cue {
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+}
+.cue-idle,
+.cue-open {
+  grid-area: 1 / 1;
+  margin: 0;
+  transition: opacity 0.35s var(--ease-gleasing);
+}
+.cue-idle {
+  color: var(--faint);
+  font: 400 12px/1 var(--sans);
+}
+.cue-open {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+}
+body[data-stage="graph"] .cue-idle {
+  opacity: 0;
+  pointer-events: none;
+}
+body[data-stage="graph"] .cue-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cue-crumb {
+  margin: 0;
   color: var(--muted);
-  font: 500 10px/1 var(--mono);
-  letter-spacing: 0.02em;
-  padding: 6px 11px;
+  font: 500 10.5px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cue-close {
+  appearance: none;
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 8px 14px 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
+  color: var(--faint);
+  font: 500 11px/1 var(--mono);
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-gleasing),
-    border-color var(--duration-fast) var(--ease-gleasing),
-    color var(--duration-fast) var(--ease-gleasing);
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color var(--duration-fast) var(--ease-gleasing),
+    color var(--duration-fast) var(--ease-gleasing),
+    transform var(--duration-fast) var(--ease-gleasing);
 }
-.timeline-sphere:hover {
+.cue-close:hover {
   border-color: var(--section-ink);
   color: var(--section-ink);
+  transform: translateY(-1px);
 }
-.timeline-sphere em {
-  font-style: normal;
-  color: var(--faint);
+.cue-close:active {
+  transform: translateY(0) scale(0.96);
 }
-.timeline-sphere:hover em {
-  color: var(--section-ink);
+.cue-close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent);
+}
+.cue-close svg {
+  width: 11px;
+  height: 11px;
 }
 
-@keyframes timeline-spheres-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
+/* --- state-gated chrome --- */
+/* The hint and the size legend describe a graph. With no graph on screen they
+   are captions to nothing, so they go with it. */
+
+body[data-stage="idle"] .hint,
+body[data-stage="idle"] .legend {
+  opacity: 0;
+  pointer-events: none;
+}
+body[data-stage="graph"] .backdrop {
+  opacity: 0;
+}
+
+@media (max-width: 720px) {
+  .shell {
+    width: 94vw;
+    padding-top: clamp(48px, 12vh, 110px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .masthead-lede {
+    font-size: 13px;
+  }
+  .nav-item {
+    padding: 7px 11px;
+    font-size: 10px;
+  }
+  .timeline-rail {
+    column-gap: 14px;
   }
 }
 
@@ -364,13 +832,23 @@ body[data-panel="open"] {
   background: color-mix(in srgb, var(--panel) 55%, transparent);
   color: var(--section-ink);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition: background var(--duration-fast) var(--ease-gleasing),
     border-color var(--duration-fast) var(--ease-gleasing),
-    color var(--duration-fast) var(--ease-gleasing);
+    color var(--duration-fast) var(--ease-gleasing),
+    transform var(--duration-fast) var(--ease-gleasing);
 }
 .icon-btn:hover {
   background: var(--panel);
   border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.icon-btn:active {
+  transform: translateY(0) scale(0.94);
+}
+.icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-ink) 28%, transparent);
 }
 .icon-btn svg {
   width: 17px;
@@ -378,21 +856,6 @@ body[data-panel="open"] {
 }
 .icon-btn .glyph {
   font: italic 500 13px/1 var(--sans);
-}
-
-.wordmark {
-  position: fixed;
-  bottom: 28px;
-  left: 33px;
-  z-index: 20;
-  color: var(--section-ink);
-  font: 400 13px/1 var(--mono);
-  letter-spacing: 0.02em;
-  text-decoration: none;
-}
-.wordmark b {
-  font-weight: 500;
-  letter-spacing: 0.12em;
 }
 
 /* --- size legend --------------------------------------------------------- */

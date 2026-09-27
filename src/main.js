@@ -1,11 +1,27 @@
-/* Wiring: data in, atlas and panel out, URL and keyboard in between. */
+/* Wiring: data in, atlas and panel out, URL and keyboard in between.
+ *
+ * The page has two states and one rule connecting them. Closed, it is a
+ * masthead, a menu of spheres and a line of years — no graph, nothing moving,
+ * nothing to read past. The graph opens only once a year *and* a sphere have
+ * both been chosen, and it opens showing that intersection alone.
+ *
+ * `sync()` is the only place that decides which state the page is in. Every
+ * control — the menu, the timeline, the close button, the back button — does
+ * nothing but write its own field into the store; sync() reads the result and
+ * derives the rest. That is what keeps "when does the graph open" a single
+ * sentence of code instead of a rule each control has to remember.
+ */
 
 import { createStore } from "./store.js";
+import { buildIndex } from "./selection.js";
 import { Atlas } from "./atlas/index.js";
 import { nodeRadius } from "./atlas/nodes.js";
 import { Panel } from "./ui/panel.js";
 import { Search } from "./ui/search.js";
+import { Nav } from "./ui/nav.js";
 import { Timeline } from "./ui/timeline.js";
+import { Web } from "./ui/web.js";
+import { Burst } from "./ui/burst.js";
 import { Sound } from "./ui/sound.js";
 import { PALETTE, paperFor, inkFor } from "./palette.js";
 import { escapeHtml, renderInline } from "./ui/markdown.js";
@@ -24,16 +40,12 @@ if (!graph) {
   );
 }
 
+const index = buildIndex(graph);
+const bySlug = new Map(graph.nodes.map((n) => [n.slug, n]));
+
 /** Reading order: sections in order, terms in the order the section lists
  *  them. This drives the "07 / 69" index and prev/next. */
 const order = graph.sections.flatMap((section) => section.slugs);
-
-/* A wallet is always selected, so the panel is never empty. Default to the
- * most-connected node (the hub) when no ?term= is in the URL. */
-const defaultSlug = graph.nodes.reduce(
-  (best, n) => (n.inDegree > best.inDegree ? n : best),
-  graph.nodes[0]
-).slug;
 
 const safe = (fn, fallback) => {
   try {
@@ -43,17 +55,55 @@ const safe = (fn, fallback) => {
   }
 };
 
-const slugFromUrl = () => {
-  const value = safe(() => new URL(location.href).searchParams.get("term"), null);
-  return value && graph.nodes.some((n) => n.slug === value) ? value : null;
-};
+/* ---------- routing ---------- */
+
+/** The whole of the page's state that is worth a URL: which year, which
+ *  sphere, which term. Anything invalid is dropped rather than rejected, so a
+ *  hand-edited or stale link still lands somewhere sensible. */
+function readUrl() {
+  const params = safe(() => new URL(location.href).searchParams, new URLSearchParams());
+
+  const year = Number(params.get("year"));
+  const section = Number(params.get("section"));
+  const term = params.get("term");
+
+  const validYear = index.years.includes(year) ? year : null;
+  return {
+    year: validYear,
+    // A sphere means nothing without a year underneath it — a hand-edited or
+    // stale ?section= with no ?year= would otherwise land on exactly the
+    // broken "pill lit up, no dot lit up" state a full year-collapse now
+    // guards against everywhere else.
+    section:
+      validYear != null && Number.isInteger(section) && section >= 0 && section < graph.sections.length
+        ? section
+        : null,
+    focusedSlug: term && bySlug.has(term) ? term : null,
+  };
+}
+
+function writeUrl(replace = false) {
+  const { year, section, focusedSlug } = store.get();
+  const url = new URL(location.href);
+  const set = (key, value) => {
+    if (value === null || value === undefined) url.searchParams.delete(key);
+    else url.searchParams.set(key, value);
+  };
+  set("year", year);
+  set("section", section);
+  set("term", focusedSlug);
+  if (url.href === location.href) return;
+  safe(() => (replace ? history.replaceState(null, "", url) : history.pushState(null, "", url)));
+}
 
 const store = createStore({
-  focusedSlug: slugFromUrl() ?? defaultSlug,
+  ...readUrl(),
   hoveredSlug: null,
   matchSlugs: [],
   searchActive: false,
   query: "",
+  /** The slugs the atlas is allowed to draw; null means "all of them". */
+  isolateSlugs: null,
   sectionColorOn: safe(() => localStorage.getItem(COLOR_KEY) === "1", false),
   overviewSection: 0,
 });
@@ -112,11 +162,243 @@ const search = new Search(document.querySelector("#search"), {
   onSound: sound.play,
 });
 
-const timeline = new Timeline(document.querySelector("#timeline"), {
-  graph,
+const nav = new Nav(document.querySelector("#nav"), {
+  index,
   store,
   onSound: sound.play,
 });
+
+const timeline = new Timeline(document.querySelector("#timeline"), {
+  index,
+  store,
+  onSound: sound.play,
+});
+
+const web = new Web(document.querySelector("#web"), {
+  store,
+  timeline,
+  navRoot: document.querySelector("#nav"),
+});
+
+// The shell compacts (or expands back) over 0.7s whenever the stage flips —
+// a purely CSS-driven move that carries every pill and the timeline itself
+// along with it, without any store field changing to tell Web to redraw.
+// Web's own year/section subscription already redraws once at the start of
+// that move; this catches where it actually ends up.
+document.querySelector("#shell").addEventListener("transitionend", (event) => {
+  if (event.propertyName === "padding-top" || event.propertyName === "gap") {
+    web.redraw();
+  }
+});
+
+/* ---------- opening and closing the graph ---------- */
+
+const crumb = document.querySelector("#cue-crumb");
+const hint = document.querySelector("#hint");
+const atlasEl = document.querySelector("#atlas");
+const burstFx = new Burst(document.querySelector("#burst"));
+
+/** How long the quick collapse-and-reopen (switching between two already-open
+ *  selections) takes before the new one starts opening. Matches the
+ *  .atlas.is-refolding transition in the stylesheet, plus a hair of slack so
+ *  the timer never fires a frame ahead of the CSS actually finishing. */
+const REFOLD_MS = 460;
+
+/**
+ * What the atlas may draw, or null for "nothing — stay closed".
+ *
+ * Three ways in, in order of authority. A chosen year and sphere is the front
+ * door and outranks the rest, so searching inside an open graph narrows it
+ * rather than replacing it. A search on its own is the side door: typing from
+ * the landing page opens a graph of the matches, because a filter over a graph
+ * nobody can see is just a disabled control. A term on its own is the deep
+ * link — a shared ?term= URL should land on something.
+ */
+function subsetFor(state) {
+  if (state.year != null && state.section != null) {
+    const slugs = index.slugsFor(state.year, state.section);
+    return slugs.length ? slugs : null;
+  }
+  if (state.searchActive && state.matchSlugs.length) {
+    return state.matchSlugs;
+  }
+  if (state.focusedSlug) {
+    return [state.focusedSlug, ...atlas.neighboursOf(state.focusedSlug)];
+  }
+  return null;
+}
+
+/** Where a selection's dot is on screen right now — the point the graph
+ *  unfolds out of and folds back into. A year has an exact dot; anything
+ *  else (search, a bare ?term= link) has no single stop to point at, so it
+ *  falls back to the timeline's own centre rather than the corner of the
+ *  screen. Read *before* the stage flips, while the layout the user was
+ *  actually looking at is still in effect — read after, and this would
+ *  report the compact "graph" position for a click that happened on the
+ *  spread-out landing page. */
+function originForState(state) {
+  // The web's second hop: a year *and* a sphere both chosen means the pill is
+  // what was actually clicked, so that is where the atlas unfolds from —
+  // continuing the same line the web already drew toward it, rather than
+  // reaching back to the year's dot underneath it.
+  if (state.year != null && state.section != null) {
+    const pill = document.querySelector(`.nav-item[data-section="${state.section}"]`);
+    if (pill) {
+      const r = pill.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+  }
+  const dot = state.year != null ? timeline.originFor(state.year) : null;
+  if (dot) return dot;
+  const rect = document.querySelector("#timeline").getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+}
+
+function applyOrigin(origin) {
+  const root = document.documentElement;
+  root.style.setProperty("--unfold-x", `${Math.round(origin.x)}px`);
+  root.style.setProperty("--unfold-y", `${Math.round(origin.y)}px`);
+}
+
+/** Open the graph on a subset, unfolding from wherever that subset's own dot
+ *  is right now. `animate: false` is the cold-load path — land on it directly,
+ *  no burst, no camera swoop. */
+function openGraph(state, subset, { animate = true } = {}) {
+  const origin = originForState(state);
+  applyOrigin(origin);
+  document.body.dataset.stage = "graph";
+  atlas.setActive(true);
+  atlas.frameSubset(subset, { burst: animate });
+  if (animate) burstFx.open(origin, subset.length);
+}
+
+/** The panel width is one source of truth, read by the atlas for its lens
+ *  shift and by the stylesheet for the right-hand controls. */
+function setPanelOpen(open) {
+  const fraction = open
+    ? parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--panel-fraction")
+      ) || 1 / 3
+    : 0;
+  document.body.dataset.panel = open ? "open" : "closed";
+  atlas.setPanelFraction(fraction);
+}
+
+let lastSubsetKey = null;
+let transitionToken = 0;
+let syncing = false;
+
+/**
+ * Derive everything visible from the selection.
+ *
+ * Re-entrant by nature — it writes to the store, and the store is what calls
+ * it — so the guard is load-bearing rather than defensive: without it, setting
+ * `isolateSlugs` here would immediately call this function again.
+ */
+function sync({ animate = true, replaceUrl = false } = {}) {
+  if (syncing) return;
+  syncing = true;
+  try {
+    // Following a connection out of the open bucket moves the bucket to match,
+    // rather than leaving the menus describing a view you have already walked
+    // out of. The atlas only has coordinates for the isolated set, so a term
+    // outside it genuinely has nowhere to appear.
+    const arriving = store.get().focusedSlug ? bySlug.get(store.get().focusedSlug) : null;
+    if (arriving?.year != null) {
+      const { year, section } = store.get();
+      if (year != null && section != null && (arriving.year !== year || arriving.section !== section)) {
+        store.set({ year: arriving.year, section: arriving.section });
+      }
+    }
+
+    const state = store.get();
+    let subset = subsetFor(state);
+    // Last resort for the handful of terms with no year at all: whatever else
+    // is on screen, the term the panel is showing has to be on it.
+    if (subset && state.focusedSlug && !subset.includes(state.focusedSlug)) {
+      subset = [...subset, state.focusedSlug];
+    }
+
+    // Keyed on the drawn set itself, not on the selection that produced it:
+    // the set is what the layout and the framing are functions of, and two
+    // different selections that draw the same nodes should not re-shuffle
+    // them. Opening a term inside an unchanged set leaves both alone, and
+    // narrowing with search inside an open graph never touches this at all.
+    const key = subset ? subset.join(" ") : null;
+
+    if (key !== lastSubsetKey) {
+      const wasOpen = lastSubsetKey !== null;
+      lastSubsetKey = key;
+      transitionToken++;
+      const myToken = transitionToken;
+      // A stale mid-flight switch, abandoned in favour of whatever this call
+      // is about to do, would otherwise leave the atlas permanently pinned
+      // to invisible by is-refolding's !important rules — nothing else ever
+      // clears the class.
+      atlasEl.classList.remove("is-refolding");
+
+      if (!subset) {
+        if (wasOpen && animate) burstFx.close();
+        atlas.clearSubset();
+        atlas.setActive(false);
+        document.body.dataset.stage = "idle";
+      } else if (!wasOpen || !animate) {
+        openGraph(state, subset, { animate });
+      } else {
+        // Switching between two already-open selections: fold the current
+        // one away first, then open the new one from its own dot — never a
+        // straight cut, and never a slide between two unrelated layouts.
+        atlasEl.classList.add("is-refolding");
+        burstFx.close();
+        setTimeout(() => {
+          if (myToken !== transitionToken) return; // superseded already
+          atlasEl.classList.remove("is-refolding");
+          openGraph(state, subset);
+        }, REFOLD_MS);
+      }
+    }
+
+    if (!subset) {
+      store.set({
+        isolateSlugs: null,
+        focusedSlug: null,
+        matchSlugs: [],
+        searchActive: false,
+        query: "",
+      });
+      setPanelOpen(false);
+      writeUrl(replaceUrl);
+      return;
+    }
+
+    store.set({ isolateSlugs: subset });
+
+    const section = state.section != null ? graph.sections[state.section] : null;
+    const pair = state.year != null && section;
+    crumb.textContent = pair
+      ? `${state.year} · ${section.title} · ${subset.length}`
+      : state.searchActive && state.matchSlugs.length
+        ? `Search · ${subset.length} ${subset.length === 1 ? "match" : "matches"}`
+        : `${bySlug.get(state.focusedSlug)?.title ?? ""} · connections`;
+
+    setPanelOpen(Boolean(state.focusedSlug));
+    hint.hidden = Boolean(state.focusedSlug);
+    writeUrl(replaceUrl);
+  } finally {
+    syncing = false;
+  }
+}
+
+/** Steps back one hop in the web — out of the company graph, to the sphere
+ *  fan still open around the chosen year — rather than all the way out to
+ *  the bare timeline. Clicking the year's own dot again (Timeline's own
+ *  toggle) is the move that clears the year and collapses the whole web. */
+function closeGraph() {
+  store.set({ section: null, focusedSlug: null });
+  sound.play("toggle");
+}
+
+document.querySelector("#close-graph").addEventListener("click", closeGraph);
 
 /* ---------- clicking a label is clicking its node ---------- */
 
@@ -139,12 +421,10 @@ function paintTheme() {
     root.style.setProperty("--section-paper", PALETTE.paper);
     root.style.setProperty("--section-ink", PALETTE.ink);
   } else {
-    // With a term open the subject is that term's section; with nothing open
-    // it is whichever section the toggle landed on.
-    const focused = state.focusedSlug
-      ? graph.nodes.find((n) => n.slug === state.focusedSlug)
-      : null;
-    const index = focused ? focused.section : state.overviewSection;
+    // With a term open the subject is that term's section; otherwise it is
+    // whichever sphere is selected, and failing that the toggle's own pick.
+    const focused = state.focusedSlug ? bySlug.get(state.focusedSlug) : null;
+    const index = focused ? focused.section : state.section ?? state.overviewSection;
     root.style.setProperty("--section-paper", paperFor(index));
     root.style.setProperty("--section-ink", inkFor(index));
   }
@@ -161,8 +441,6 @@ colorButton?.addEventListener("click", () => {
   const on = !store.get().sectionColorOn;
   store.set({
     sectionColorOn: on,
-    // Landing on a different section each time makes the toggle a way to
-    // wander the collection, not just a colour switch.
     overviewSection: on
       ? Math.floor(Math.random() * graph.sections.length)
       : store.get().overviewSection,
@@ -203,48 +481,33 @@ info.addEventListener("click", (event) => {
   if (event.target.closest("[data-close]")) closeInfo();
 });
 
-/* ---------- routing ---------- */
-
-function syncUrl(slug) {
-  const url = new URL(location.href);
-  if (slug) url.searchParams.set("term", slug);
-  else url.searchParams.delete("term");
-  if (url.href !== location.href) {
-    safe(() => history.pushState({ slug }, "", url));
-  }
-}
-
-window.addEventListener("popstate", () => {
-  store.set({ focusedSlug: slugFromUrl() ?? defaultSlug });
-});
-
 /* ---------- reactions ---------- */
 
-const hint = document.querySelector("#hint");
-
-/** The panel width is one source of truth, read by the atlas for its lens
- *  shift and by the stylesheet for the right-hand controls. */
-function setPanelOpen(open) {
-  const fraction = open
-    ? parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue("--panel-fraction")
-      ) || 1 / 3
-    : 0;
-  document.body.dataset.panel = open ? "open" : "closed";
-  atlas.setPanelFraction(fraction);
-}
+window.addEventListener("popstate", () => {
+  store.set(readUrl());
+});
 
 store.subscribe((state, previous) => {
-  if (state.focusedSlug !== previous.focusedSlug) {
-    syncUrl(state.focusedSlug);
-    // The atlas re-centres itself in whatever space the panel leaves, and the
-    // right-hand controls ride in with its edge.
-    setPanelOpen(Boolean(state.focusedSlug));
-    hint.hidden = Boolean(state.focusedSlug);
+  const selectionChanged =
+    state.year !== previous.year ||
+    state.section !== previous.section ||
+    state.focusedSlug !== previous.focusedSlug;
+  // A search only re-derives the view while it is the thing holding the graph
+  // open. Once a year and a sphere are chosen, typing filters inside that
+  // graph and must not be allowed to re-frame the camera on every keystroke.
+  const searchDrives =
+    state.year == null ||
+    state.section == null ||
+    previous.year == null ||
+    previous.section == null;
+
+  if (selectionChanged || (searchDrives && state.query !== previous.query)) {
+    sync();
   }
   if (
     state.sectionColorOn !== previous.sectionColorOn ||
     state.overviewSection !== previous.overviewSection ||
+    state.section !== previous.section ||
     state.focusedSlug !== previous.focusedSlug
   ) {
     paintTheme();
@@ -268,9 +531,12 @@ window.addEventListener("keydown", (event) => {
   }
 
   if (event.key === "Escape") {
+    // Outermost thing first: a dialog, then search, then the open term, and
+    // only once none of those are in the way does Escape close the graph.
     if (!info.hidden) closeInfo();
     else if (search.isOpen) search.close();
-    // No deselect: a wallet is always selected so the panel stays open.
+    else if (store.get().focusedSlug) store.set({ focusedSlug: null });
+    else if (document.body.dataset.stage === "graph") closeGraph();
     return;
   }
 
@@ -290,6 +556,8 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("resize", () => atlas.resize());
 
 paintTheme();
-setPanelOpen(Boolean(store.get().focusedSlug));
+// No burst on a cold load: an unfold animation only means something as the
+// answer to a click, and replaceState keeps a deep link out of the history as
+// its own back-step.
+sync({ animate: false, replaceUrl: true });
 panel.render(store.get().focusedSlug);
-hint.hidden = Boolean(store.get().focusedSlug);

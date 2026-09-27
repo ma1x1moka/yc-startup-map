@@ -54,6 +54,13 @@ export class LabelLayer {
     this.radii = radii;
   }
 
+  /** The live node coordinates, shared with the node layer and the picker, so
+   *  a re-laid-out subset takes its labels with it.
+   *  @param {Float32Array} positions xyz triples */
+  setPositions(positions) {
+    this.positions = positions;
+  }
+
   /**
    * @param {import('three').Camera} camera
    * @param {number} width viewport px
@@ -70,9 +77,9 @@ export class LabelLayer {
       if (weight[i] <= 0.02) continue;
 
       this.projected.set(
-        this.nodes[i].layout[0],
-        this.nodes[i].layout[1],
-        this.nodes[i].layout[2]
+        this.positions[i * 3],
+        this.positions[i * 3 + 1],
+        this.positions[i * 3 + 2]
       );
       const depth = camera.position.distanceTo(this.projected);
       this.projected.project(camera);

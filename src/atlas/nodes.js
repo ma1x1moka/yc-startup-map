@@ -147,6 +147,15 @@ export class NodeLayer {
     this.positions = positions;
   }
 
+  /** Move the nodes. Used when an isolated subset is re-laid-out for itself;
+   *  the buffer is the same one the atlas reads for picking and labels, so
+   *  there is only ever one set of live coordinates.
+   *  @param {Float32Array} positions xyz triples */
+  setPositions(positions) {
+    this.positions.set(positions);
+    this.mesh.geometry.attributes.iPos.needsUpdate = true;
+  }
+
   /** @param {Float32Array} colors rgb triples, 0..1 @param {Float32Array} alphas */
   apply(colors, alphas) {
     this.colors.set(colors);

@@ -6,7 +6,7 @@
     <title>The AI Coding Dictionary</title>
     <meta
       name="description"
-      content="The vocabulary of AI coding, defined plainly and wired into a 3D atlas you can explore term by term."
+      content="Ten years of Y Combinator, one batch at a time. Pick a year and a sphere of activity to open the graph."
     />
     <meta name="theme-color" content="#f2f2f0" />
     <link rel="stylesheet" href="assets/styles.css" />
@@ -15,15 +15,75 @@
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23f2f2f0'/><circle cx='16' cy='16' r='6' fill='%231a1a19'/></svg>"
     />
   </head>
-  <body>
-    <a class="skip" href="#panel">Skip to the term panel</a>
+  <body data-stage="idle">
+    <a class="skip" href="#nav">Skip to the navigation</a>
 
-    <div class="timeline" id="timeline"></div>
+    <!-- Idle-only decoration: two loose, crossing threads with a scatter of
+         graph-dots along them — a quiet echo of "this site is a graph of
+         dots and connections", not a literal double helix. Fades out the
+         moment a graph is open, so it never competes with real content. -->
+    <svg class="backdrop" id="backdrop" viewBox="0 0 1200 700" preserveAspectRatio="none" aria-hidden="true">
+      <path class="backdrop-thread backdrop-thread-a"
+        d="M -80 460 C 220 220, 420 640, 700 360 S 1080 160 1280 380" />
+      <path class="backdrop-thread backdrop-thread-b"
+        d="M -80 260 C 220 500, 420 80, 700 400 S 1080 620 1280 260" />
+      <g class="backdrop-dots">
+        <circle cx="188" cy="330" r="3.4" />
+        <circle cx="404" cy="410" r="2.6" />
+        <circle cx="512" cy="216" r="3" />
+        <circle cx="700" cy="380" r="4" />
+        <circle cx="868" cy="280" r="2.6" />
+        <circle cx="1006" cy="440" r="3.2" />
+        <circle cx="1140" cy="300" r="2.4" />
+      </g>
+    </svg>
 
+    <!-- The first hop of the web: real, persistent lines from the chosen
+         year's dot up to each sphere pill — src/ui/web.js redraws these
+         whenever the year changes or the window resizes. Distinct from
+         #burst below: this one is structural (it stays as long as the pills
+         are showing), not a one-shot flourish. -->
+    <svg class="web" id="web" aria-hidden="true" focusable="false"></svg>
+
+    <!-- Purely decorative: a burst of lines that draws outward from the
+         timeline dot when a graph opens, and retracts into it when the
+         graph closes or the selection changes. Never touched for layout or
+         hit-testing — src/ui/burst.js only ever adds/removes <path>s. -->
+    <svg class="burst" id="burst" aria-hidden="true" focusable="false"></svg>
+
+    <!-- Closed until a year and a sphere are both chosen; it then unfolds out
+         of the timeline dot that opened it. -->
     <div class="atlas" id="atlas">
       <canvas id="atlas-canvas"></canvas>
       <!-- Labels are HTML over the canvas so they stay crisp and focusable. -->
       <div class="atlas-labels" id="atlas-labels" aria-label="Terms in the atlas"></div>
+    </div>
+
+    <div class="shell" id="shell">
+      <header class="masthead">
+        <a class="wordmark" href="./" id="wordmark"></a>
+        <p class="masthead-lede" id="masthead-lede">
+          Ten years of Y Combinator — 2,490 companies and founders.
+          Pick a year, then a sphere of activity.
+        </p>
+      </header>
+
+      <nav class="nav" id="nav" aria-label="Spheres of activity"></nav>
+
+      <div class="timeline" id="timeline"></div>
+
+      <div class="cue" id="cue">
+        <p class="cue-idle" id="cue-idle">Choose a year and a sphere to open the graph.</p>
+        <div class="cue-open">
+          <p class="cue-crumb" id="cue-crumb"></p>
+          <button type="button" class="cue-close" id="close-graph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+              <path d="M7 7l10 10M17 7L7 17" stroke-linecap="round" />
+            </svg>
+            Close
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="corner corner-tl">
@@ -62,8 +122,6 @@
         <span class="glyph">i</span>
       </button>
     </div>
-
-    <a class="wordmark" href="./" id="wordmark"></a>
 
     <p class="hint" id="hint">Drag to rotate <span>·</span> Scroll to zoom</p>
 

@@ -114,6 +114,27 @@ export class Controls {
     this._sweep();
   }
 
+  /**
+   * Jump the camera inside a group and let it ease outward, so the group looks
+   * like it is unfolding into place rather than being cut to.
+   *
+   * The target is snapped rather than eased: travelling *and* pulling back at
+   * once reads as a swoop across the atlas, which is the opposite of the
+   * "this opened from here" feeling the timeline dot is promising. No sweep
+   * either — the motion should be purely outward.
+   */
+  burstTo(position, distance) {
+    const clamped = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, distance));
+    this.target.set(position[0], position[1], position[2]);
+    this.goal.target.set(position[0], position[1], position[2]);
+    // Deliberately below MIN_DISTANCE: that floor exists to stop the *user*
+    // scrolling into the middle of the cloud, not to stop a scripted opening
+    // shot from starting there.
+    this.distance = clamped * 0.16;
+    this.goal.distance = clamped;
+    this.lastInteraction = performance.now();
+  }
+
   /** Add a partial orbit to the azimuth goal so the camera swings around the
    *  new centre as it flies in. Direction alternates each jump so repeated
    *  navigation doesn't wind endlessly one way. */

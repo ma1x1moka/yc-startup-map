@@ -124,6 +124,26 @@ const DOT_FRAGMENT = /* glsl */ `
   }
 `;
 
+/* The same outward bow the pipeline bakes (see bezierControl in
+ * pipeline/layout.mjs), recomputed at runtime for moved nodes. Duplicated
+ * rather than imported so the browser bundle does not pull in the offline
+ * layout module for four lines of arithmetic. */
+function bow(out, a, b) {
+  const mx = (a[0] + b[0]) / 2;
+  const my = (a[1] + b[1]) / 2;
+  const mz = (a[2] + b[2]) / 2;
+  const midLength = Math.hypot(mx, my, mz);
+  if (midLength < 1e-3) {
+    out[0] = mx; out[1] = my; out[2] = mz;
+    return out;
+  }
+  const amount = (Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) * 0.11) / midLength;
+  out[0] = mx + mx * amount;
+  out[1] = my + my * amount;
+  out[2] = mz + mz * amount;
+  return out;
+}
+
 function bezier(out, a, control, b, t) {
   const u = 1 - t;
   const w0 = u * u, w1 = 2 * u * t, w2 = t * t;
@@ -258,6 +278,65 @@ export class EdgeLayer {
     this.dotGeometry = dotGeometry;
 
     this.active = [];
+  }
+
+  /**
+   * Redraw every curve from a new set of node coordinates.
+   *
+   * Called when an isolated subset is laid out for itself: the ribbons are
+   * baked from the positions the nodes had at build time, and a ribbon still
+   * joining where two nodes *used* to be is worse than no ribbon at all. The
+   * control points are recomputed too — the bow is a function of where the
+   * endpoints are, so a stale one bends the curve off into nothing.
+   *
+   * Every edge is rebuilt rather than only the visible ones. Uploading the
+   * whole buffer costs about a megabyte on a selection change, which is
+   * nothing next to keeping a "which edges are currently stale" set correct
+   * across every path that can move a node.
+   *
+   * @param {(slug: string, out: number[]) => number[]} positionOf
+   */
+  reproject(positionOf) {
+    const positions = this.lines.geometry.attributes.position.array;
+    const tangents = this.lines.geometry.attributes.aTangent.array;
+    const a = [0, 0, 0];
+    const b = [0, 0, 0];
+    const control = [0, 0, 0];
+    const scratch = [0, 0, 0];
+    const tan = [0, 0, 0];
+
+    this.edges.forEach((edge, e) => {
+      positionOf(edge.source, a);
+      positionOf(edge.target, b);
+      bow(control, a, b);
+
+      const pts = this.curves[e];
+      for (let j = 0; j <= SEGMENTS; j++) {
+        const p = bezier(scratch, a, control, b, j / SEGMENTS);
+        pts[j][0] = p[0]; pts[j][1] = p[1]; pts[j][2] = p[2];
+      }
+
+      const base = e * this.vertsPerEdge;
+      for (let j = 0; j <= SEGMENTS; j++) {
+        const prev = pts[Math.max(0, j - 1)];
+        const next = pts[Math.min(SEGMENTS, j + 1)];
+        tan[0] = next[0] - prev[0];
+        tan[1] = next[1] - prev[1];
+        tan[2] = next[2] - prev[2];
+        for (const side of [0, 1]) {
+          const vi = base + j * 2 + side;
+          positions[vi * 3] = pts[j][0];
+          positions[vi * 3 + 1] = pts[j][1];
+          positions[vi * 3 + 2] = pts[j][2];
+          tangents[vi * 3] = tan[0];
+          tangents[vi * 3 + 1] = tan[1];
+          tangents[vi * 3 + 2] = tan[2];
+        }
+      }
+    });
+
+    this.lines.geometry.attributes.position.needsUpdate = true;
+    this.lines.geometry.attributes.aTangent.needsUpdate = true;
   }
 
   /**
