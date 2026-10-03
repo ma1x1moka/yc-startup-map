@@ -82,6 +82,32 @@ node claude-tools/yc-api/generate-qa.mjs --all               # every card
 node claude-tools/yc-api/generate-qa.mjs --from-file list.txt  # from a list
 ```
 
+### check-and-update-batches.mjs — daily freshness check
+
+Run by `.github/workflows/update-yc-batches.yml` on a daily schedule (also
+`workflow_dispatch`-able by hand). One cheap Algolia facet query gets a
+company count for every YC batch ever run; the `--watch` (default 2) most
+recent real batches (`--min-size`, default 5, filters out YC's placeholder
+future-batch stubs) are compared against `data/batch-counts.json`. Unchanged
+→ exits, nothing happens. Changed → re-pulls that batch in full and runs it
+through `match-existing.mjs` → `generate-cards.mjs` → `write-cards.mjs` →
+`npm run graph`, same pipeline as a manual run.
+
+It only ever modifies the working tree — no git commands inside it. The
+workflow's `create-pull-request` step turns whatever changed into a PR, so a
+human reviews the generated prose before it reaches `main` (see the
+known-limitations list above; this is exactly the step those limitations
+mean you shouldn't skip).
+
+```bash
+node claude-tools/yc-api/check-and-update-batches.mjs           # as the workflow runs it
+node claude-tools/yc-api/check-and-update-batches.mjs --watch 3 # widen the watch window
+```
+
+See `mcp-server/` (repo root) for the MCP server that serves this data —
+`mcp-server/README.md` covers how a merged update there reaches a live
+deploy.
+
 **Provider history (read before reaching for Gemini again):** this used
 Google's Gemini API first. Its free tier turned out to be 20 requests/DAY
 per project for `gemini-3.6-flash` (Google cut it from 250 on 2025-12-07,

@@ -34,7 +34,16 @@ function notable(c) {
 
 const candidates = list.filter(quality).filter(c => includeAll || notable(c));
 
-const batchShort = b => (b === "Fall 2025" ? "F25" : b === "Winter 2026" ? "W26" : b);
+// Spring is disambiguated as "Sp" (not "S") because Summer already claimed
+// "S" across every existing card in content/ (S16..S26) before Spring
+// batches existed (Spring 2025 was YC's first) — reusing "S" for Spring
+// would make e.g. "S26" ambiguous between Summer 2026 and Spring 2026.
+const SEASON_CODE = { Winter: "W", Spring: "Sp", Summer: "S", Fall: "F" };
+function batchShort(b) {
+  const m = b.match(/^(Winter|Spring|Summer|Fall) (\d{4})$/);
+  if (!m) return b;
+  return `${SEASON_CODE[m[1]]}${m[2].slice(2)}`;
+}
 
 const VERB_3P = {
   build: "builds", use: "uses", are: "is", help: "helps", provide: "provides",
@@ -95,22 +104,47 @@ function cleanBody(desc, name) {
   return thirdPerson(chosen.join("\n\n"), name);
 }
 
+// Must return an exact title from content/sections.json — write-cards.mjs
+// throws if classify() names a section that doesn't exist there. This list
+// drifted out of sync with sections.json once before (classify() still said
+// "Hardware"/"AI Infrastructure"/"Vertical AI" after the site reorganized
+// into ten named sections) and crashed the first automated run
+// (check-and-update-batches.mjs) on the first Hardware-tagged company it
+// saw. Keep these strings matching content/sections.json's titles.
 function classify(c) {
   const tags = (c.tags || []).map(t => t.toLowerCase());
   const inds = (c.industries || []).map(t => t.toLowerCase());
   const text = (c.one_liner + " " + c.long_description).toLowerCase();
   const has = (...words) => words.some(w => tags.includes(w) || inds.includes(w));
 
-  if (has("hardware", "robotics", "drones", "space technology", "aerospace") || /\brobot|drone|silicon|semiconductor/.test(text)) {
-    return "Hardware";
+  if (has("hardware", "robotics", "drones", "space technology", "aerospace", "manufacturing and robotics", "3d printing", "advanced materials", "industrials") || /\brobot|drone|silicon|semiconductor|3d print/.test(text)) {
+    return "Hardware, Robotics & Industrials";
+  }
+  if (has("fintech", "insurance", "finance", "asset management", "banking", "payments") || /\bfintech|insurance|payments?\b/.test(text)) {
+    return "Fintech & Payments";
+  }
+  if (has("healthcare", "health", "biotech", "health & wellness", "life sciences", "medical") || /healthcare|biotech|\bclinical\b|\bpatient/.test(text)) {
+    return "Healthcare & Biotech";
+  }
+  if (has("real estate", "housing", "construction", "real estate and construction")) {
+    return "Real Estate & Construction";
+  }
+  if (has("supply chain", "logistics", "climate", "energy", "transportation") || /supply chain|logistics|\bclimate\b|renewable/.test(text)) {
+    return "Logistics, Supply Chain & Climate";
+  }
+  if (has("education", "ai-enhanced learning", "edtech") || /\beducation\b|learning platform|edtech/.test(text)) {
+    return "Education";
   }
   if (/defense|drones? that kill|mosquito|space solar|life.sciences|immigration law|government affairs|collectible|private markets/.test(text)) {
     return "New Frontiers";
   }
-  if (has("infrastructure", "developer tools", "devops", "api", "databases", "dev tools", "open source", "cybersecurity", "security") || /\bapi\b|infrastructure|reliability|inference os|agent reliability|monitor/.test(text)) {
-    return "AI Infrastructure";
+  if (has("infrastructure", "developer tools", "devops", "api", "databases", "dev tools", "open source", "cybersecurity", "security") || /\bapi\b|infrastructure|reliability|inference os|agent reliability|devsecops|monitor/.test(text)) {
+    return "AI & Developer Tools";
   }
-  return "Vertical AI";
+  if (has("human resources", "hr tech", "sales", "marketing", "operations", "enterprise software", "b2b", "smb") || /\bhr\b|\bsales\b|\bmarketing\b|enterprise software|\boperations\b/.test(text)) {
+    return "Enterprise & Productivity";
+  }
+  return "Consumer & Marketplace";
 }
 
 const out = candidates.map(c => {

@@ -1,5 +1,6 @@
 dist/
 node_modules/
+.DS_Store
 github.pointer.md
 claude-tools/.env
 # Scratch/working area for the 10-year mining pipeline — large intermediate
@@ -7,3 +8,8 @@ claude-tools/.env
 # output lives in content/*.md, already committed.
 claude-tools/yc-api/staging-10yr/
 claude-tools/yc-api/.compound-tpd-cooldown.json
+
+# mcp-server: startups.json is regenerated from data/graph.json by
+# scripts/prepare-data.mjs (npm run prepare-data), not hand-edited.
+mcp-server/.mcp-use/
+mcp-server/data/startups.json

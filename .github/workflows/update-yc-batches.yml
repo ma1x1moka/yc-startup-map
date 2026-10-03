@@ -1,0 +1,48 @@
+name: Check YC batches for new companies
+
+on:
+  schedule:
+    # 06:17 UTC daily — arbitrary off-the-hour time to avoid GitHub Actions'
+    # cron congestion at :00.
+    - cron: "17 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Check the most recent batches and draft cards for new companies
+        run: node claude-tools/yc-api/check-and-update-batches.mjs
+      - name: Open a PR if content changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "Update YC batch data"
+          title: "YC batch update: new companies detected"
+          body: |
+            Automated run of `claude-tools/yc-api/check-and-update-batches.mjs`
+            (see the job summary for which batches changed and what was added).
+
+            `generate-cards.mjs`'s prose is a regex first-person -> third-person
+            pass, not a per-company rewrite — please skim the new `content/*.md`
+            files for phrasal-verb breakage or misclassified sections before
+            merging (see `claude-tools/README.md`).
+
+            Merging this deploys automatically: pushing to `main` triggers both
+            the GitHub Pages build (`.github/workflows/pages.yml`) and, if
+            `mcp-server/` is connected there, a Manufact redeploy.
+          branch: automated/yc-batch-update
+          labels: automated
+          add-paths: |
+            content/*.md
+            content/sections.json
+            data/graph.json
+            claude-tools/yc-api/data/batch-counts.json

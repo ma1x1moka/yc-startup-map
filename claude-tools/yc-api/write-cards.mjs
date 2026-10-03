@@ -7,6 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { slugify } from "../../src/slug.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(here, "../..");
@@ -32,7 +33,12 @@ for (const o of out) {
   fs.writeFileSync(filename, o.md);
   const sec = sections.sections.find(s => s.title === o.section);
   if (!sec) throw new Error(`unknown section "${o.section}" for ${o.name}`);
-  if (!sec.slugs.includes(o.slug)) sec.slugs.push(o.slug);
+  // build-graph.mjs derives every node's slug from its filename via the same
+  // slugify() (see src/slug.js's shared-on-purpose note), not from whatever
+  // slug the source API used — those can differ (YC disambiguates its own
+  // slugs, e.g. "mantle-2", when a name collides with an unrelated company).
+  const slug = slugify(o.name);
+  if (!sec.slugs.includes(slug)) sec.slugs.push(slug);
   written++;
 }
 

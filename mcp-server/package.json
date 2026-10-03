@@ -1,0 +1,29 @@
+{
+  "name": "yc-startup-map-mcp",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "version": "1.0.0",
+  "description": "MCP server exposing yc-startup-map's YC company/founder dataset for search by LLM clients",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "prepare-data": "node scripts/prepare-data.mjs",
+    "predev": "npm run prepare-data",
+    "prebuild": "npm run prepare-data",
+    "dev": "mcp-use dev",
+    "build": "mcp-use build",
+    "start": "mcp-use start",
+    "deploy": "mcp-use deploy",
+    "typecheck": "mcp-use typecheck"
+  },
+  "dependencies": {
+    "mcp-use": "2.7.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.0",
+    "typescript": "^7.0.2"
+  }
+}
