@@ -11,6 +11,7 @@
  */
 
 import { slugFromHref } from "../slug.js";
+import { ICONS, svg } from "./icons.js";
 
 export function escapeHtml(text) {
   return String(text)
@@ -19,6 +20,53 @@ export function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+/* Cards open with a line like "**Website:** ndea.com | **Twitter:** @ndea |
+ * **YC:** https://...". Rendered as plain bold-label text it reads as raw
+ * data-entry; a paragraph made *entirely* of "**Label:** value" segments
+ * joined by " | " is pulled out and rendered as a row of icon links instead
+ * (see claude-tools/README.md's card format — this is the same line every
+ * generate-cards.mjs-written card starts with). A label this doesn't
+ * recognize (e.g. "YC partner", "Background") falls back to a plain,
+ * non-linked chip rather than guessing a URL for it. */
+const SOCIAL_LINK = {
+  website: { icon: "website", href: (v) => normalizeUrl(v), text: (v) => v.replace(/^https?:\/\//i, "").replace(/\/+$/, "") },
+  twitter: { icon: "twitter", href: (v) => `https://x.com/${handleOf(v)}`, text: (v) => `@${handleOf(v)}` },
+  linkedin: { icon: "linkedin", href: (v) => normalizeUrl(v), text: () => "LinkedIn" },
+  github: { icon: "link", href: (v) => normalizeUrl(v), text: () => "GitHub" },
+  yc: { icon: "link", href: (v) => normalizeUrl(v), text: () => "YC" },
+  docs: { icon: "link", href: (v) => normalizeUrl(v), text: () => "Docs" },
+};
+
+function normalizeUrl(value) {
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+function handleOf(value) {
+  // Drops a trailing parenthetical ("@markhuqhes (CEO)") and a leading @.
+  return value.replace(/\s*\([^)]*\)\s*$/, "").replace(/^@/, "");
+}
+
+/** A paragraph is a social line only if *every* " | "-separated segment
+ *  parses as "**Label:** value" — one stray sentence anywhere in it and this
+ *  returns null, falling back to ordinary paragraph rendering. */
+function parseSocialLine(paragraph) {
+  const segments = paragraph.split(/\s*\|\s*/).map((segment) => {
+    const m = segment.match(/^\*\*([^*]+):\*\*\s*(.+)$/);
+    return m ? { label: m[1].trim(), value: m[2].trim() } : null;
+  });
+  return segments.every(Boolean) ? segments : null;
+}
+
+function renderSocialSegment({ label, value }) {
+  const spec = SOCIAL_LINK[label.toLowerCase().replace(/\s+/g, "")];
+  if (!spec) {
+    return `<span class="social-chip">${escapeHtml(label)}: ${escapeHtml(value)}</span>`;
+  }
+  return `<a class="social-link" href="${escapeHtml(spec.href(value))}" target="_blank" rel="noopener noreferrer">${svg(
+    ICONS[spec.icon],
+    "icon-sm"
+  )}<span>${escapeHtml(spec.text(value))}</span></a>`;
 }
 
 /**
@@ -30,7 +78,12 @@ export function renderMarkdown(source, exists = () => true) {
   if (!source) return "";
   return source
     .split(/\n\s*\n/)
-    .map((paragraph) => `<p>${renderInline(paragraph.trim(), exists)}</p>`)
+    .map((raw) => {
+      const paragraph = raw.trim();
+      const social = parseSocialLine(paragraph);
+      if (social) return `<p class="social-links">${social.map(renderSocialSegment).join("")}</p>`;
+      return `<p>${renderInline(paragraph, exists)}</p>`;
+    })
     .join("");
 }
 

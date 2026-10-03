@@ -982,6 +982,8 @@ body[data-panel="open"] {
   color: var(--muted);
   font: 400 12px/1 var(--sans);
   white-space: nowrap;
+  /* Purely informational — never steals the drag/scroll it is explaining. */
+  pointer-events: none;
   transition: opacity var(--duration) var(--ease-gleasing);
 }
 .hint span {
@@ -991,7 +993,19 @@ body[data-panel="open"] {
 .hint[hidden] {
   display: block;
   opacity: 0;
-  pointer-events: none;
+}
+/* A contextual nudge, not a fixture (see src/ui/hint.js): dims and comes
+   back twice, then main.js hides it for good once the animation ends. */
+.hint.is-pulsing {
+  animation: hint-pulse 0.9s ease-in-out 3;
+}
+@keyframes hint-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 /* --- search -------------------------------------------------------------- */
@@ -1070,6 +1084,94 @@ body[data-panel="open"] {
   font: 500 9.6px/1 var(--mono);
   letter-spacing: 0.2em;
   text-transform: uppercase;
+}
+
+/* --- panel resizer --------------------------------------------------------
+   A hit-area straddling the panel's left edge (see src/ui/panel-resize.js),
+   positioned off the same --panel-fraction the panel's own width and the
+   corner controls' inset already read — nothing here has to stay in sync
+   with those by hand. Lives outside #panel (see index.html's comment) so
+   panel.js's innerHTML re-renders never touch it. */
+.panel-resizer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: calc(100vw * var(--panel-fraction));
+  z-index: 31;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  translate: 8.5px 0; /* centres the hit area on the panel's edge */
+  cursor: col-resize;
+  touch-action: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration) var(--ease-gleasing);
+}
+body[data-panel="open"] .panel-resizer {
+  opacity: 1;
+  pointer-events: auto;
+}
+.panel-resizer::before {
+  content: "";
+  width: 1px;
+  height: 100%;
+  background: var(--line);
+  transition: background var(--duration-fast) linear;
+}
+.panel-resizer:hover::before,
+.panel-resizer:focus-visible::before,
+body.is-resizing-panel .panel-resizer::before {
+  background: var(--line-strong);
+}
+.panel-resizer:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+.panel-collapse {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--duration-fast) linear, color var(--duration-fast) linear,
+    background var(--duration-fast) linear;
+}
+.panel-collapse svg {
+  width: 13px;
+  height: 13px;
+}
+.panel-resizer:hover .panel-collapse,
+.panel-resizer:focus-visible .panel-collapse {
+  opacity: 1;
+}
+.panel-collapse:hover {
+  background: var(--ink);
+  color: var(--panel);
+  border-color: var(--ink);
+}
+
+/* While actively dragging, everything the panel's width drives should track
+   the cursor 1:1 — the corner controls' own `right` transition exists for
+   the panel *opening*, and would otherwise fight a fast drag with a lagged
+   chase instead of following it. */
+body.is-resizing-panel {
+  cursor: col-resize;
+  user-select: none;
+}
+body.is-resizing-panel .corner-tr,
+body.is-resizing-panel .corner-br {
+  transition: none;
 }
 
 /* --- the panel ----------------------------------------------------------- */
@@ -1215,42 +1317,84 @@ mark.dup-word {
   margin-top: 14px;
 }
 
-/* "Heard in the wild" — a two-line exchange, not a pull quote. */
-.usage {
+/* "Heard in the wild" — closed-by-default accordion, one pair open at a
+   time (see panel.js's toggle-accordion). The 0fr -> 1fr grid row is what
+   makes the expand/collapse smooth without measuring content height in JS. */
+.accordion {
   margin: 14px 0 0;
-  padding: 0;
-  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.bubble {
-  max-width: 251px;
-  padding: 11px 15px;
-  font-size: 14.4px;
-  line-height: 1.45;
-}
-.bubble[data-role="q"] {
+.accordion-item {
   border: 1px solid var(--line);
-  border-radius: 13.6px 13.6px 13.6px 1.6px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color var(--duration) var(--ease-gleasing);
+}
+.accordion-item[data-expanded] {
+  border-color: var(--line-strong);
+}
+.accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
   background: var(--panel);
   color: color-mix(in srgb, var(--ink) 90%, transparent);
+  font: 500 14.4px/1.45 var(--sans);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease-gleasing);
 }
-.bubble[data-role="a"] {
-  /* The reply is the payload, so it gets the ink block — and it deliberately
-     overhangs the measure to the right, the way a reply sits in a chat. */
-  margin: 12px -14px 0 auto;
-  max-width: 290px;
-  border-radius: 13.6px 13.6px 1.6px 13.6px;
-  background: var(--ink);
-  color: var(--panel);
-  transition: background var(--duration-slow) var(--ease-gleasing),
-    color var(--duration-slow) var(--ease-gleasing);
+.accordion-trigger:hover {
+  background: var(--surface);
 }
-/* In colour mode it takes the atlas's ground rather than plain ink, so the
-   one saturated block in the panel belongs to the section you are reading.
-   Using --section-ink as the background instead would turn white-inked
-   sections into a glaring white slab. */
-body[data-section-color="on"] .bubble[data-role="a"] {
-  background: var(--section-paper);
-  color: var(--section-ink);
+/* The one saturated accent belongs to the section you are reading, in
+   colour mode — same reasoning the old reply-bubble used to follow. */
+.accordion-item[data-expanded] .accordion-trigger {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink) 9%, var(--panel)),
+    var(--panel)
+  );
+}
+body[data-section-color="on"] .accordion-item[data-expanded] .accordion-trigger {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--section-ink) 12%, var(--section-paper)),
+    var(--section-paper)
+  );
+}
+.accordion-chevron {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--muted);
+  transition: transform var(--duration) var(--ease-gleasing);
+}
+.accordion-item[data-expanded] .accordion-chevron {
+  transform: rotate(180deg);
+  color: var(--ink);
+}
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-gleasing);
+}
+.accordion-item[data-expanded] .accordion-body {
+  grid-template-rows: 1fr;
+}
+.accordion-answer {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 15px 14px;
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .avoid {
@@ -1295,6 +1439,25 @@ body[data-section-color="on"] .bubble[data-role="a"] {
 }
 .prose p:last-child {
   margin-bottom: 0;
+}
+/* A card's opening "**Website:** x | **Twitter:** @y | ..." line, pulled out
+   of ordinary paragraph rendering by markdown.js's renderMarkdown() into a
+   row of icon links (reusing .social-link from the founder dossier block)
+   plus a plain chip for any label it doesn't recognize as a link. */
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.social-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font: 500 11px/1 var(--mono);
+  white-space: nowrap;
 }
 .prose a {
   color: inherit;

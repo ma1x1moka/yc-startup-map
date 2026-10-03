@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>The AI Coding Dictionary</title>
+    <title>YC Atlas — 10 Years</title>
     <meta
       name="description"
       content="Ten years of Y Combinator, one batch at a time. Pick a year and a sphere of activity to open the graph."
@@ -126,6 +126,27 @@
     <p class="hint" id="hint">Drag to rotate <span>·</span> Scroll to zoom</p>
 
     <aside class="panel" id="panel" aria-label="Term detail" hidden></aside>
+
+    <!-- Lives outside #panel on purpose: panel.js replaces that element's
+         whole innerHTML on every render, which would wipe a child placed
+         inside it. Position follows --panel-fraction in CSS, the same
+         variable .panel's own width already uses. -->
+    <div
+      class="panel-resizer"
+      id="panel-resizer"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Resize detail panel"
+      aria-valuemin="22"
+      aria-valuemax="50"
+      tabindex="0"
+    >
+      <button type="button" class="panel-collapse" id="panel-collapse" aria-label="Close detail panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+          <path d="M7 7l10 10M17 7L7 17" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
 
     <div class="modal" id="info" hidden>
       <div class="modal-scrim" data-close></div>

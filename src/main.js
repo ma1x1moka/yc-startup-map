@@ -23,6 +23,8 @@ import { Timeline } from "./ui/timeline.js";
 import { Web } from "./ui/web.js";
 import { Burst } from "./ui/burst.js";
 import { Sound } from "./ui/sound.js";
+import { Hint } from "./ui/hint.js";
+import { PanelResizer } from "./ui/panel-resize.js";
 import { PALETTE, paperFor, inkFor } from "./palette.js";
 import { escapeHtml, renderInline } from "./ui/markdown.js";
 
@@ -112,9 +114,17 @@ const store = createStore({
 
 const sound = new Sound(document.querySelector("#sound-toggle"));
 
-document.querySelector("#wordmark").innerHTML = `<b>AI</b> ${escapeHtml(
-  (graph.meta?.title ?? "Coding Dictionary").replace(/^The\s+AI\s+/i, "")
-)}`;
+// Bold the title's first word for a touch of emphasis — not a hardcoded
+// "AI" prefix (that was a leftover from this project's original "AI Coding
+// Dictionary" branding and had nothing to do with the YC Atlas pivot; it
+// rendered as "AI YC Atlas — 10 Years" in the wordmark, independent of
+// whatever graph.meta.title actually said).
+const title = graph.meta?.title ?? "Atlas";
+const [firstWord, ...rest] = title.split(" ");
+document.querySelector("#wordmark").innerHTML = `<b>${escapeHtml(firstWord)}</b>${
+  rest.length ? " " + escapeHtml(rest.join(" ")) : ""
+}`;
+document.title = title;
 
 const atlas = new Atlas(document.querySelector("#atlas-canvas"), {
   graph,
@@ -156,6 +166,18 @@ const panel = new Panel(document.querySelector("#panel"), {
   onSound: sound.play,
 });
 
+// Reads any saved width and writes --panel-fraction before setPanelOpen()
+// below ever has a reason to read it (a cold load landing straight on a
+// ?term= deep link opens the panel on its very first sync()).
+const panelResizer = new PanelResizer(document.querySelector("#panel-resizer"), {
+  atlas,
+  store,
+});
+document.querySelector("#panel-collapse").addEventListener("click", () => {
+  store.set({ focusedSlug: null });
+  sound.play("toggle");
+});
+
 const search = new Search(document.querySelector("#search"), {
   graph,
   store,
@@ -194,7 +216,9 @@ document.querySelector("#shell").addEventListener("transitionend", (event) => {
 /* ---------- opening and closing the graph ---------- */
 
 const crumb = document.querySelector("#cue-crumb");
-const hint = document.querySelector("#hint");
+const hint = new Hint(document.querySelector("#hint"), {
+  canvas: document.querySelector("#atlas-canvas"),
+});
 const atlasEl = document.querySelector("#atlas");
 const burstFx = new Burst(document.querySelector("#burst"));
 
@@ -270,6 +294,7 @@ function openGraph(state, subset, { animate = true } = {}) {
   atlas.setActive(true);
   atlas.frameSubset(subset, { burst: animate });
   if (animate) burstFx.open(origin, subset.length);
+  if (!state.focusedSlug) hint.peek();
 }
 
 /** The panel width is one source of truth, read by the atlas for its lens
@@ -367,6 +392,7 @@ function sync({ animate = true, replaceUrl = false } = {}) {
         query: "",
       });
       setPanelOpen(false);
+      hint.hide();
       writeUrl(replaceUrl);
       return;
     }
@@ -382,7 +408,7 @@ function sync({ animate = true, replaceUrl = false } = {}) {
         : `${bySlug.get(state.focusedSlug)?.title ?? ""} · connections`;
 
     setPanelOpen(Boolean(state.focusedSlug));
-    hint.hidden = Boolean(state.focusedSlug);
+    if (state.focusedSlug) hint.hide();
     writeUrl(replaceUrl);
   } finally {
     syncing = false;

@@ -8,19 +8,7 @@
 
 import { renderMarkdown, renderInline, escapeHtml } from "./markdown.js";
 import { highlightDuplicateWords } from "./lint.js";
-
-const ICONS = {
-  close: `<path d="M7 7l10 10M17 7L7 17" stroke-linecap="round"/>`,
-  left: `<path d="M14.5 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/>`,
-  right: `<path d="M9.5 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>`,
-  chevron: `<path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>`,
-  share: `<path d="M12 15V4m0 0L8.5 7.5M12 4l3.5 3.5M5 13v5.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V13" stroke-linecap="round" stroke-linejoin="round"/>`,
-  copy: `<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 6.5A1.5 1.5 0 0 0 13.5 5h-7A1.5 1.5 0 0 0 5 6.5v7A1.5 1.5 0 0 0 6.5 15" stroke-linecap="round"/>`,
-  link: `<path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1.2 1.2M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1.2-1.2" stroke-linecap="round"/>`,
-  twitter: `<path d="M4 4l16 16M4 20 20 4" stroke-linecap="round"/><path d="M9 4H4l4.5 6M15 4h5l-4.5 6M4 20h5l11-16" stroke-linecap="round" stroke-linejoin="round"/>`,
-  linkedin: `<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.5" stroke-linecap="round"/><path d="M12 16v-5m0 0c0-1.5 4-1.5 4 0v5" stroke-linecap="round"/>`,
-  graduation: `<path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M6 11.5V17c0 1.5 2.7 3 6 3s6-1.5 6-3v-5.5" stroke-linecap="round"/>`,
-};
+import { ICONS, svg } from "./icons.js";
 
 /** Consistent hue from a string — same name always same colour. */
 function nameHue(name) {
@@ -76,9 +64,6 @@ function renderDossier(node, i) {
       ${socialHtml ? `<div class="dossier-social">${socialHtml}</div>` : ""}
     </section>`;
 }
-
-const svg = (path, className = "") =>
-  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${path}</svg>`;
 
 const money = (v) =>
   v >= 1e9 ? `$${(v / 1e9).toFixed(2)}B`
@@ -201,6 +186,20 @@ export class Panel {
       const open = wrap.toggleAttribute("data-expanded");
       action.setAttribute("aria-expanded", String(open));
       action.textContent = open ? "less" : `+${wrap.dataset.rest} more`;
+    } else if (kind === "toggle-accordion") {
+      // One open at a time, per accordion group — opening a closed item
+      // closes whichever sibling was open rather than stacking them up.
+      const item = action.closest(".accordion-item");
+      const group = item.closest(".accordion");
+      const wasOpen = item.hasAttribute("data-expanded");
+      for (const sibling of group.querySelectorAll(".accordion-item[data-expanded]")) {
+        sibling.removeAttribute("data-expanded");
+        sibling.querySelector(".accordion-trigger").setAttribute("aria-expanded", "false");
+      }
+      if (!wasOpen) {
+        item.setAttribute("data-expanded", "");
+        action.setAttribute("aria-expanded", "true");
+      }
     } else if (kind === "copy-markdown" || kind === "copy-link" || kind === "share") {
       this._share(kind, action);
     }
@@ -303,21 +302,33 @@ export class Panel {
     }
 
     if (node.usage?.length) {
+      // node.usage is a flat [q1, a1, q2, a2, ...] list — today almost every
+      // card has exactly one pair, but the accordion renders however many
+      // there are, closed by default, one open at a time (see _onClick's
+      // "toggle-accordion").
+      const pairs = [];
+      for (let p = 0; p + 1 < node.usage.length; p += 2) {
+        pairs.push({ q: node.usage[p], a: node.usage[p + 1] });
+      }
       blocks.push(`
         <section class="block" style="--i:${++i}">
           <span class="rule"></span>
-          <p class="label">Heard in the wild</p>
-          <ul class="usage">
-            ${node.usage
+          <div class="accordion">
+            ${pairs
               .map(
-                (line, index) =>
-                  `<li class="bubble" data-role="${index % 2 === 0 ? "q" : "a"}">${renderInline(
-                    line,
-                    exists
-                  )}</li>`
+                ({ q, a }) => `
+              <div class="accordion-item">
+                <button type="button" class="accordion-trigger" data-action="toggle-accordion" aria-expanded="false">
+                  <span class="accordion-q">${renderInline(q, exists)}</span>
+                  ${svg(ICONS.chevron, "accordion-chevron")}
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-answer">${renderInline(a, exists)}</div>
+                </div>
+              </div>`
               )
               .join("")}
-          </ul>
+          </div>
         </section>`);
     }
 
