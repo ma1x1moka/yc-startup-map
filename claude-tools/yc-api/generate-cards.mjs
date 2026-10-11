@@ -139,7 +139,7 @@ function classify(c) {
     return "New Frontiers";
   }
   if (has("infrastructure", "developer tools", "devops", "api", "databases", "dev tools", "open source", "cybersecurity", "security") || /\bapi\b|infrastructure|reliability|inference os|agent reliability|devsecops|monitor/.test(text)) {
-    return "AI & Developer Tools";
+    return "Developer Tools";
   }
   if (has("human resources", "hr tech", "sales", "marketing", "operations", "enterprise software", "b2b", "smb") || /\bhr\b|\bsales\b|\bmarketing\b|enterprise software|\boperations\b/.test(text)) {
     return "Enterprise & Productivity";

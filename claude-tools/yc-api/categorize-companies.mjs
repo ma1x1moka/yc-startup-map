@@ -25,7 +25,7 @@ if (!inputPath || !outDir) {
 const BATCH_SIZE = 40;
 
 export const CATEGORIES = [
-  "AI & Developer Tools",
+  "Developer Tools",
   "Fintech & Payments",
   "Healthcare & Biotech",
   "Enterprise & Productivity",
@@ -56,7 +56,7 @@ const SYSTEM_PROMPT = `You sort YC startups into exactly ONE of these sphere-of-
 
 ${CATEGORIES.map((c, i) => `${i + 1}. ${c}`).join("\n")}
 
-Guidance: "AI & Developer Tools" is for infrastructure, dev tooling, data platforms, security, and agent/model tooling — AI-native or not, if developers are the buyer. "Enterprise & Productivity" is business software bought by ops/sales/marketing/HR/legal teams, not developers. "Consumer & Marketplace" is anything sold to individual consumers, including marketplaces and content/social/gaming. Don't use YC's own generic "B2B"/"Consumer" tags as your answer — reason from what the company actually does. If genuinely torn between two, pick the one that will have more companies to keep it good company, except "New Frontiers" — use that only as a last resort for something that truly fits nowhere else (defense, space, gov, VR/AR, agriculture, other novel domains).
+Guidance: "Developer Tools" is for infrastructure, dev tooling, data platforms, security, and agent/model tooling — AI-native or not, if developers are the buyer. "Enterprise & Productivity" is business software bought by ops/sales/marketing/HR/legal teams, not developers. "Consumer & Marketplace" is anything sold to individual consumers, including marketplaces and content/social/gaming. Don't use YC's own generic "B2B"/"Consumer" tags as your answer — reason from what the company actually does. If genuinely torn between two, pick the one that will have more companies to keep it good company, except "New Frontiers" — use that only as a last resort for something that truly fits nowhere else (defense, space, gov, VR/AR, agriculture, other novel domains).
 
 Respond with ONLY a JSON object: {"results": [{"id": <id>, "category": "<one of the exact section names above>"}, ...]} covering EVERY id given, in any order. No markdown fences, no other text.`;
 

@@ -427,9 +427,23 @@ body[data-stage="graph"] .atlas {
 .shell > * {
   pointer-events: auto;
 }
+/* Once a graph is open, the shell IS the top bar — year/sphere pills sit
+   directly over the live 3D canvas, and a hovered pill's own translucent
+   background (.nav-item) alone wasn't enough to read cleanly against a busy
+   graph behind it. One solid backdrop behind the whole bar, rather than
+   patching each child, so it reads as a single clean strip. Scoped to the
+   graph stage only — on the idle landing page .shell is vertically centred
+   with a tall padding-top spacer, and a background there would paint that
+   empty space too. */
 body[data-stage="graph"] .shell {
   padding-top: 22px;
+  padding-bottom: 14px;
+  padding-inline: clamp(20px, 4vw, 36px);
   gap: 12px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(16px);
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 1px 0 var(--line);
 }
 
 /* --- masthead --- */
@@ -1901,6 +1915,11 @@ body[data-section-color="on"] .accordion-item[data-expanded] .accordion-trigger 
 .modal-body dd small {
   color: var(--muted);
   font-size: 13px;
+}
+.faq-label {
+  margin: 22px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
 
 @media (prefers-reduced-motion: reduce) {

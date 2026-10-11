@@ -25,6 +25,7 @@ import { Burst } from "./ui/burst.js";
 import { Sound } from "./ui/sound.js";
 import { Hint } from "./ui/hint.js";
 import { PanelResizer } from "./ui/panel-resize.js";
+import { renderAccordion, toggleAccordionItem } from "./ui/accordion.js";
 import { PALETTE, paperFor, inkFor } from "./palette.js";
 import { escapeHtml, renderInline } from "./ui/markdown.js";
 
@@ -480,6 +481,16 @@ colorButton?.addEventListener("click", () => {
 const info = document.querySelector("#info");
 const meta = graph.meta ?? {};
 document.querySelector("#info-title").textContent = meta.title ?? "About";
+
+// Platform-level FAQ — distinct from a card's own "Heard in the wild": this
+// one answers "what is this site", not "what does this company do".
+const FAQ = [
+  {
+    q: "How does this platform differ from a standard website?",
+    a: "It isn't a static page — the graph is a live 3D scene you fly through, not a screenshot of one. And the dataset behind it is exposed over MCP (Model Context Protocol), so an AI agent — Claude, ChatGPT, your own coding agent — can query the same companies and founders directly (search, pull a profile, filter by batch) instead of scraping rendered HTML the way it would on an ordinary site.",
+  },
+];
+
 document.querySelector("#info-body").innerHTML = `
   ${(meta.about ?? [])
     .map((paragraph) => `<p>${renderInline(paragraph)}</p>`)
@@ -490,7 +501,9 @@ document.querySelector("#info-body").innerHTML = `
       <b>${graph.nodes.length} terms across ${graph.sections.length} sections</b>
       <small>${graph.edges.length} connections, drawn from the links in each definition.</small>
     </dd>
-  </dl>`;
+  </dl>
+  <div class="label faq-label">FAQ</div>
+  ${renderAccordion(FAQ.map(({ q, a }) => ({ q: renderInline(q), a: renderInline(a) })))}`;
 
 const openInfo = () => {
   info.hidden = false;
@@ -504,7 +517,12 @@ const closeInfo = () => {
 
 document.querySelector("#info-open").addEventListener("click", openInfo);
 info.addEventListener("click", (event) => {
-  if (event.target.closest("[data-close]")) closeInfo();
+  if (event.target.closest("[data-close]")) {
+    closeInfo();
+    return;
+  }
+  const trigger = event.target.closest('[data-action="toggle-accordion"]');
+  if (trigger) toggleAccordionItem(trigger);
 });
 
 /* ---------- reactions ---------- */

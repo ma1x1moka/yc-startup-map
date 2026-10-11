@@ -9,6 +9,7 @@
 import { renderMarkdown, renderInline, escapeHtml } from "./markdown.js";
 import { highlightDuplicateWords } from "./lint.js";
 import { ICONS, svg } from "./icons.js";
+import { renderAccordion, toggleAccordionItem } from "./accordion.js";
 
 /** Consistent hue from a string — same name always same colour. */
 function nameHue(name) {
@@ -187,19 +188,7 @@ export class Panel {
       action.setAttribute("aria-expanded", String(open));
       action.textContent = open ? "less" : `+${wrap.dataset.rest} more`;
     } else if (kind === "toggle-accordion") {
-      // One open at a time, per accordion group — opening a closed item
-      // closes whichever sibling was open rather than stacking them up.
-      const item = action.closest(".accordion-item");
-      const group = item.closest(".accordion");
-      const wasOpen = item.hasAttribute("data-expanded");
-      for (const sibling of group.querySelectorAll(".accordion-item[data-expanded]")) {
-        sibling.removeAttribute("data-expanded");
-        sibling.querySelector(".accordion-trigger").setAttribute("aria-expanded", "false");
-      }
-      if (!wasOpen) {
-        item.setAttribute("data-expanded", "");
-        action.setAttribute("aria-expanded", "true");
-      }
+      toggleAccordionItem(action);
     } else if (kind === "copy-markdown" || kind === "copy-link" || kind === "share") {
       this._share(kind, action);
     }
@@ -308,27 +297,12 @@ export class Panel {
       // "toggle-accordion").
       const pairs = [];
       for (let p = 0; p + 1 < node.usage.length; p += 2) {
-        pairs.push({ q: node.usage[p], a: node.usage[p + 1] });
+        pairs.push({ q: renderInline(node.usage[p], exists), a: renderInline(node.usage[p + 1], exists) });
       }
       blocks.push(`
         <section class="block" style="--i:${++i}">
           <span class="rule"></span>
-          <div class="accordion">
-            ${pairs
-              .map(
-                ({ q, a }) => `
-              <div class="accordion-item">
-                <button type="button" class="accordion-trigger" data-action="toggle-accordion" aria-expanded="false">
-                  <span class="accordion-q">${renderInline(q, exists)}</span>
-                  ${svg(ICONS.chevron, "accordion-chevron")}
-                </button>
-                <div class="accordion-body">
-                  <div class="accordion-answer">${renderInline(a, exists)}</div>
-                </div>
-              </div>`
-              )
-              .join("")}
-          </div>
+          ${renderAccordion(pairs)}
         </section>`);
     }
 

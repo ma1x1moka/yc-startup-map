@@ -66,7 +66,7 @@ server.tool(
       "Full-text search over YC company/founder titles, descriptions, aliases and body text. Optionally narrow by section, batch (e.g. \"W26\") or calendar year.",
     inputSchema: z.object({
       query: z.string().describe("Search text, matched case-insensitively against title/description/aliases/prose."),
-      section: z.string().optional().describe("Exact section title, e.g. \"AI & Developer Tools\". Use list-sections to see options."),
+      section: z.string().optional().describe("Exact section title, e.g. \"Developer Tools\". Use list-sections to see options."),
       batch: z.string().optional().describe("Exact YC batch code, e.g. \"W26\" or \"F25\"."),
       year: z.number().optional().describe("Calendar year the company/founder entered YC."),
       kind: z.enum(["company", "founder"]).optional(),
