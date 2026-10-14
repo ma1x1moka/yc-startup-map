@@ -9,7 +9,9 @@ claude-tools/.env
 claude-tools/yc-api/staging-10yr/
 claude-tools/yc-api/.compound-tpd-cooldown.json
 
-# mcp-server: startups.json is regenerated from data/graph.json by
-# scripts/prepare-data.mjs (npm run prepare-data), not hand-edited.
+# mcp-server/data/startups.json IS committed (see scripts/prepare-data.mjs):
+# Manufact's "Root directory: mcp-server" deploy uploads only that
+# subdirectory as the build context, so ../data/graph.json isn't reachable
+# there — the deployed server has to ship with a pre-generated snapshot.
+# Regenerate it by hand (npm run prepare-data) after editing content/.
 mcp-server/.mcp-use/
-mcp-server/data/startups.json

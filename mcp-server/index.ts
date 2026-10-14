@@ -11,8 +11,14 @@
 // from content/year-index.json via the main pipeline and is far more
 // complete; prefer it when `batch` is missing.
 import { MCPServer } from "mcp-use";
-import { readFileSync } from "node:fs";
 import { z } from "zod";
+// A static import, not a runtime readFileSync off import.meta.url: mcp-use's
+// build bundles index.ts into .mcp-use/build/index.js, a different
+// directory than this source file, so a path resolved at runtime relative
+// to import.meta.url pointed at a data/ that only exists next to the
+// *source* — 404 at startup on every deploy. A static import makes the
+// bundler inline the JSON itself, so there is no runtime path to get wrong.
+import rawDataset from "./data/startups.json" with { type: "json" };
 
 const server = new MCPServer({
   name: "yc-startup-map",
@@ -42,9 +48,7 @@ type Dataset = {
   startups: Startup[];
 };
 
-const dataset: Dataset = JSON.parse(
-  readFileSync(new URL("./data/startups.json", import.meta.url), "utf8")
-);
+const dataset = rawDataset as Dataset;
 const bySlug = new Map(dataset.startups.map((s) => [s.slug, s]));
 
 function summarize(s: Startup) {

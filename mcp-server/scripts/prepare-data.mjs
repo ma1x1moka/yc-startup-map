@@ -6,7 +6,16 @@
 // `batch` (e.g. "W26") parsed from the description, which build-graph.mjs
 // does not emit as a structured field today.
 //
-// Run via `npm run prepare` (also runs automatically before dev/build).
+// Run via `npm run prepare-data` (also runs automatically before dev/build)
+// whenever content/ changes and data/graph.json gets rebuilt.
+//
+// Manufact's "Root directory: mcp-server" setting uploads only this
+// subdirectory as the build context — ../data/graph.json genuinely does not
+// exist there, so this is a normal, expected skip on that deploy, not an
+// error: it silently reuses whatever mcp-server/data/startups.json is
+// already committed. That file therefore has to be committed (see
+// .gitignore) and refreshed by hand (or by CI) after editing content/,
+// unlike data/graph.json itself which a full local build always rebuilds.
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -15,8 +24,17 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const mcpServerRoot = join(here, "..");
 const repoRoot = join(mcpServerRoot, "..");
+const graphPath = join(repoRoot, "data", "graph.json");
 
-const graph = JSON.parse(await readFile(join(repoRoot, "data", "graph.json"), "utf8"));
+let graphRaw;
+try {
+  graphRaw = await readFile(graphPath, "utf8");
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+  console.log("prepare-data: ../data/graph.json not present (isolated build context) — keeping the committed mcp-server/data/startups.json as-is.");
+  process.exit(0);
+}
+const graph = JSON.parse(graphRaw);
 
 const sectionTitleByIndex = new Map(graph.sections.map((s) => [s.index, s.title]));
 

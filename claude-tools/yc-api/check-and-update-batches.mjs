@@ -131,6 +131,15 @@ for (const b of changed) {
 if (totalWritten > 0) {
   console.log("\nRebuilding data/graph.json...");
   execFileSync("npm", ["run", "graph"], { cwd: repoRoot, stdio: "inherit" });
+
+  // mcp-server/data/startups.json is committed (Manufact's "Root directory:
+  // mcp-server" deploy uploads only that subdirectory, so it can't read
+  // ../data/graph.json at build time there) — a PR that adds companies but
+  // leaves this stale would silently ship a graph update the deployed MCP
+  // server never sees.
+  console.log("Refreshing mcp-server/data/startups.json...");
+  execFileSync("npm", ["ci"], { cwd: join(repoRoot, "mcp-server"), stdio: "inherit" });
+  execFileSync("npm", ["run", "prepare-data"], { cwd: join(repoRoot, "mcp-server"), stdio: "inherit" });
 }
 
 const summaryPath = process.env.GITHUB_STEP_SUMMARY;

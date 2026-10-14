@@ -46,3 +46,4 @@ jobs:
             content/sections.json
             data/graph.json
             claude-tools/yc-api/data/batch-counts.json
+            mcp-server/data/startups.json
