@@ -187,7 +187,9 @@
         "newcraft",
         "codestream",
         "dagger",
-        "doppler"
+        "doppler",
+        "tilion",
+        "workers-io"
       ]
     },
     {
@@ -291,7 +293,11 @@
         "flinto",
         "alpaca",
         "middesk",
-        "kalshi"
+        "kalshi",
+        "ageospatial",
+        "hesper-ai",
+        "ignition-benefits",
+        "elimentary"
       ]
     },
     {
@@ -398,7 +404,9 @@
         "clear-genetics",
         "modern-health",
         "evry-health",
-        "onederful"
+        "onederful",
+        "ascenix",
+        "altair-health"
       ]
     },
     {
@@ -590,7 +598,13 @@
         "youteam",
         "lawyaw",
         "numero",
-        "postscript"
+        "postscript",
+        "linklane",
+        "frontrunner",
+        "praxis",
+        "quivly-ai",
+        "lantern-ai",
+        "sentient-os"
       ]
     },
     {
@@ -804,7 +818,8 @@
         "versori",
         "papa",
         "legacy",
-        "refine"
+        "refine",
+        "reconero"
       ]
     },
     {
@@ -843,7 +858,15 @@
         "flux-auto",
         "industrial-next",
         "proxy",
-        "artifact"
+        "artifact",
+        "lucebox",
+        "mantle",
+        "orca-aerospace",
+        "invertix",
+        "viraj-aero",
+        "runtime-si",
+        "fire-wallet",
+        "rodeo-robotics"
       ]
     },
     {
@@ -881,7 +904,9 @@
         "taxproper",
         "obie",
         "latchel",
-        "zerodown"
+        "zerodown",
+        "habu",
+        "tire-swing"
       ]
     },
     {
@@ -921,7 +946,8 @@
         "mypetrolpump",
         "gaiascope",
         "solarmente",
-        "nabis"
+        "nabis",
+        "truemile"
       ]
     },
     {
